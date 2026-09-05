@@ -17,6 +17,8 @@ export default [
     route("app/products", "routes/products.tsx"),
     route("app/customers", "routes/customers.tsx"),
     route("app/governance", "routes/governance.tsx"),
+    route("app/approvals", "routes/approvals.tsx"),
+    route("app/approvals/:id", "routes/approval-detail.tsx"),
     route("app/settings", "routes/settings.tsx"),
   ]),
 ] satisfies RouteConfig;
