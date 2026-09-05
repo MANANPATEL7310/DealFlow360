@@ -543,3 +543,34 @@ model DealHealthAlert {
   @@index([quotationId, type, status])
   @@index([status, severity])
 }
+
+// ==========================================
+// MODULE 6: UPSELL & CROSS-SELL (Dev 2)
+// ==========================================
+
+model UpsellRule {
+  id              String   @id @default(cuid())
+  productId       String                            // when THIS product is in the cart…
+  suggestedId     String                            // …suggest THIS product
+  coPurchaseScore Float    @default(0)              // historical co-purchase affinity
+  minMarginPct    Float    @default(0)              // suppress if resulting order-margin drops below this
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@index([productId])
+}
+
+model UpsellSuggestion {
+  id             String   @id @default(cuid())
+  quotationId    String
+  suggestedId    String
+  marginDeltaPct Float                              // order-margin impact if added
+  promoted       Boolean  @default(false)
+  accepted       Boolean  @default(false)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  @@index([quotationId])
+  @@index([quotationId, suggestedId])
+}
+

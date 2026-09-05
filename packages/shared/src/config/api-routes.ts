@@ -24,11 +24,23 @@ export const apiRoutes = {
 
   // ─── Auth ──────────────────────────────────────────────────────────────────
   auth: {
+    register: {
+      path: "/auth/register",
+      method: "POST",
+      auth: false,
+      description: "Register a new user. Returns access token.",
+    },
     login: {
       path: "/auth/login",
       method: "POST",
       auth: false,
       description: "Authenticate with email & password. Returns access token.",
+    },
+    me: {
+      path: "/auth/me",
+      method: "GET",
+      auth: true,
+      description: "Returns the currently authenticated user.",
     },
   },
 
@@ -45,7 +57,7 @@ export const apiRoutes = {
   // ─── ADD NEW ROUTES BELOW THIS LINE ────────────────────────────────────────
   // Follow the same pattern: add here first, then implement on backend, then consume on frontend.
 
-  // === M1: Products ===
+  // === M1: Products (Dev 2) ===
   products: {
     list: {
       path: "/products",
@@ -79,7 +91,7 @@ export const apiRoutes = {
     },
   },
 
-  // === M1: Price Lists ===
+  // === M1: Price Lists (Dev 2) ===
   priceLists: {
     list: {
       path: "/price-lists",
@@ -119,7 +131,7 @@ export const apiRoutes = {
     },
   },
 
-  // === M2: Customers ===
+  // === M2: Customers (Dev 2) ===
   customers: {
     list: {
       path: "/customers",
@@ -165,7 +177,117 @@ export const apiRoutes = {
     },
   },
 
-  // === M6: Upsell & Cross-sell ===
+  // ─── Governance (M3 — Dev 1) ──────────────────────────────────────────────
+  governance: {
+    discountTiers: {
+      list: {
+        path: "/governance/discount-tiers",
+        method: "GET",
+        auth: true,
+        description: "List all discount tier ceilings.",
+      },
+      upsert: {
+        path: "/governance/discount-tiers",
+        method: "PUT",
+        auth: true,
+        description: "Upsert a discount tier ceiling.",
+      },
+    },
+    categoryCeilings: {
+      list: {
+        path: "/governance/category-ceilings",
+        method: "GET",
+        auth: true,
+        description: "List all category discount ceilings.",
+      },
+      upsert: {
+        path: "/governance/category-ceilings",
+        method: "PUT",
+        auth: true,
+        description: "Upsert a category discount ceiling.",
+      },
+    },
+    approvalRules: {
+      list: {
+        path: "/governance/approval-rules",
+        method: "GET",
+        auth: true,
+        description: "List all approval chain rules.",
+      },
+      create: {
+        path: "/governance/approval-rules",
+        method: "POST",
+        auth: true,
+        description: "Create an approval chain rule.",
+      },
+      update: {
+        path: "/governance/approval-rules/:id",
+        method: "PATCH",
+        auth: true,
+        description: "Update an approval chain rule.",
+      },
+      remove: {
+        path: "/governance/approval-rules/:id",
+        method: "DELETE",
+        auth: true,
+        description: "Delete an approval chain rule.",
+      },
+    },
+  },
+
+  // ─── Quotations (M5 — Dev 1) ──────────────────────────────────────────────
+  quotations: {
+    list: {
+      path: "/quotations",
+      method: "GET",
+      auth: true,
+      description: "List quotations.",
+    },
+    getById: {
+      path: "/quotations/:id",
+      method: "GET",
+      auth: true,
+      description: "Get quotation by ID.",
+    },
+    create: {
+      path: "/quotations",
+      method: "POST",
+      auth: true,
+      description: "Create a new quotation.",
+    },
+    addLine: {
+      path: "/quotations/:id/lines",
+      method: "POST",
+      auth: true,
+      description: "Add a line item to quotation.",
+    },
+    updateLine: {
+      path: "/quotations/:id/lines/:lineId",
+      method: "PATCH",
+      auth: true,
+      description: "Update a line item on quotation.",
+    },
+    removeLine: {
+      path: "/quotations/:id/lines/:lineId",
+      method: "DELETE",
+      auth: true,
+      description: "Delete a line item from quotation.",
+    },
+    confirm: {
+      path: "/quotations/:id/confirm",
+      method: "POST",
+      auth: true,
+      description: "Confirm quotation and trigger risk evaluation.",
+    },
+    approvalDecision: {
+      path: "/quotations/:id/approvals/decision",
+      method: "POST",
+      auth: true,
+      description: "Submit approval decision (approve, reject, return).",
+    },
+  },
+
+  // === M6: Upsell & Cross-sell (Dev 2) ===
   upsell: {
     list: {
       path: "/quotations/:id/upsell",
@@ -181,7 +303,7 @@ export const apiRoutes = {
     },
   },
 
-  // === M8: Billing ===
+  // === M8: Billing (Dev 2) ===
   billing: {
     getSchedule: {
       path: "/quotations/:id/billing",
@@ -198,7 +320,7 @@ export const apiRoutes = {
     },
   },
 
-  // === M8: Invoices ===
+  // === M8: Invoices (Dev 2) ===
   invoices: {
     recordPayment: {
       path: "/invoices/:invoiceId/payments",
