@@ -341,6 +341,28 @@ export const apiRoutes = {
       description: "Exports the scoped sales report as PDF.",
     },
   },
+
+  // ─── Admin (M12) ─────────────────────────────────────────────────────────
+  admin: {
+    settings: {
+      path: "/admin/settings",
+      method: "GET",
+      auth: true,
+      description: "List runtime system settings.",
+    },
+    updateSetting: {
+      path: "/admin/settings/:key",
+      method: "PUT",
+      auth: true,
+      description: "Update one runtime system setting.",
+    },
+    auditLogs: {
+      path: "/admin/audit-logs",
+      method: "GET",
+      auth: true,
+      description: "List filtered audit log entries.",
+    },
+  },
 } as const;
 
 // ─── Derived Types (auto-generated, do not edit manually) ─────────────────────
