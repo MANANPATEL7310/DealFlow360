@@ -123,7 +123,13 @@
   --animate-slide-down: slide-down 0.4s cubic-bezier(0.16, 1, 0.3, 1);
   --animate-scale-in: scale-in 0.3s cubic-bezier(0.16, 1, 0.3, 1);
   --animate-pulse-subtle: pulse-subtle 3s ease-in-out infinite;
+  --animate-border-beam: border-beam calc(var(--duration, 15) * 1s) infinite linear;
 
+  @keyframes border-beam {
+    100% {
+      offset-distance: 100%;
+    }
+  }
   @keyframes fade-in {
     from {
       opacity: 0;
@@ -254,5 +260,28 @@
     .sidebar-layout {
       grid-template-columns: 260px 1fr;
     }
+  }
+
+  .border-beam-container {
+    pointer-events: none;
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    border: calc(var(--border-width, 1.5) * 1px) solid transparent;
+    mask-clip: padding-box, border-box;
+    mask-composite: intersect;
+    mask: linear-gradient(transparent, transparent), linear-gradient(white, white);
+  }
+
+  .border-beam-runner::after {
+    content: "";
+    position: absolute;
+    aspect-ratio: 1;
+    width: calc(var(--size, 220) * 1px);
+    animation: border-beam calc(var(--duration, 14) * 1s) infinite linear;
+    animation-delay: var(--delay, 0s);
+    background: linear-gradient(to left, var(--color-from, var(--primary)), var(--color-to, var(--secondary)), transparent);
+    offset-anchor: calc(var(--anchor, 90) * 1%) 50%;
+    offset-path: rect(0 auto auto 0 round calc(var(--size, 220) * 1px));
   }
 }

@@ -7,6 +7,8 @@ import {
   CheckCircle2,
   TrendingUp,
 } from "lucide-react";
+import { BorderBeam } from "@/components/ui/border-beam";
+import { SpotlightCard } from "@/components/ui/spotlight-card";
 
 export function FeaturesBento() {
   return (
@@ -28,7 +30,8 @@ export function FeaturesBento() {
         {/* Bento Grid */}
         <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
           {/* Card 1: Blended Risk Engine (Double width on large screens) */}
-          <div className="rounded-2xl border border-border bg-surface p-7 shadow-lg transition-all hover:border-primary/40 lg:col-span-2">
+          <SpotlightCard className="p-7 shadow-lg transition-all lg:col-span-2">
+            <BorderBeam size={280} duration={16} delay={4} />
             <div className="mb-4 flex items-center justify-between">
               <div className="flex size-11 items-center justify-center rounded-xl bg-primary/10 text-primary">
                 <ShieldAlert className="size-6" />
@@ -66,10 +69,13 @@ export function FeaturesBento() {
                 </span>
               </div>
             </div>
-          </div>
+          </SpotlightCard>
 
           {/* Card 2: Live Upsell & Cross-Sell */}
-          <div className="flex flex-col justify-between rounded-2xl border border-border bg-surface p-7 shadow-lg transition-all hover:border-secondary/40">
+          <SpotlightCard
+            spotlightColor="color-mix(in srgb, var(--secondary) 20%, transparent)"
+            className="flex flex-col justify-between p-7 shadow-lg transition-all"
+          >
             <div>
               <div className="mb-4 flex items-center justify-between">
                 <div className="flex size-11 items-center justify-center rounded-xl bg-secondary/10 text-secondary">
@@ -97,10 +103,10 @@ export function FeaturesBento() {
                 <span>One-click line insertion</span>
               </div>
             </div>
-          </div>
+          </SpotlightCard>
 
           {/* Card 3: Multi-Warehouse Fulfillment */}
-          <div className="flex flex-col justify-between rounded-2xl border border-border bg-surface p-7 shadow-lg transition-all hover:border-primary/40">
+          <SpotlightCard className="flex flex-col justify-between p-7 shadow-lg transition-all">
             <div>
               <div className="mb-4 flex items-center justify-between">
                 <div className="flex size-11 items-center justify-center rounded-xl bg-primary/10 text-primary">
@@ -128,10 +134,13 @@ export function FeaturesBento() {
                 <span className="font-semibold text-warning">20 Units (Backorder)</span>
               </div>
             </div>
-          </div>
+          </SpotlightCard>
 
           {/* Card 4: Hybrid Invoicing */}
-          <div className="flex flex-col justify-between rounded-2xl border border-border bg-surface p-7 shadow-lg transition-all hover:border-secondary/40">
+          <SpotlightCard
+            spotlightColor="color-mix(in srgb, var(--secondary) 20%, transparent)"
+            className="flex flex-col justify-between p-7 shadow-lg transition-all"
+          >
             <div>
               <div className="mb-4 flex items-center justify-between">
                 <div className="flex size-11 items-center justify-center rounded-xl bg-secondary/10 text-secondary">
@@ -159,10 +168,13 @@ export function FeaturesBento() {
                 <span className="font-semibold text-secondary">$890/mo (Recurring)</span>
               </div>
             </div>
-          </div>
+          </SpotlightCard>
 
           {/* Card 5: Deal Health & Anomaly Radar */}
-          <div className="flex flex-col justify-between rounded-2xl border border-border bg-surface p-7 shadow-lg transition-all hover:border-warning/40">
+          <SpotlightCard
+            spotlightColor="color-mix(in srgb, var(--warning) 20%, transparent)"
+            className="flex flex-col justify-between p-7 shadow-lg transition-all"
+          >
             <div>
               <div className="mb-4 flex items-center justify-between">
                 <div className="flex size-11 items-center justify-center rounded-xl bg-warning/10 text-warning">
@@ -186,7 +198,7 @@ export function FeaturesBento() {
                 Instant escalation and manager nudging via audit trail
               </span>
             </div>
-          </div>
+          </SpotlightCard>
         </div>
       </div>
     </section>

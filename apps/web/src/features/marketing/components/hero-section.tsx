@@ -11,7 +11,10 @@ import {
   Layers,
 } from "lucide-react";
 import { appRoutes } from "@template/shared";
+import { AnimatedCounter } from "@/components/ui/animated-counter";
+import { BorderBeam } from "@/components/ui/border-beam";
 import { Button } from "@/components/ui/button";
+import { SpotlightCard } from "@/components/ui/spotlight-card";
 
 export function HeroSection() {
   // Interactive Simulator state
@@ -140,7 +143,8 @@ export function HeroSection() {
 
           {/* Hero Right: Interactive Live Margin & Risk Simulator */}
           <div id="simulator" className="lg:col-span-5">
-            <div className="relative rounded-2xl border border-border bg-surface/90 p-6 shadow-2xl backdrop-blur-2xl transition-all">
+            <SpotlightCard className="relative p-6 shadow-2xl backdrop-blur-2xl transition-all">
+              <BorderBeam size={250} duration={12} delay={0} />
               {/* Simulator Header */}
               <div className="flex items-center justify-between border-b border-border pb-4">
                 <div className="flex items-center gap-2.5">
@@ -255,20 +259,26 @@ export function HeroSection() {
                 <div className="space-y-2 rounded-xl border border-border bg-surface-muted/50 p-3.5 text-xs">
                   <div className="flex justify-between">
                     <span className="text-muted-foreground">Gross Value:</span>
-                    <span className="font-medium text-foreground">${grossTotal.toLocaleString()}</span>
+                    <span className="font-medium text-foreground">
+                      <AnimatedCounter value={grossTotal} prefix="$" />
+                    </span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-muted-foreground">Total Discount:</span>
-                    <span className="font-medium text-danger">-${Math.round(discountAmount).toLocaleString()}</span>
+                    <span className="font-medium text-danger">
+                      -<AnimatedCounter value={Math.round(discountAmount)} prefix="$" />
+                    </span>
                   </div>
                   <div className="flex justify-between border-t border-border pt-1.5 font-bold">
                     <span className="text-foreground">Net Proposal Value:</span>
-                    <span className="text-foreground">${Math.round(netTotal).toLocaleString()}</span>
+                    <span className="text-foreground">
+                      <AnimatedCounter value={Math.round(netTotal)} prefix="$" />
+                    </span>
                   </div>
                   <div className="flex items-center justify-between border-t border-border pt-1.5">
                     <span className="text-muted-foreground">Estimated Margin:</span>
                     <span className={`rounded px-2 py-0.5 font-bold ${marginPct >= 35 ? "bg-secondary/15 text-secondary" : "bg-warning/15 text-warning"}`}>
-                      {marginPct}% Margin
+                      <AnimatedCounter value={marginPct} suffix="% Margin" />
                     </span>
                   </div>
                 </div>
@@ -310,7 +320,7 @@ export function HeroSection() {
                   </div>
                 </div>
               </div>
-            </div>
+            </SpotlightCard>
           </div>
         </div>
       </div>
