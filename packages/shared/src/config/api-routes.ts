@@ -285,6 +285,127 @@ export const apiRoutes = {
       auth: true,
       description: "Submit approval decision (approve, reject, return).",
     },
+    send: {
+      path: "/quotations/:id/send",
+      method: "POST",
+      auth: true,
+      description:
+        "Send approved quotation to customer and mint portal access token.",
+    },
+    negotiations: {
+      path: "/quotations/:id/negotiations",
+      method: "GET",
+      auth: true,
+      description: "List negotiation requests raised for this quotation.",
+    },
+    answerNegotiation: {
+      path: "/quotations/:id/negotiations/:negId/answer",
+      method: "POST",
+      auth: true,
+      description: "Answer or accept a customer negotiation request.",
+    },
+  },
+
+  // ─── Customer Portal (M9) ───────────────────────────────────────────────────
+  portal: {
+    quotation: {
+      path: "/portal/quotation",
+      method: "GET",
+      auth: false,
+      description:
+        "Customer view of the quotation (safe projection, cost & margin stripped).",
+    },
+    open: {
+      path: "/portal/open",
+      method: "POST",
+      auth: false,
+      description:
+        "Mark quotation as UNDER_NEGOTIATION when opened by customer.",
+    },
+    negotiations: {
+      path: "/portal/negotiations",
+      method: "POST",
+      auth: false,
+      description:
+        "Customer submits a comment or counter-discount negotiation request.",
+    },
+    confirm: {
+      path: "/portal/confirm",
+      method: "POST",
+      auth: false,
+      description:
+        "Customer confirms quote — folds accepted counters and re-evaluates risk governance gate.",
+    },
+  },
+
+  // ─── Fulfillment (M7) ─────────────────────────────────────────────────────
+  fulfillment: {
+    get: {
+      path: "/quotations/:id/fulfillment",
+      method: "GET",
+      auth: true,
+      description: "Get fulfillment plan for a quotation.",
+    },
+    moveToFulfillment: {
+      path: "/quotations/:id/fulfillment",
+      method: "POST",
+      auth: true,
+      description:
+        "Move a confirmed quotation into fulfillment and generate a plan.",
+    },
+    accept: {
+      path: "/quotations/:id/fulfillment/accept",
+      method: "POST",
+      auth: true,
+      description: "Accept the suggested fulfillment plan and commit stock.",
+    },
+    override: {
+      path: "/quotations/:id/fulfillment/override",
+      method: "POST",
+      auth: true,
+      description: "Override the fulfillment plan with manual splits.",
+    },
+    consolidate: {
+      path: "/quotations/:id/backorders/:backorderId/consolidate",
+      method: "POST",
+      auth: true,
+      description:
+        "Consolidate an outstanding backorder against current stock.",
+    },
+  },
+
+  // ─── Deal Health (M10) ────────────────────────────────────────────────────
+  dealHealth: {
+    alerts: {
+      path: "/deal-health/alerts",
+      method: "GET",
+      auth: true,
+      description: "List deal health alerts.",
+    },
+    detect: {
+      path: "/deal-health/detect",
+      method: "POST",
+      auth: true,
+      description: "Run deal health detection.",
+    },
+    acknowledge: {
+      path: "/deal-health/alerts/:id/acknowledge",
+      method: "POST",
+      auth: true,
+      description: "Acknowledge a deal health alert.",
+    },
+    resolve: {
+      path: "/deal-health/alerts/:id/resolve",
+      method: "POST",
+      auth: true,
+      description: "Resolve a deal health alert.",
+    },
+    nudge: {
+      path: "/deal-health/alerts/:id/nudge",
+      method: "POST",
+      auth: true,
+      description: "Nudge or escalate a deal health alert.",
+    },
   },
 
   // === M6: Upsell & Cross-sell (Dev 2) ===
