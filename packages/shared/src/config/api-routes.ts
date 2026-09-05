@@ -30,6 +30,18 @@ export const apiRoutes = {
       auth: false,
       description: "Authenticate with email & password. Returns access token.",
     },
+    register: {
+      path: "/auth/register",
+      method: "POST",
+      auth: false,
+      description: "Register new user account with assigned role.",
+    },
+    me: {
+      path: "/auth/me",
+      method: "GET",
+      auth: true,
+      description: "Get current authenticated user profile.",
+    },
   },
 
   // ─── Dashboard ─────────────────────────────────────────────────────────────

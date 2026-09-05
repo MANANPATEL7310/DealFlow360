@@ -1,5 +1,5 @@
-import type { AuthSession, AuthUser } from "@template/shared";
-import { storageKeys } from "@template/shared";
+import type { AuthSession, AuthUser, UserRole } from "@template/shared";
+import { DEMO_PERSONAS, storageKeys } from "@template/shared";
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
 
@@ -11,6 +11,7 @@ type AuthStore = {
   setSession: (session: AuthSession) => void;
   clearSession: () => void;
   markHydrated: () => void;
+  switchPersona: (role: UserRole) => void;
 };
 
 const dummyStorage = {
@@ -39,6 +40,20 @@ export const useAuthStore = create<AuthStore>()(
           status: "anonymous",
         }),
       markHydrated: () => set({ isHydrated: true }),
+      switchPersona: (role) => {
+        const persona = DEMO_PERSONAS[role];
+        if (!persona) return;
+        set({
+          user: {
+            id: `usr-${role}-demo`,
+            name: persona.name,
+            email: persona.email,
+            role: persona.role,
+          },
+          accessToken: `mock-token-${role}-${Date.now()}`,
+          status: "authenticated",
+        });
+      },
     }),
     {
       name: storageKeys.authSession,
