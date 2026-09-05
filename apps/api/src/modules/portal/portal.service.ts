@@ -1,251 +1,329 @@
+import type { SubmitNegotiationInput } from "@template/shared";
+import { writeAudit } from "../../lib/audit.js";
+import { db } from "../../lib/db.js";
+import { loadRiskConfig } from "../discount/risk-config.js";
+import { computeBlendedRisk } from "../discount/risk-engine.js";
+import { resolveRequiredLevels } from "../discount/routing.service.js";
+import { onConfirmed } from "../quotation/confirmed.hook.js";
+import { assertTransition, transition } from "../quotation/lifecycle.js";
 import {
-  evaluateQuotationRisk,
-  computeTotals,
-  SEED_QUOTATIONS,
-  SEED_DISCOUNT_TIERS,
-  SEED_CATEGORY_CEILINGS,
-  SEED_APPROVAL_RULES,
-  type CreateNegotiationInput,
-  type NegotiationRequest,
-  type PortalConfirmResult,
-  type PortalQuotationLine,
-  type PortalQuotationView,
-  type Quotation,
-} from "@template/shared";
+  type DbClient,
+  loadQuotationWithLines,
+  recomputeTotals,
+  toRiskLine,
+} from "../quotation/quotation.service.js";
 
-// In-memory persistent state for portal operations (synced with seed quotations)
-const quotationsStore: Map<string, Quotation> = new Map();
-const negotiationsStore: Map<string, NegotiationRequest[]> = new Map();
-
-// Initialize with SEED_QUOTATIONS
-for (const q of SEED_QUOTATIONS) {
-  quotationsStore.set(q.id, { ...q });
+interface QuotationLineProjection {
+  id: string;
+  product?: { name?: string | null } | null;
+  qty: number;
+  unitPriceMinor: number;
+  discountPct: number;
+  lineType: string;
 }
 
-export const portalService = {
-  getQuotation(quotationId: string): PortalQuotationView {
-    const quote = quotationsStore.get(quotationId);
-    if (!quote) {
-      throw new Error("Quotation not found or invalid magic link.");
-    }
+interface NegotiationProjection {
+  id: string;
+  lineId: string | null;
+  comment: string | null;
+  counterDiscountPct: number | null;
+  status: string;
+  createdAt: Date;
+}
 
-    const negotiations = negotiationsStore.get(quotationId) ?? [];
+interface QuotationProjection {
+  id: string;
+  status: string;
+  customer?: { name?: string; currency?: string } | null;
+  subtotalMinor: number;
+  discountTotalMinor: number;
+  taxTotalMinor: number;
+  grandTotalMinor: number;
+  lines?: QuotationLineProjection[];
+  negotiations?: NegotiationProjection[];
+}
 
-    // Sanitize lines: strip unitCostMinor and lineMargin
-    const lines: PortalQuotationLine[] = quote.lines.map((line) => {
-      const lineGross = line.qty * line.unitPriceMinor;
-      const lineTotal = Math.round(lineGross * (1 - line.discountPct / 100));
+/** Safe customer projection — strips cost, margin, risk breakdown, approvals, and audit */
+export function scopedSummary(q: QuotationProjection) {
+  return {
+    id: q.id,
+    status: q.status,
+    customerName: q.customer?.name ?? "",
+    currency: q.customer?.currency ?? "USD",
+    subtotalMinor: q.subtotalMinor,
+    discountTotalMinor: q.discountTotalMinor,
+    taxTotalMinor: q.taxTotalMinor,
+    grandTotalMinor: q.grandTotalMinor,
+    lines: (q.lines || []).map((l) => ({
+      id: l.id,
+      name: l.product?.name ?? "Item",
+      qty: l.qty,
+      unitPriceMinor: l.unitPriceMinor,
+      discountPct: l.discountPct,
+      lineType: l.lineType,
+    })),
+    negotiations: (q.negotiations || []).map((n) => ({
+      id: n.id,
+      lineId: n.lineId,
+      comment: n.comment,
+      counterDiscountPct: n.counterDiscountPct,
+      status: n.status,
+      createdAt: n.createdAt,
+    })),
+  };
+}
 
-      return {
-        id: line.id,
-        productId: line.productId,
-        productName: line.product?.name ?? "Enterprise Product",
-        variantName: line.variant ? `${line.variant.attribute}: ${line.variant.value}` : null,
-        qty: line.qty,
-        unitPriceMinor: line.unitPriceMinor,
-        discountPct: line.discountPct,
-        lineTotalMinor: lineTotal,
-        lineType: line.lineType,
-      };
+export async function getPortalQuotation(quotationId: string) {
+  const q = await loadQuotationWithLines(quotationId, {
+    includeNegotiations: true,
+  });
+  if (!q) {
+    throw Object.assign(new Error("Quotation not found."), {
+      http: 404,
+      code: "QUOTATION_NOT_FOUND",
     });
+  }
+  return scopedSummary(q);
+}
 
-    const expiresAt = new Date(Date.now() + 14 * 24 * 60 * 60 * 1000).toISOString();
+/** Open action: marks SENT -> UNDER_NEGOTIATION idempotently */
+export async function openPortal(quotationId: string, contactId: string) {
+  const q = await loadQuotationWithLines(quotationId);
+  if (!q) {
+    throw Object.assign(new Error("Quotation not found."), {
+      http: 404,
+      code: "QUOTATION_NOT_FOUND",
+    });
+  }
 
-    return {
-      id: quote.id,
-      code: quote.quotationNumber,
-      customerName: quote.customer?.name ?? "Client Account",
-      customerTier: (quote.customer?.tier as "BRONZE" | "SILVER" | "GOLD") ?? "SILVER",
-      contactName: "David Sterling",
-      salesRepName: "Alex Miller",
-      subtotalMinor: quote.subtotalMinor,
-      discountTotalMinor: quote.discountTotalMinor,
-      taxTotalMinor: quote.taxTotalMinor,
-      grandTotalMinor: quote.grandTotalMinor,
-      status: quote.status,
-      lines,
-      negotiations,
-      expiresAt,
-    };
-  },
+  if (q.status === "SENT") {
+    await transition(
+      q,
+      "UNDER_NEGOTIATION",
+      contactId,
+      `Opened by customer contact ${contactId}`,
+      undefined,
+      "customer",
+    );
+  }
 
-  markOpened(quotationId: string): { status: string } {
-    const quote = quotationsStore.get(quotationId);
-    if (!quote) {
-      throw new Error("Quotation not found.");
-    }
+  return getPortalQuotation(quotationId);
+}
 
-    if (quote.status === "SENT") {
-      quote.status = "UNDER_NEGOTIATION";
-      quotationsStore.set(quotationId, quote);
-    }
+/** Submit negotiation request (line-level or order-level) */
+export async function submitNegotiation(
+  quotationId: string,
+  contactId: string,
+  input: SubmitNegotiationInput,
+) {
+  const q = await db.quotation.findUnique({
+    where: { id: quotationId },
+    include: { lines: true },
+  });
 
-    return { status: quote.status };
-  },
+  if (!q) {
+    throw Object.assign(new Error("Quotation not found."), {
+      http: 404,
+      code: "QUOTATION_NOT_FOUND",
+    });
+  }
+  if (q.status !== "UNDER_NEGOTIATION") {
+    throw Object.assign(new Error("Quotation is not under negotiation."), {
+      http: 409,
+      code: "NOT_NEGOTIATING",
+    });
+  }
+  if (input.lineId && !q.lines.some((l) => l.id === input.lineId)) {
+    throw Object.assign(
+      new Error("Target line item does not exist on this quotation."),
+      { http: 422, code: "LINE_NOT_ON_QUOTE" },
+    );
+  }
 
-  createNegotiation(
-    quotationId: string,
-    contactId: string,
-    input: CreateNegotiationInput,
-  ): NegotiationRequest {
-    const quote = quotationsStore.get(quotationId);
-    if (!quote) {
-      throw new Error("Quotation not found.");
-    }
-
-    if (input.lineId) {
-      const lineExists = quote.lines.some((l) => l.id === input.lineId);
-      if (!lineExists) {
-        throw new Error("Target line item not found on this quotation.");
-      }
-    }
-
-    const newRequest: NegotiationRequest = {
-      id: `neg-${Date.now()}`,
+  const negotiation = await db.negotiationRequest.create({
+    data: {
       quotationId,
       contactId,
       lineId: input.lineId ?? null,
-      comment: input.comment?.trim() ?? null,
+      comment: input.comment ?? null,
       counterDiscountPct: input.counterDiscountPct ?? null,
       status: "OPEN",
-      repComment: null,
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
-    };
+    },
+  });
 
-    const currentList = negotiationsStore.get(quotationId) ?? [];
-    currentList.push(newRequest);
-    negotiationsStore.set(quotationId, currentList);
+  await writeAudit({
+    actorId: contactId,
+    actorKind: "customer",
+    action: "negotiation.submitted",
+    entity: "NegotiationRequest",
+    entityId: negotiation.id,
+    diff: { quotationId, ...input },
+  });
 
-    // Keep quotation status aligned
-    if (quote.status === "SENT") {
-      quote.status = "UNDER_NEGOTIATION";
-      quotationsStore.set(quotationId, quote);
-    }
+  return negotiation;
+}
 
-    return newRequest;
-  },
-
-  confirmQuotation(quotationId: string): PortalConfirmResult {
-    const quote = quotationsStore.get(quotationId);
-    if (!quote) {
-      throw new Error("Quotation not found.");
-    }
-
-    const negotiations = negotiationsStore.get(quotationId) ?? [];
-    const acceptedCounters = negotiations.filter((n) => n.status === "ACCEPTED");
-
-    // Apply any accepted counter discounts to quotation lines
-    const updatedLines = quote.lines.map((line) => {
-      const lineCounter = acceptedCounters.find((c) => c.lineId === line.id);
-      const orderCounter = acceptedCounters.find((c) => !c.lineId);
-
-      let effectiveDiscount = line.discountPct;
-      if (lineCounter?.counterDiscountPct !== undefined && lineCounter.counterDiscountPct !== null) {
-        effectiveDiscount = lineCounter.counterDiscountPct;
-      } else if (orderCounter?.counterDiscountPct !== undefined && orderCounter.counterDiscountPct !== null) {
-        effectiveDiscount = orderCounter.counterDiscountPct;
-      }
-
-      return {
-        ...line,
-        discountPct: effectiveDiscount,
-      };
+/**
+ * Customer confirmation — the governance gate.
+ * Folds accepted counter-offers into line discounts, re-evaluates risk,
+ * and routes to CONFIRMED or back to PENDING_APPROVAL.
+ */
+export async function portalConfirm(quotationId: string, contactId: string) {
+  return db.$transaction(async (tx) => {
+    let q = await loadQuotationWithLines(quotationId, {
+      prisma: tx,
+      includeNegotiations: true,
     });
 
-    // Recalculate totals
-    const totals = computeTotals(updatedLines);
+    if (!q) {
+      throw Object.assign(new Error("Quotation not found."), {
+        http: 404,
+        code: "QUOTATION_NOT_FOUND",
+      });
+    }
+    if (q.status !== "UNDER_NEGOTIATION") {
+      throw Object.assign(new Error("Quotation is not under negotiation."), {
+        http: 409,
+        code: "NOT_NEGOTIATING",
+      });
+    }
 
-    // Run PS §10 Blended Risk Engine
-    const customerTier = (quote.customer?.tier as "BRONZE" | "SILVER" | "GOLD") ?? "SILVER";
-    const riskEvaluation = evaluateQuotationRisk(
-      updatedLines,
-      customerTier,
-      SEED_DISCOUNT_TIERS,
-      SEED_CATEGORY_CEILINGS,
-      SEED_APPROVAL_RULES,
-    );
+    // 1) Fold every ACCEPTED counter into line discounts, then recompute totals
+    await applyAcceptedCounters(tx, q);
+    q = await loadQuotationWithLines(quotationId, {
+      prisma: tx,
+      includeNegotiations: true,
+    });
+    if (!q) {
+      throw Object.assign(new Error("Quotation not found."), {
+        http: 404,
+        code: "QUOTATION_NOT_FOUND",
+      });
+    }
 
-    quote.lines = updatedLines;
-    quote.subtotalMinor = totals.subtotalMinor;
-    quote.discountTotalMinor = totals.discountTotalMinor;
-    quote.taxTotalMinor = totals.taxTotalMinor;
-    quote.grandTotalMinor = totals.grandTotalMinor;
-    quote.marginPct = totals.marginPct;
-    quote.blendedRiskScore = riskEvaluation.blendedRiskScore;
+    // 2) Re-evaluate risk on the NEW terms
+    const cfg = await loadRiskConfig(q.customer.tier);
+    const risk = computeBlendedRisk(q.lines.map(toRiskLine), cfg);
+    const chain = await tx.approvalChainRule.findMany({
+      orderBy: { minScore: "asc" },
+    });
+    const levels = resolveRequiredLevels(risk, cfg, chain);
 
-    // The Governance Gate:
-    // If approval is required (not auto-approved), bounce to PENDING_APPROVAL
-    if (!riskEvaluation.isAutoApproved || riskEvaluation.requiredLevels.length > 0) {
-      quote.status = "PENDING_APPROVAL";
-      quotationsStore.set(quotationId, quote);
+    // 3) Governance Gate: The customer CANNOT self-approve an overage
+    if (levels.length > 0) {
+      assertTransition(q.status, "PENDING_APPROVAL");
+
+      await tx.quotation.update({
+        where: { id: q.id },
+        data: {
+          status: "PENDING_APPROVAL",
+          blendedRiskScore: risk.blendedScore,
+          lastActivityAt: new Date(),
+        },
+      });
+
+      // Reset and create fresh approval steps for required levels
+      await tx.approvalStep.deleteMany({ where: { quotationId: q.id } });
+      await Promise.all(
+        levels.map((level, i) =>
+          tx.approvalStep.create({
+            data: {
+              quotationId: q.id,
+              level,
+              sequence: i + 1,
+            },
+          }),
+        ),
+      );
+
+      await tx.quotationStatusEvent.create({
+        data: {
+          quotationId: q.id,
+          fromStatus: q.status,
+          toStatus: "PENDING_APPROVAL",
+          actorId: null,
+          reason: "Customer counter-offer exceeded discount thresholds",
+        },
+      });
+
+      await writeAudit({
+        actorId: contactId,
+        actorKind: "customer",
+        action: "portal.confirm.escalated",
+        entity: "Quotation",
+        entityId: q.id,
+        reason: "Customer counter-offer exceeded discount thresholds",
+        diff: { blendedScore: risk.blendedScore, requiredLevels: levels },
+      });
 
       return {
-        status: "PENDING_APPROVAL",
-        message:
-          "Your accepted proposal terms exceed standard tier discount baselines and have been submitted to Sales Leadership for expedited authorization.",
-        requiresApproval: true,
-        requiredLevels: riskEvaluation.requiredLevels,
+        status: "PENDING_APPROVAL" as const,
+        requiredLevels: levels,
+        risk,
       };
     }
 
-    // Within standard governance ceiling: Confirm directly
-    quote.status = "CONFIRMED";
-    quotationsStore.set(quotationId, quote);
+    // Within limits -> Transition to CONFIRMED
+    assertTransition(q.status, "CONFIRMED");
 
-    return {
-      status: "CONFIRMED",
-      message: "Quotation officially confirmed and booked. Invoicing and order fulfillment have been initialized.",
-      requiresApproval: false,
-      requiredLevels: [],
-    };
-  },
+    await tx.quotation.update({
+      where: { id: q.id },
+      data: {
+        status: "CONFIRMED",
+        blendedRiskScore: risk.blendedScore,
+        lastActivityAt: new Date(),
+      },
+    });
 
-  // ─── Internal Sales Rep Actions ───────────────────────────────────────────
-  getNegotiations(quotationId: string): NegotiationRequest[] {
-    return negotiationsStore.get(quotationId) ?? [];
-  },
+    await tx.quotationStatusEvent.create({
+      data: {
+        quotationId: q.id,
+        fromStatus: q.status,
+        toStatus: "CONFIRMED",
+        actorId: null,
+        reason: "Customer confirmed quotation within limits",
+      },
+    });
 
-  answerNegotiation(
-    quotationId: string,
-    negotiationId: string,
-    status: "ACCEPTED" | "ANSWERED",
-    repComment?: string,
-  ): NegotiationRequest {
-    const list = negotiationsStore.get(quotationId) ?? [];
-    const item = list.find((n) => n.id === negotiationId);
+    await onConfirmed(q.id, tx);
 
-    if (!item) {
-      throw new Error("Negotiation request not found.");
+    await writeAudit({
+      actorId: contactId,
+      actorKind: "customer",
+      action: "portal.confirm.confirmed",
+      entity: "Quotation",
+      entityId: q.id,
+      reason: "Customer confirmed quotation within limits",
+      diff: { blendedScore: risk.blendedScore },
+    });
+
+    return { status: "CONFIRMED" as const, risk };
+  });
+}
+
+async function applyAcceptedCounters(tx: DbClient, q: { id: string }) {
+  const accepted = await tx.negotiationRequest.findMany({
+    where: {
+      quotationId: q.id,
+      status: "ACCEPTED",
+      counterDiscountPct: { not: null },
+    },
+    orderBy: { createdAt: "asc" }, // deterministic: later requests win
+  });
+
+  for (const n of accepted) {
+    if (n.lineId) {
+      await tx.quotationLine.update({
+        where: { id: n.lineId },
+        data: { discountPct: n.counterDiscountPct! },
+      });
+    } else {
+      await tx.quotationLine.updateMany({
+        where: { quotationId: q.id },
+        data: { discountPct: n.counterDiscountPct! },
+      });
     }
+  }
 
-    item.status = status;
-    item.repComment = repComment?.trim() ?? null;
-    item.updatedAt = new Date().toISOString();
-
-    negotiationsStore.set(quotationId, list);
-    return item;
-  },
-
-  sendQuotation(quotationId: string): { token: string; magicLink: string; quotation: Quotation } {
-    const quote = quotationsStore.get(quotationId);
-    if (!quote) {
-      throw new Error("Quotation not found.");
-    }
-
-    quote.status = "SENT";
-    quotationsStore.set(quotationId, quote);
-
-    // Mint portal token for the customer's primary contact
-    const contactId = quote.customer?.contacts?.[0]?.id ?? "cst-contact-01";
-    const token = Buffer.from(
-      JSON.stringify({ quotationId, contactId, exp: Date.now() + 14 * 86400000 }),
-    ).toString("base64url");
-
-    return {
-      token,
-      magicLink: `/portal?token=${token}`,
-      quotation: quote,
-    };
-  },
-};
+  await recomputeTotals(q.id, tx);
+}

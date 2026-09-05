@@ -30,5 +30,7 @@
   // ─── Prisma ───────────────────────────────────────────────
   "[prisma]": {
     "editor.defaultFormatter": "Prisma.prisma"
-  }
+  },
+  "prisma.prismaFmtBinPath": "./node_modules/.bin/prisma",
+  "prisma.pinToPrisma6": true
 }
