@@ -3,7 +3,10 @@ import { adminRouter } from "../modules/admin/admin.routes.js";
 import { authRouter } from "../modules/auth/auth.routes.js";
 import { dashboardRouter } from "../modules/dashboard/dashboard.routes.js";
 import { dealHealthRouter } from "../modules/deal-health/deal-health.routes.js";
-import { fulfillmentRouter } from "../modules/fulfillment/fulfillment.routes.js";
+import {
+  fulfillmentRouter,
+  warehouseRouter,
+} from "../modules/fulfillment/fulfillment.routes.js";
 import { governanceRouter } from "../modules/governance/governance.routes.js";
 import { healthRouter } from "../modules/health/health.routes.js";
 // === M1: Products & Price Lists (Dev 2) ===
@@ -22,6 +25,7 @@ import {
   invoiceRouter,
 } from "../modules/billing/billing.routes.js";
 import { reportsRouter } from "../modules/reports/reports.routes.js";
+import { aiRouter } from "../modules/ai/ai.routes.js";
 import { aiFulfillmentRouter } from "../modules/ai/fulfillment/routes.js";
 import { aiDealHealthRouter } from "../modules/ai/deal-health/routes.js";
 import { aiInsightsRouter } from "../modules/ai/insights/routes.js";
@@ -48,6 +52,7 @@ apiRouter.use("/governance", governanceRouter);
 // === M5 (Dev 1) ===
 apiRouter.use("/quotations", quotationRouter);
 apiRouter.use("/quotations", fulfillmentRouter);
+apiRouter.use("/warehouses", warehouseRouter);
 // === M6 (Dev 2) — second router on /quotations for upsell sub-routes ===
 apiRouter.use("/quotations", upsellRouter);
 // === M8 (Dev 2) ===
@@ -55,7 +60,9 @@ apiRouter.use("/quotations", billingRouter);
 apiRouter.use("/invoices", invoiceRouter);
 apiRouter.use("/portal", portalRouter);
 apiRouter.use("/reports", reportsRouter);
-// === Phase 2: Agentic AI ===
+
+// === Agentic AI Endpoints ===
+apiRouter.use("/ai", aiRouter);
 apiRouter.use("/ai", aiApprovalsRouter);
 apiRouter.use("/ai", discountApprovalRouter);
 apiRouter.use("/ai", negotiationRouter);

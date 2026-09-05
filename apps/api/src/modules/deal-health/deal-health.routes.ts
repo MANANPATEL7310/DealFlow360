@@ -9,6 +9,7 @@ export const dealHealthRouter = createRouter();
 
 dealHealthRouter.use(requireAuth);
 
+dealHealthRouter.get("/summary", c.summaryController);
 dealHealthRouter.get("/alerts", c.listAlertsController);
 dealHealthRouter.post(
   "/detect",

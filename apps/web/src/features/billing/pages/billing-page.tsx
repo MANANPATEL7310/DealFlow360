@@ -27,6 +27,7 @@ import { BillingStats } from "../components/billing-stats";
 import { CreditNotesList } from "../components/credit-notes-list";
 import { OneTimeInvoice } from "../components/one-time-invoice";
 import { SubscriptionSchedule } from "../components/subscription-schedule";
+import { AiBillingAssistantCard } from "../components/ai-billing-assistant-card";
 import {
   useAllBillingSchedules,
   useBillingSchedule,
@@ -204,6 +205,12 @@ function QuotationBillingWorkspace({ quotationId }: { quotationId: string }) {
         {/* Metric Cards */}
         <BillingStats schedule={schedule} isLoading={isLoading} />
 
+        {/* Agent 4: AI Billing & Hybrid Schedule Assistant */}
+        <AiBillingAssistantCard
+          quotationId={quotationId}
+          invoices={schedule.invoices}
+        />
+
         {/* Section 1: Upfront One-Time Charges */}
         <div className="space-y-3">
           <div className="flex items-center gap-2">
@@ -286,7 +293,7 @@ function BillingOperationsOverview() {
     .flatMap((s) => s.invoices)
     .filter((i) => i.status !== "VOID");
 
-  const mockScheduleSummary = {
+  const scheduleSummary = {
     id: "global",
     quotationId: "global",
     createdAt: "",
@@ -325,7 +332,7 @@ function BillingOperationsOverview() {
         </div>
 
         {/* Global Summary Stats */}
-        <BillingStats schedule={mockScheduleSummary} isLoading={isLoading} />
+        <BillingStats schedule={scheduleSummary} isLoading={isLoading} />
 
         {/* Schedules Directory Table */}
         <div className="surface-card space-y-4 p-5">

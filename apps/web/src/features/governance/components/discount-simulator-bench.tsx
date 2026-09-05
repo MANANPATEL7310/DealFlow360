@@ -17,16 +17,7 @@ export function DiscountSimulatorBench() {
   const [category, setCategory] = useState<ProductCategory>("HARDWARE");
   const [discountPct, setDiscountPct] = useState<string>("18.0");
 
-  const [result, setResult] = useState<DiscountSimulationResult | null>({
-    tierCapPct: 10,
-    categoryCapPct: 15,
-    applicableCapPct: 10,
-    excessDiscountPct: 8,
-    blendedRiskScore: 9.6,
-    isAutoApproved: false,
-    requiredApprovers: ["SALES_MANAGER", "FINANCE"],
-    matchedRuleName: "High Risk Multi-Tier Band",
-  });
+  const [result, setResult] = useState<DiscountSimulationResult | null>(null);
 
   const simulateMutation = useDiscountSimulation();
 

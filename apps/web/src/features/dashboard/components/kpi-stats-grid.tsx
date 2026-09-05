@@ -26,11 +26,6 @@ export function KpiStatsGrid() {
         icon={DollarSign}
         tone="primary"
         loading={isLoading}
-        trend={{
-          value: "+14.2%",
-          label: "vs. last month",
-          positive: true,
-        }}
       />
 
       {/* 2. Blended Margin % */}
@@ -45,11 +40,6 @@ export function KpiStatsGrid() {
         icon={Percent}
         tone={isHealthyMargin ? "secondary" : "warning"}
         loading={isLoading}
-        trend={{
-          value: isHealthyMargin ? "+2.8%" : "-1.4%",
-          label: "target: 35%",
-          positive: isHealthyMargin,
-        }}
       />
 
       {/* 3. Pending Approvals */}
@@ -60,11 +50,6 @@ export function KpiStatsGrid() {
         icon={GitPullRequest}
         tone={(kpis?.pendingApprovalsCount ?? 0) > 0 ? "warning" : "secondary"}
         loading={isLoading}
-        trend={{
-          value: "Avg 4.2h",
-          label: "turnaround time",
-          positive: true,
-        }}
       />
 
       {/* 4. Active Backorders */}
@@ -75,11 +60,6 @@ export function KpiStatsGrid() {
         icon={Truck}
         tone={(kpis?.activeBackordersCount ?? 0) > 0 ? "danger" : "secondary"}
         loading={isLoading}
-        trend={{
-          value: "Multi-facility",
-          label: "split routing active",
-          positive: true,
-        }}
       />
     </div>
   );

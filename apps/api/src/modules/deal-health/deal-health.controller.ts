@@ -5,6 +5,7 @@ import { sendError, sendOk } from "../../lib/response.js";
 import { alertFiltersSchema } from "./deal-health.schema.js";
 import {
   acknowledgeAlert,
+  getHealthSummary,
   listAlerts,
   nudgeOrEscalate,
   resolveAlert,
@@ -29,6 +30,14 @@ function handleError(res: Response, error: unknown) {
     httpStatus.internalServerError,
     err.message || "Internal server error.",
   );
+}
+
+export async function summaryController(_req: Request, res: Response) {
+  try {
+    return sendOk(res, await getHealthSummary());
+  } catch (e) {
+    return handleError(res, e);
+  }
 }
 
 export async function listAlertsController(req: Request, res: Response) {

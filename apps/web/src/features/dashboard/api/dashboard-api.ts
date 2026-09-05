@@ -1,4 +1,4 @@
-import { apiRoutes, SEED_QUOTATIONS, type Quotation } from "@template/shared";
+import { apiRoutes, type Quotation, SEED_QUOTATIONS } from "@template/shared";
 import { apiClient } from "@/services/http/api-client";
 
 export interface DashboardKpis {
@@ -140,7 +140,7 @@ export const dashboardApi = {
 
   getRecentQuotations: async (limit = 5): Promise<QuotationSummaryItem[]> => {
     try {
-      const res = await apiClient.get(apiRoutes.quotations.list.path, {
+      const res = await apiClient.get(apiRoutes.dashboard.recent.path, {
         params: { limit },
       });
       const data = res.data?.data ?? res.data;
@@ -155,7 +155,9 @@ export const dashboardApi = {
 
   getAlerts: async (): Promise<DealHealthAlertItem[]> => {
     try {
-      const res = await apiClient.get(apiRoutes.dealHealth.alerts.path);
+      const res = await apiClient.get(apiRoutes.dealHealth.alerts.path, {
+        params: { status: "open" },
+      });
       const data = res.data?.data ?? res.data;
       if (Array.isArray(data) && data.length > 0) {
         return data;

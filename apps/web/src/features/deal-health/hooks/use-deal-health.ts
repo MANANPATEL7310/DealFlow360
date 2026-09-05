@@ -5,6 +5,7 @@ import type {
   DealHealthSeverity,
   DealHealthStatus,
   ResolveAlertInput,
+  NudgeInput,
 } from "@template/shared";
 import { dealHealthApi } from "../api/deal-health-api";
 
@@ -79,6 +80,18 @@ export function useTriggerDetectionScan() {
 
   return useMutation({
     mutationFn: () => dealHealthApi.triggerScan(),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: DEAL_HEALTH_KEYS.all });
+    },
+  });
+}
+
+export function useNudgeAlert() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: ({ alertId, input }: { alertId: string; input: NudgeInput }) =>
+      dealHealthApi.nudgeAlert(alertId, input),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: DEAL_HEALTH_KEYS.all });
     },

@@ -52,6 +52,13 @@ export const apiRoutes = {
       auth: true,
       description: "Returns summary statistics for the authenticated user.",
     },
+    recent: {
+      path: "/dashboard/recent-quotations",
+      method: "GET",
+      auth: true,
+      description:
+        "Returns the most recently updated quotations visible to the user.",
+    },
   },
 
   // ─── Products & Price Lists ────────────────────────────────────────────────
@@ -189,7 +196,7 @@ export const apiRoutes = {
     },
     upsertDiscountTier: {
       path: "/governance/discount-tiers",
-      method: "POST",
+      method: "PUT",
       auth: true,
       description: "Upsert discount tier ceiling.",
     },
@@ -201,7 +208,7 @@ export const apiRoutes = {
     },
     upsertCategoryCeiling: {
       path: "/governance/category-ceilings",
-      method: "POST",
+      method: "PUT",
       auth: true,
       description: "Upsert category discount ceiling.",
     },
@@ -463,6 +470,12 @@ export const apiRoutes = {
 
   // ─── Hybrid Billing ────────────────────────────────────────────────────────
   billing: {
+    list: {
+      path: "/invoices/schedules",
+      method: "GET",
+      auth: true,
+      description: "Lists billing schedules visible to the authenticated user.",
+    },
     schedule: {
       path: "/quotations/:id/billing",
       method: "GET",
@@ -665,6 +678,109 @@ export const apiRoutes = {
       auth: true,
       description:
         "Translate natural language into whitelisted M11 report filters.",
+    },
+  },
+
+  // ─── Agentic AI & Human-in-the-Loop (HITL) ──────────────────────────────────
+  ai: {
+    status: {
+      path: "/ai/status",
+      method: "GET",
+      auth: true,
+      description:
+        "Get global AI status, monthly budget cap, and availability.",
+    },
+    approvals: {
+      path: "/ai/approvals",
+      method: "GET",
+      auth: true,
+      description: "List pending human-in-the-loop approval requests.",
+    },
+    decideApproval: {
+      path: "/ai/approvals/:id/decision",
+      method: "POST",
+      auth: true,
+      description: "Approve or reject a human-in-the-loop request.",
+    },
+    runs: {
+      path: "/ai/runs",
+      method: "GET",
+      auth: true,
+      description: "List recent agent execution runs and step traces.",
+    },
+    contextual: {
+      path: "/ai/contextual",
+      method: "POST",
+      auth: true,
+      description: "Get AI contextual suggestions for the current screen.",
+    },
+    discountReview: {
+      path: "/ai/discount-review",
+      method: "POST",
+      auth: true,
+      description:
+        "Agent 1 discount approval recommendation and RAG deal comparisons.",
+    },
+    negotiationEvaluate: {
+      path: "/ai/negotiation-evaluate",
+      method: "POST",
+      auth: true,
+      description: "Agent 6 negotiation counter simulation and draft reply.",
+    },
+    upsellRecommendations: {
+      path: "/ai/upsell-recommendations",
+      method: "POST",
+      auth: true,
+      description:
+        "Agent 2 AI product and upsell recommendations for quotation builder.",
+    },
+    dealHealthTriage: {
+      path: "/ai/deal-health-triage",
+      method: "POST",
+      auth: true,
+      description:
+        "Agent 5 AI deal health triage and prioritized anomaly radar.",
+    },
+    draftNudge: {
+      path: "/ai/draft-nudge",
+      method: "POST",
+      auth: true,
+      description: "Agent 5 AI personalized recovery nudge generator.",
+    },
+    fulfillmentOptimize: {
+      path: "/ai/fulfillment-optimize",
+      method: "POST",
+      auth: true,
+      description:
+        "Agent 3 AI autonomous multi-warehouse fulfillment optimization.",
+    },
+    billingExplain: {
+      path: "/ai/billing-explain",
+      method: "POST",
+      auth: true,
+      description:
+        "Agent 4 AI hybrid billing schedule and proration explanation.",
+    },
+    draftCreditNote: {
+      path: "/ai/draft-credit-note",
+      method: "POST",
+      auth: true,
+      description:
+        "Agent 4 AI draft credit note generator with Finance HITL routing.",
+    },
+    nlQuery: {
+      path: "/ai/nl-query",
+      method: "POST",
+      auth: true,
+      description:
+        "Agent 7 conversational sales analytics and natural language reporting query.",
+    },
+    updateConfig: {
+      path: "/ai/config",
+      method: "PATCH",
+      auth: true,
+      description:
+        "Update global AI configuration, monthly budget cap, and agent kill-switches.",
     },
   },
 } as const;

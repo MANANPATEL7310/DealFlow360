@@ -8,18 +8,46 @@ import type { Request, Response } from "express";
 import { sendCreated, sendNotFound, sendOk } from "../../lib/response.js";
 import {
   customerService,
+  generateMagicLink,
   listContacts,
   addContact,
 } from "./customer.service.js";
+import { db } from "../../lib/db.js";
 
 // ─── Customer controllers ─────────────────────────────────────────────────────
 
-export async function listCustomersController(_req: Request, res: Response) {
-  return sendOk(res, await customerService.findMany({}));
+export async function listCustomersController(req: Request, res: Response) {
+  const query =
+    typeof req.query.query === "string" ? req.query.query.trim() : "";
+  const tier =
+    typeof req.query.tier === "string" && req.query.tier !== "ALL"
+      ? req.query.tier
+      : undefined;
+  return sendOk(
+    res,
+    await db.customer.findMany({
+      where: {
+        ...(tier ? { tier: tier as "BRONZE" | "SILVER" | "GOLD" } : {}),
+        ...(query ? { name: { contains: query, mode: "insensitive" } } : {}),
+      },
+      include: { contacts: true },
+      orderBy: { updatedAt: "desc" },
+    }),
+  );
+}
+
+export async function generateMagicLinkController(req: Request, res: Response) {
+  return sendOk(
+    res,
+    await generateMagicLink(req.params.id as string, req.body.contactId),
+  );
 }
 
 export async function getCustomerController(req: Request, res: Response) {
-  const customer = await customerService.findById(req.params.id as string);
+  const customer = await db.customer.findUnique({
+    where: { id: req.params.id as string },
+    include: { contacts: true },
+  });
   return customer
     ? sendOk(res, customer)
     : sendNotFound(res, "Customer not found.");

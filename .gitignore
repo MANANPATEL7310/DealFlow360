@@ -18,3 +18,4 @@ planning/
 docs/architecture/
 .claude/
 docs/
+.playwright-mcp/

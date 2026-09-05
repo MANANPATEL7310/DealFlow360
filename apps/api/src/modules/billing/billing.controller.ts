@@ -17,6 +17,22 @@ export async function getBillingScheduleHandler(req: Request, res: Response) {
   return sendOk(res, schedule);
 }
 
+export async function listBillingSchedulesHandler(req: Request, res: Response) {
+  const where =
+    req.user!.role === "sales_rep"
+      ? { quotation: { salesRepId: req.user!.sub } }
+      : {};
+  const schedules = await db.billingSchedule.findMany({
+    where,
+    include: {
+      invoices: { orderBy: [{ periodStart: "asc" }, { createdAt: "asc" }] },
+      creditNotes: { orderBy: { createdAt: "asc" } },
+    },
+    orderBy: { updatedAt: "desc" },
+  });
+  return sendOk(res, schedules);
+}
+
 export async function subscriptionChangeHandler(req: Request, res: Response) {
   const quotationId = req.params.id as string;
   const actorId = req.user!.sub;

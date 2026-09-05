@@ -8,6 +8,7 @@ import {
   type DealHealthStatus,
   type DealHealthSummary,
   type ResolveAlertInput,
+  type NudgeInput,
   SEED_QUOTATIONS,
 } from "@template/shared";
 import { apiClient } from "@/services/http/api-client";
@@ -51,10 +52,10 @@ const mockAlerts: DealHealthAlert[] = [
       "Warehouse Central has only 2 units in stock against 12 units committed on quotation line 1.",
     metrics: {
       deficitUnits: 10,
-      atRiskAmountMinor: 3800000,
+      atRiskAmountMinor: 8400000,
     },
     recommendedAction:
-      "Execute multi-depot split with Western Coast Hub or postpone delivery commitment.",
+      "Split line fulfillment: ship 2 units ex-Central, 10 units cross-dock from West Hub.",
     status: "open",
     createdAt: new Date(Date.now() - 72000000).toISOString(),
     updatedAt: new Date(Date.now() - 72000000).toISOString(),
@@ -63,8 +64,8 @@ const mockAlerts: DealHealthAlert[] = [
     id: "alt-stl-qt-103",
     quotationId: "qt-103",
     quotationCode: "QT-2026-003",
-    customerName: "Horizon Media Systems",
-    customerTier: "BRONZE",
+    customerName: "BioGen Research Corp",
+    customerTier: "GOLD",
     salesRepName: "Marcus Vance",
     type: "STALLED",
     severity: "medium",
@@ -274,6 +275,27 @@ export const dealHealthApi = {
         alert.status = "resolved";
         alert.resolvedAt = new Date().toISOString();
         alert.resolutionNote = input.resolutionNote;
+      }
+      return alert ?? mockAlerts[0]!;
+    }
+  },
+
+  nudgeAlert: async (
+    alertId: string,
+    input: NudgeInput,
+  ): Promise<DealHealthAlert> => {
+    try {
+      const { data } = await apiClient.post(
+        apiRoutes.dealHealth.nudge.path.replace(":id", alertId),
+        input,
+      );
+      return data.data;
+    } catch {
+      const alert = mockAlerts.find((a) => a.id === alertId);
+      if (alert) {
+        alert.status = "acknowledged";
+        alert.acknowledgedAt = new Date().toISOString();
+        if (input.message) alert.resolutionNote = input.message;
       }
       return alert ?? mockAlerts[0]!;
     }
