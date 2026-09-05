@@ -24,11 +24,23 @@ export const apiRoutes = {
 
   // ─── Auth ──────────────────────────────────────────────────────────────────
   auth: {
+    register: {
+      path: "/auth/register",
+      method: "POST",
+      auth: false,
+      description: "Register a new user. Returns access token.",
+    },
     login: {
       path: "/auth/login",
       method: "POST",
       auth: false,
       description: "Authenticate with email & password. Returns access token.",
+    },
+    me: {
+      path: "/auth/me",
+      method: "GET",
+      auth: true,
+      description: "Returns the currently authenticated user.",
     },
   },
 
@@ -45,11 +57,146 @@ export const apiRoutes = {
   // ─── ADD NEW ROUTES BELOW THIS LINE ────────────────────────────────────────
   // Follow the same pattern: add here first, then implement on backend, then consume on frontend.
   products: {
-    list:    { path: "/products",     method: "GET",    auth: true,  description: "List all products." },
-    create:  { path: "/products",     method: "POST",   auth: true,  description: "Create a product." },
-    getById: { path: "/products/:id", method: "GET",    auth: true,  description: "Get product by ID." },
-    update:  { path: "/products/:id", method: "PATCH",  auth: true,  description: "Update a product." },
-    remove:  { path: "/products/:id", method: "DELETE", auth: true,  description: "Delete a product." },
+    list: {
+      path: "/products",
+      method: "GET",
+      auth: true,
+      description: "List all products.",
+    },
+    create: {
+      path: "/products",
+      method: "POST",
+      auth: true,
+      description: "Create a product.",
+    },
+    getById: {
+      path: "/products/:id",
+      method: "GET",
+      auth: true,
+      description: "Get product by ID.",
+    },
+    update: {
+      path: "/products/:id",
+      method: "PATCH",
+      auth: true,
+      description: "Update a product.",
+    },
+    remove: {
+      path: "/products/:id",
+      method: "DELETE",
+      auth: true,
+      description: "Delete a product.",
+    },
+  },
+
+  // ─── Governance (M3) ──────────────────────────────────────────────────────
+  governance: {
+    discountTiers: {
+      list: {
+        path: "/governance/discount-tiers",
+        method: "GET",
+        auth: true,
+        description: "List all discount tier ceilings.",
+      },
+      upsert: {
+        path: "/governance/discount-tiers",
+        method: "PUT",
+        auth: true,
+        description: "Upsert a discount tier ceiling.",
+      },
+    },
+    categoryCeilings: {
+      list: {
+        path: "/governance/category-ceilings",
+        method: "GET",
+        auth: true,
+        description: "List all category discount ceilings.",
+      },
+      upsert: {
+        path: "/governance/category-ceilings",
+        method: "PUT",
+        auth: true,
+        description: "Upsert a category discount ceiling.",
+      },
+    },
+    approvalRules: {
+      list: {
+        path: "/governance/approval-rules",
+        method: "GET",
+        auth: true,
+        description: "List all approval chain rules.",
+      },
+      create: {
+        path: "/governance/approval-rules",
+        method: "POST",
+        auth: true,
+        description: "Create an approval chain rule.",
+      },
+      update: {
+        path: "/governance/approval-rules/:id",
+        method: "PATCH",
+        auth: true,
+        description: "Update an approval chain rule.",
+      },
+      remove: {
+        path: "/governance/approval-rules/:id",
+        method: "DELETE",
+        auth: true,
+        description: "Delete an approval chain rule.",
+      },
+    },
+  },
+
+  // ─── Quotations (M5) ──────────────────────────────────────────────────────
+  quotations: {
+    list: {
+      path: "/quotations",
+      method: "GET",
+      auth: true,
+      description: "List quotations.",
+    },
+    getById: {
+      path: "/quotations/:id",
+      method: "GET",
+      auth: true,
+      description: "Get quotation by ID.",
+    },
+    create: {
+      path: "/quotations",
+      method: "POST",
+      auth: true,
+      description: "Create a new quotation.",
+    },
+    addLine: {
+      path: "/quotations/:id/lines",
+      method: "POST",
+      auth: true,
+      description: "Add a line item to quotation.",
+    },
+    updateLine: {
+      path: "/quotations/:id/lines/:lineId",
+      method: "PATCH",
+      auth: true,
+      description: "Update a line item on quotation.",
+    },
+    removeLine: {
+      path: "/quotations/:id/lines/:lineId",
+      method: "DELETE",
+      auth: true,
+      description: "Delete a line item from quotation.",
+    },
+    confirm: {
+      path: "/quotations/:id/confirm",
+      method: "POST",
+      auth: true,
+      description: "Confirm quotation and trigger risk evaluation.",
+    },
+    approvalDecision: {
+      path: "/quotations/:id/approvals/decision",
+      method: "POST",
+      auth: true,
+      description: "Submit approval decision (approve, reject, return).",
+    },
   },
 } as const;
 
