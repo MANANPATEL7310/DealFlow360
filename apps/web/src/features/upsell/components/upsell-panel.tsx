@@ -355,6 +355,11 @@ export function UpsellPanel({ quotationId, className }: UpsellPanelProps) {
     (s) => !dismissedIds.has(s.product.id),
   );
 
+  const filteredDeterministic = visibleSuggestions.filter((s) => {
+    if (filter === "MARGIN_BOOST") return s.marginDeltaPct >= 0;
+    return true;
+  });
+
   if (visibleSuggestions.length === 0) {
     return null;
   }
@@ -388,32 +393,73 @@ export function UpsellPanel({ quotationId, className }: UpsellPanelProps) {
           </div>
         </div>
 
-        <Button
-          size="sm"
-          variant="outline"
-          className="size-8 rounded-lg p-0 self-end sm:self-auto"
-          onClick={() => setIsCollapsed(!isCollapsed)}
-          aria-label={isCollapsed ? "Expand panel" : "Collapse panel"}
-        >
-          {isCollapsed ? (
-            <ChevronDown className="size-4" />
-          ) : (
-            <ChevronUp className="size-4" />
+        <div className="flex items-center gap-2 self-end sm:self-auto">
+          {/* Filter tabs */}
+          {!isCollapsed && visibleSuggestions.length > 0 && (
+            <div className="flex items-center gap-1 rounded-xl border border-border bg-surface-muted/40 p-1">
+              <Button
+                size="sm"
+                variant={filter === "ALL" ? "primary" : "ghost"}
+                className="h-7 text-xs"
+                onClick={() => setFilter("ALL")}
+              >
+                All ({visibleSuggestions.length})
+              </Button>
+              <Button
+                size="sm"
+                variant={filter === "MARGIN_BOOST" ? "primary" : "ghost"}
+                className="h-7 gap-1 text-xs"
+                onClick={() => setFilter("MARGIN_BOOST")}
+              >
+                <TrendingUp className="size-3" />
+                Margin Boosters
+              </Button>
+            </div>
           )}
-        </Button>
+
+          {/* Collapse Toggle */}
+          <Button
+            size="sm"
+            variant="outline"
+            className="size-8 rounded-lg p-0"
+            onClick={() => setIsCollapsed(!isCollapsed)}
+            aria-label={isCollapsed ? "Expand panel" : "Collapse panel"}
+          >
+            {isCollapsed ? (
+              <ChevronDown className="size-4" />
+            ) : (
+              <ChevronUp className="size-4" />
+            )}
+          </Button>
+        </div>
       </div>
 
       {!isCollapsed && (
-        <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-          {visibleSuggestions.map((suggestion) => (
-            <UpsellSuggestionCard
-              key={suggestion.product.id}
-              isAdding={addingId === suggestion.product.id}
-              onAdd={handleAdd}
-              onDismiss={handleDismiss}
-              suggestion={suggestion}
-            />
-          ))}
+        <div className="pt-1">
+          {filteredDeterministic.length === 0 ? (
+            <div className="flex flex-col items-center justify-center rounded-xl border border-dashed border-border py-8 text-center text-xs text-muted-foreground">
+              <CheckCircle2 className="mb-2 size-6 text-success/60" />
+              <p className="font-semibold text-foreground">
+                All recommendations in this filter applied or dismissed
+              </p>
+              <p className="mt-0.5 text-muted-foreground">
+                Switch filters or add more lines to discover complementary
+                packages.
+              </p>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+              {filteredDeterministic.map((suggestion) => (
+                <UpsellSuggestionCard
+                  key={suggestion.product.id}
+                  isAdding={addingId === suggestion.product.id}
+                  onAdd={handleAdd}
+                  onDismiss={handleDismiss}
+                  suggestion={suggestion}
+                />
+              ))}
+            </div>
+          )}
         </div>
       )}
     </Card>
