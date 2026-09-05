@@ -15,11 +15,13 @@ import {
   getAiBillingExplanation,
   draftAiCreditNote,
   evaluateAiReportQuery,
+  updateAiConfig,
 } from "./ai.service.js";
 import {
   HitlApprovalDecisionSchema,
   AiDraftCreditNoteRequestSchema,
   AiNaturalLanguageQueryRequestSchema,
+  UpdateAiConfigSchema,
 } from "@template/shared";
 
 export const aiRouter = createRouter();
@@ -183,6 +185,17 @@ aiRouter.post("/nl-query", async (req, res, next) => {
       userId,
     );
     res.json(result);
+  } catch (err) {
+    next(err);
+  }
+});
+
+aiRouter.patch("/config", async (req, res, next) => {
+  try {
+    const parsed = UpdateAiConfigSchema.parse(req.body);
+    const userId = req.user?.sub ?? "admin";
+    const updated = await updateAiConfig(parsed, userId);
+    res.json(updated);
   } catch (err) {
     next(err);
   }

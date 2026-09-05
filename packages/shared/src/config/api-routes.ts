@@ -689,6 +689,13 @@ export const apiRoutes = {
       description:
         "Agent 7 conversational sales analytics and natural language reporting query.",
     },
+    updateConfig: {
+      path: "/ai/config",
+      method: "PATCH",
+      auth: true,
+      description:
+        "Update global AI configuration, monthly budget cap, and agent kill-switches.",
+    },
   },
 } as const;
 

@@ -14,6 +14,7 @@ import type {
   AiDraftCreditNoteResponse,
   AiNaturalLanguageQueryResponse,
   ReportFilters,
+  UpdateAiConfig,
 } from "@template/shared";
 import { db } from "../../lib/db.js";
 import { writeAudit } from "../../lib/audit.js";
@@ -21,7 +22,17 @@ import { getUpsellSuggestions } from "../upsell/upsell.service.js";
 import { listAlerts } from "../deal-health/deal-health.service.js";
 import { buildReportDataset } from "../reports/report-dataset.js";
 
-// In-memory persistent state for HITL queue during runtime
+// In-memory persistent state for AI config & HITL queue during runtime
+let runtimeMonthlyBudgetUsd = 50.0;
+const runtimeAgentFlags: Record<string, boolean> = {
+  "discount-approval": true,
+  "product-recommendation": true,
+  "fulfillment-planner": true,
+  "billing-assistant": true,
+  "deal-health-monitor": true,
+  "negotiation-assistant": true,
+  "sales-insights": true,
+};
 const hitlApprovalStore: Map<string, ApprovalRequest> = new Map();
 const agentRunStore: AgentRun[] = [];
 
@@ -233,22 +244,54 @@ export async function getAiStatus(): Promise<AiStatus> {
   return {
     enabled: isAiEnabled,
     aiAvailable: isAiEnabled,
-    monthlyBudgetUsd: 50.0,
+    monthlyBudgetUsd: runtimeMonthlyBudgetUsd,
     spendUsd: Number(totalCost.toFixed(4)),
     activeModel: "anthropic/claude-sonnet-4.5",
     degradedReason: !isAiEnabled
       ? "AI features disabled in system settings. Running in deterministic fallback mode."
       : null,
-    agentFlags: {
-      "discount-approval": true,
-      "product-recommendation": true,
-      "fulfillment-planner": true,
-      "billing-assistant": true,
-      "deal-health-monitor": true,
-      "negotiation-assistant": true,
-      "sales-insights": true,
-    },
+    agentFlags: { ...runtimeAgentFlags },
   };
+}
+
+export async function updateAiConfig(
+  payload: UpdateAiConfig,
+  userId: string,
+): Promise<AiStatus> {
+  if (payload.enabled !== undefined) {
+    try {
+      await db.systemSetting.upsert({
+        where: { key: "ai.enabled" },
+        update: { value: JSON.stringify(payload.enabled) },
+        create: {
+          key: "ai.enabled",
+          value: JSON.stringify(payload.enabled),
+          scope: "global",
+        },
+      });
+    } catch {
+      // fallback if mock or local
+    }
+  }
+
+  if (payload.monthlyBudgetUsd !== undefined) {
+    runtimeMonthlyBudgetUsd = payload.monthlyBudgetUsd;
+  }
+
+  if (payload.agentFlags) {
+    Object.assign(runtimeAgentFlags, payload.agentFlags);
+  }
+
+  await writeAudit({
+    actorId: userId,
+    actorKind: "user",
+    action: "ai.config.updated",
+    entity: "SystemSetting",
+    entityId: "ai.config",
+    diff: payload,
+  });
+
+  return getAiStatus();
 }
 
 export async function listApprovalRequests(

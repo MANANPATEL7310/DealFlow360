@@ -302,3 +302,11 @@ export const AiNaturalLanguageQueryResponseSchema = z.object({
 export type AiNaturalLanguageQueryResponse = z.infer<
   typeof AiNaturalLanguageQueryResponseSchema
 >;
+
+// ── Admin AI Governance & Operations ──
+export const UpdateAiConfigSchema = z.object({
+  enabled: z.boolean().optional(),
+  monthlyBudgetUsd: z.number().positive().optional(),
+  agentFlags: z.record(z.string(), z.boolean()).optional(),
+});
+export type UpdateAiConfig = z.infer<typeof UpdateAiConfigSchema>;

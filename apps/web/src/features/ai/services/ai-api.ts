@@ -17,6 +17,7 @@ import type {
   AiDraftCreditNoteResponse,
   AiNaturalLanguageQueryResponse,
   ReportFilters,
+  UpdateAiConfig,
 } from "@template/shared";
 
 export async function fetchAiStatus(): Promise<AiStatus> {
@@ -150,6 +151,16 @@ export async function fetchAiNaturalLanguageReportQuery(
   const { data } = await apiClient.post<AiNaturalLanguageQueryResponse>(
     apiRoutes.ai.nlQuery.path,
     { prompt, currentFilters },
+  );
+  return data;
+}
+
+export async function updateAiConfig(
+  payload: UpdateAiConfig,
+): Promise<AiStatus> {
+  const { data } = await apiClient.patch<AiStatus>(
+    apiRoutes.ai.updateConfig.path,
+    payload,
   );
   return data;
 }
