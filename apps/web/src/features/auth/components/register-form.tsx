@@ -13,6 +13,14 @@ export function RegisterForm({ onSwitchToLogin }: RegisterFormProps) {
   const { form, isPending, onSubmit } = useRegisterForm();
   const selectedRole = form.watch("role") as UserRole;
 
+  const handleFillSample = () => {
+    const randomId = Math.floor(1000 + Math.random() * 9000);
+    form.setValue("name", `Enterprise User ${randomId}`);
+    form.setValue("email", `demo.user.${randomId}@dealflow360.dev`);
+    form.setValue("password", "password123");
+    form.clearErrors();
+  };
+
   return (
     <div className="space-y-6">
       <div className="space-y-2">
@@ -26,6 +34,27 @@ export function RegisterForm({ onSwitchToLogin }: RegisterFormProps) {
         <p className="text-sm text-muted-foreground">
           Provision your DealFlow360 account with your assigned enterprise role.
         </p>
+      </div>
+
+      <div className="rounded-lg border border-blue-500/30 bg-blue-500/10 p-3 text-xs text-blue-400">
+        <span className="font-semibold">Looking for demo accounts?</span>{" "}
+        Ready-to-use demo accounts already exist.{" "}
+        <button
+          className="font-bold underline hover:text-blue-300"
+          type="button"
+          onClick={onSwitchToLogin}
+        >
+          Switch to Sign In
+        </button>{" "}
+        for 1-click access, or{" "}
+        <button
+          className="font-bold underline hover:text-blue-300"
+          type="button"
+          onClick={handleFillSample}
+        >
+          Auto-fill test details
+        </button>{" "}
+        to register a new account.
       </div>
 
       <form className="space-y-4" onSubmit={onSubmit}>

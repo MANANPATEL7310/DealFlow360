@@ -11,6 +11,11 @@ export default [
   index("routes/home.tsx"),
   route("auth/login", "routes/login.tsx"),
   route("portal", "routes/portal.tsx"),
+  route("invoices/:id/paid", "routes/invoice-paid.tsx"),
+  route(
+    "invoices/:id/checkout-simulation",
+    "routes/invoice-checkout-simulation.tsx",
+  ),
   layout("routes/app-layout.tsx", [
     route("app", "routes/dashboard.tsx"),
     route("app/quotations", "routes/quotations.tsx"),

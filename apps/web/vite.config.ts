@@ -8,4 +8,22 @@ export default defineConfig({
   server: {
     port: 5173,
   },
+  optimizeDeps: {
+    include: [
+      "react",
+      "react/jsx-runtime",
+      "react/jsx-dev-runtime",
+      "react-dom",
+      "react-dom/client",
+      "react-router",
+      "@tanstack/react-query",
+      "react-hot-toast",
+      "lucide-react",
+      "axios",
+      "clsx",
+      "tailwind-merge",
+      "zustand",
+      "dayjs",
+    ],
+  },
 });

@@ -17,8 +17,8 @@ export function useLoginForm() {
   const form = useForm<LoginFormValues>({
     resolver: zodResolver(loginInputSchema),
     defaultValues: {
-      email: "admin@example.com",
-      password: "changeme123",
+      email: "admin@dealflow360.dev",
+      password: "password123",
       rememberMe: true,
     },
   });

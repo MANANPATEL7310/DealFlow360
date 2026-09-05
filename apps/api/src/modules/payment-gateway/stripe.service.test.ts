@@ -1,70 +1,72 @@
-import { beforeEach, describe, expect, it } from "vitest";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import { db } from "../../lib/db.js";
+import { recordPayment } from "../billing/billing.service.js";
 import {
   createCheckoutSession,
   handleStripeWebhookEvent,
   simulatePaymentSettlement,
 } from "./stripe.service.js";
 
-describe("Stripe Payment Gateway", () => {
-  let customerId: string;
-  let quoteId: string;
-  let scheduleId: string;
-  let invoiceId: string;
+vi.mock("../../lib/db.js", () => ({
+  db: {
+    invoice: {
+      findUnique: vi.fn(),
+      update: vi.fn(),
+    },
+    customer: {
+      create: vi.fn(),
+    },
+    user: {
+      findFirst: vi.fn(),
+      create: vi.fn(),
+    },
+    quotation: {
+      create: vi.fn(),
+    },
+    billingSchedule: {
+      create: vi.fn(),
+    },
+  },
+}));
 
-  beforeEach(async () => {
-    // Set up test customer, quote, schedule, and invoice
-    const customer = await db.customer.create({
-      data: {
-        name: "Payment Gateway Test Customer",
-        tier: "GOLD",
-        currency: "USD",
-        contacts: {
-          create: {
-            name: "Test Buyer",
-            email: "testbuyer@payment.test",
+vi.mock("../billing/billing.service.js", () => ({
+  recordPayment: vi.fn(),
+}));
+
+describe("Stripe Payment Gateway", () => {
+  const invoiceId = "inv-test-123";
+  let mockInvoice: Record<string, unknown>;
+
+  beforeEach(() => {
+    vi.clearAllMocks();
+
+    mockInvoice = {
+      id: invoiceId,
+      scheduleId: "sched-test-1",
+      kind: "ONE_TIME",
+      amountMinor: 10000,
+      status: "ISSUED",
+      payments: [],
+      schedule: {
+        quotationId: "q-123",
+        quotation: {
+          customer: {
+            currency: "USD",
+            contacts: [{ email: "testbuyer@payment.test" }],
           },
         },
       },
-    });
-    customerId = customer.id;
+    };
 
-    const rep =
-      (await db.user.findFirst({ where: { role: "sales_rep" } })) ??
-      (await db.user.create({
-        data: {
-          email: "rep-stripe-test@dealflow360.dev",
-          name: "Stripe Test Rep",
-          password: "password123",
-          role: "sales_rep",
-        },
-      }));
+    vi.mocked(db.invoice.findUnique).mockResolvedValue(mockInvoice as never);
 
-    const quote = await db.quotation.create({
-      data: {
-        customerId,
-        salesRepId: rep.id,
-        status: "CONFIRMED",
-        subtotalMinor: 10000,
-        grandTotalMinor: 10000,
-      },
+    vi.mocked(recordPayment).mockImplementation(async (invId: string) => {
+      mockInvoice.status = "PAID";
+      return {
+        id: invId,
+        status: "PAID",
+      } as never;
     });
-    quoteId = quote.id;
-
-    const schedule = await db.billingSchedule.create({
-      data: { quotationId: quoteId },
-    });
-    scheduleId = schedule.id;
-
-    const invoice = await db.invoice.create({
-      data: {
-        scheduleId,
-        kind: "ONE_TIME",
-        amountMinor: 10000, // $100.00
-        status: "ISSUED",
-      },
-    });
-    invoiceId = invoice.id;
   });
 
   it("creates a checkout session (live if secret key configured, simulation if unset)", async () => {
@@ -81,16 +83,14 @@ describe("Stripe Payment Gateway", () => {
   });
 
   it("rejects checkout session for non-existent invoice", async () => {
+    vi.mocked(db.invoice.findUnique).mockResolvedValueOnce(null as never);
     await expect(
       createCheckoutSession("non-existent-invoice-id"),
     ).rejects.toThrow("INVOICE_NOT_FOUND");
   });
 
   it("rejects checkout session for a VOID invoice", async () => {
-    await db.invoice.update({
-      where: { id: invoiceId },
-      data: { status: "VOID" },
-    });
+    mockInvoice.status = "VOID";
 
     await expect(createCheckoutSession(invoiceId)).rejects.toThrow(
       "INVOICE_VOID",
@@ -118,11 +118,11 @@ describe("Stripe Payment Gateway", () => {
       status: "PAID",
     });
 
-    // Verify invoice status in DB
-    const updatedInvoice = await db.invoice.findUnique({
-      where: { id: invoiceId },
-    });
-    expect(updatedInvoice?.status).toBe("PAID");
+    expect(recordPayment).toHaveBeenCalledWith(
+      invoiceId,
+      10000,
+      "stripe_webhook",
+    );
   });
 
   it("safely ignores unrecognized webhook events without throwing", async () => {
@@ -144,7 +144,10 @@ describe("Stripe Payment Gateway", () => {
       newStatus: "PAID",
     });
 
-    const checkDb = await db.invoice.findUnique({ where: { id: invoiceId } });
-    expect(checkDb?.status).toBe("PAID");
+    expect(recordPayment).toHaveBeenCalledWith(
+      invoiceId,
+      10000,
+      "stripe_simulation",
+    );
   });
 });

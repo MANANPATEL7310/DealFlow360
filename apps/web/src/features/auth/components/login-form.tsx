@@ -57,6 +57,71 @@ export function LoginForm() {
             </p>
           </div>
 
+          <div className="space-y-2.5 rounded-lg border border-border/80 bg-muted/30 p-3">
+            <div className="flex items-center justify-between">
+              <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                Demo Accounts (1-Click Fill)
+              </span>
+              <span className="text-xs text-muted-foreground">
+                Password: password123
+              </span>
+            </div>
+            <div className="grid grid-cols-2 gap-2">
+              {[
+                {
+                  label: "Admin",
+                  email: "admin@dealflow360.dev",
+                  badge: "Full Access",
+                },
+                {
+                  label: "Sales Rep",
+                  email: "sales_rep@dealflow360.dev",
+                  badge: "CPQ & Deals",
+                },
+                {
+                  label: "Sales Mgr",
+                  email: "sales_manager@dealflow360.dev",
+                  badge: "Approvals",
+                },
+                {
+                  label: "Finance",
+                  email: "finance@dealflow360.dev",
+                  badge: "Invoices",
+                },
+              ].map((demo) => {
+                const currentEmail = form.watch("email");
+                const isActive = currentEmail === demo.email;
+                return (
+                  <button
+                    key={demo.email}
+                    className={`flex flex-col items-start rounded-md border p-2 text-left transition-all ${
+                      isActive
+                        ? "border-primary bg-primary/10 shadow-xs"
+                        : "border-border/60 bg-background/80 hover:bg-muted/60 hover:border-primary/40"
+                    }`}
+                    type="button"
+                    onClick={() => {
+                      form.setValue("email", demo.email);
+                      form.setValue("password", "password123");
+                    }}
+                  >
+                    <div className="flex w-full items-center justify-between">
+                      <span className="text-xs font-semibold text-foreground">
+                        {demo.label}
+                      </span>
+                      <span className="text-xs text-muted-foreground">
+                        {demo.badge}
+                      </span>
+                    </div>
+                    <span className="mt-0.5 truncate text-xs text-muted-foreground">
+                      {demo.email}
+                    </span>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+
           <form className="space-y-4" onSubmit={onSubmit}>
             <div className="space-y-1.5">
               <label
