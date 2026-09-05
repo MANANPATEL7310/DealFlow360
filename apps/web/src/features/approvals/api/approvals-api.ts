@@ -1,5 +1,4 @@
 import {
-  apiRoutes,
   type ApprovalDecisionInput,
   type Quotation,
   type QuotationApprovalStep,
@@ -7,7 +6,6 @@ import {
   type UserRole,
 } from "@template/shared";
 import { quotationsApi } from "@/features/quotations/api/quotations-api";
-import { apiClient } from "@/services/http/api-client";
 
 export interface ApprovalQueueItem {
   quotation: Quotation;
@@ -43,28 +41,27 @@ function getRequiredRoleLabel(stepLevel: string | undefined): string {
 
 export const approvalsApi = {
   async getPendingApprovals(userRole?: UserRole): Promise<ApprovalQueueItem[]> {
-    try {
-      const { data } = await apiClient.get(apiRoutes.approvals.inbox.path);
-      return data.data;
-    } catch {
-      const allQuotes = await quotationsApi.getQuotations({
-        status: "PENDING_APPROVAL",
-      });
-
-      return allQuotes.map((q) => {
+    const summaries = await quotationsApi.getQuotations({
+      status: "PENDING_APPROVAL",
+    });
+    const quotations = await Promise.all(
+      summaries.map((quotation) =>
+        quotationsApi.getQuotationById(quotation.id),
+      ),
+    );
+    return quotations
+      .filter((quotation): quotation is Quotation => quotation !== null)
+      .map((quotation) => {
         const currentStep =
-          q.approvals.find((s) => s.decision === "PENDING") ?? null;
-        const canReview = checkCanReview(currentStep?.level, userRole);
-        const requiredRoleLabel = getRequiredRoleLabel(currentStep?.level);
-
+          quotation.approvals.find((step) => step.decision === "PENDING") ??
+          null;
         return {
-          quotation: q,
+          quotation,
           currentStep,
-          canReview,
-          requiredRoleLabel,
+          canReview: checkCanReview(currentStep?.level, userRole),
+          requiredRoleLabel: getRequiredRoleLabel(currentStep?.level),
         };
       });
-    }
   },
 
   async getApprovalDetails(

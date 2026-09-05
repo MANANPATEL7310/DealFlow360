@@ -26,6 +26,7 @@ import { ApprovalStepsStepper } from "@/features/approvals/components/approval-s
 import { AuditTimeline } from "@/features/approvals/components/audit-timeline";
 import { DecisionModal } from "@/features/approvals/components/decision-modal";
 import { RiskBreakdownCard } from "@/features/approvals/components/risk-breakdown-card";
+import { AiDiscountReviewCard } from "@/features/approvals/components/ai-discount-review-card";
 import {
   useApprovalDetails,
   useSubmitApprovalDecision,
@@ -320,6 +321,9 @@ export function ApprovalDetailPage() {
                 </Table>
               </div>
             </Card>
+
+            {/* Agent 1 AI Discount Approval Review Card */}
+            <AiDiscountReviewCard quotation={quotation} risk={risk ?? null} />
 
             {/* Risk Breakdown Card */}
             <RiskBreakdownCard quotation={quotation} risk={risk ?? null} />

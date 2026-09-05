@@ -10,6 +10,7 @@ import { ExportButtons } from "../components/export-buttons";
 import { FilterBar } from "../components/filter-bar";
 import { FunnelTable } from "../components/funnel-table";
 import { SummaryCards } from "../components/summary-cards";
+import { AiSalesInsightsCard } from "../components/ai-sales-insights-card";
 import { useSalesReport } from "../hooks/use-reports";
 
 export default function ReportsPage() {
@@ -77,6 +78,12 @@ export default function ReportsPage() {
         value={filters}
         onChange={setFilters}
         canPickRep={canPickRep}
+      />
+
+      {/* Agent 7: AI Sales Insights & Conversational Analytics */}
+      <AiSalesInsightsCard
+        currentFilters={filters}
+        onApplyFilters={setFilters}
       />
 
       {/* Main Content Area */}

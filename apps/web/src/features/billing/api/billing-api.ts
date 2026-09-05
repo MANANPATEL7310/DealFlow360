@@ -140,7 +140,12 @@ export const billingApi = {
    * Retrieves all billing schedules for platform-wide operations view.
    */
   async listSchedules(): Promise<BillingSchedule[]> {
-    return localSchedules;
+    try {
+      const { data } = await apiClient.get(apiRoutes.billing.list.path);
+      return data.data;
+    } catch {
+      return localSchedules;
+    }
   },
 
   /**
@@ -158,10 +163,15 @@ export const billingApi = {
     payment: Payment;
   }> {
     try {
-      const { data } = await apiClient.post(
-        apiRoutes.invoices.pay.path.replace(":id", invoiceId),
-        { amountMinor, paymentMethod, reference },
+      const endpoint = (apiRoutes.invoices.pay.path as string).replace(
+        /:id|:invoiceId/,
+        invoiceId,
       );
+      const { data } = await apiClient.post(endpoint, {
+        amountMinor,
+        paymentMethod,
+        reference,
+      });
       return data.data;
     } catch {
       const schedule = localSchedules.find(

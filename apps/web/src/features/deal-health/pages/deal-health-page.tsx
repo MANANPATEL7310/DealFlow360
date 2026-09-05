@@ -19,6 +19,8 @@ import { AnomalyAlertFeed } from "../components/anomaly-alert-feed";
 import { DealHealthKpiGrid } from "../components/deal-health-kpi-grid";
 import { DealHealthRadarView } from "../components/deal-health-radar-view";
 import { DealHealthTable } from "../components/deal-health-table";
+import { AiDealHealthTriageCard } from "../components/ai-deal-health-triage-card";
+import { AiRecoveryNudgeModal } from "../components/ai-recovery-nudge-modal";
 import {
   useAcknowledgeAlert,
   useDealHealthAlerts,
@@ -35,6 +37,12 @@ export function DealHealthPage() {
   const [resolvingAlert, setResolvingAlert] = useState<DealHealthAlert | null>(
     null,
   );
+  const [nudgingAlert, setNudgingAlert] = useState<DealHealthAlert | null>(
+    null,
+  );
+  const [nudgePrefill, setNudgePrefill] = useState<string | undefined>(
+    undefined,
+  );
   const [notification, setNotification] = useState<string | null>(null);
 
   const { data: summaryData, isLoading: isLoadingSummary } =
@@ -48,6 +56,11 @@ export function DealHealthPage() {
   const showToast = (msg: string) => {
     setNotification(msg);
     setTimeout(() => setNotification(null), 5000);
+  };
+
+  const handleOpenNudgeModal = (alert: DealHealthAlert, prefill?: string) => {
+    setNudgingAlert(alert);
+    setNudgePrefill(prefill);
   };
 
   const handleRunScan = async () => {
@@ -175,6 +188,9 @@ export function DealHealthPage() {
         onSelectCategory={setSelectedCategory}
       />
 
+      {/* Agent 5: Autonomous Deal Health Triage & Recovery Assistant */}
+      <AiDealHealthTriageCard onOpenNudgeModal={handleOpenNudgeModal} />
+
       {/* Section View Tabs */}
       <div className="flex border-b border-border gap-6">
         <button
@@ -216,6 +232,7 @@ export function DealHealthPage() {
           alerts={alerts ?? []}
           onAcknowledge={handleAcknowledge}
           onOpenResolveModal={(alert) => setResolvingAlert(alert)}
+          onOpenNudgeModal={handleOpenNudgeModal}
         />
       ) : (
         <DealHealthTable scores={scores} selectedCategory={selectedCategory} />
@@ -227,6 +244,18 @@ export function DealHealthPage() {
         onClose={() => setResolvingAlert(null)}
         alert={resolvingAlert}
         onResolve={handleResolve}
+      />
+
+      {/* Agent 5: AI Recovery Nudge HITL Modal */}
+      <AiRecoveryNudgeModal
+        isOpen={Boolean(nudgingAlert)}
+        onClose={() => {
+          setNudgingAlert(null);
+          setNudgePrefill(undefined);
+        }}
+        alert={nudgingAlert}
+        initialDraft={nudgePrefill}
+        onSuccess={showToast}
       />
     </div>
   );

@@ -53,3 +53,4 @@ customerRouter.post(
   validateRequest(createContactSchema),
   c.addContactController,
 );
+customerRouter.post("/:id/magic-link", c.generateMagicLinkController);

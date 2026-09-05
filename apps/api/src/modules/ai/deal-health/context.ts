@@ -16,9 +16,9 @@ export async function buildTriageTaskPrompt() {
       severity: alert.severity,
       detail: alert.detail,
       quotationId: alert.quotationId,
-      quotationStatus: alert.quotation.status,
-      salesRepId: alert.quotation.salesRepId,
-      dealValueMinor: alert.quotation.grandTotalMinor,
+      customerName: alert.customerName,
+      salesRepName: alert.salesRepName,
+      dealValueMinor: alert.metrics?.atRiskAmountMinor ?? 0,
     })),
     timelines,
   });

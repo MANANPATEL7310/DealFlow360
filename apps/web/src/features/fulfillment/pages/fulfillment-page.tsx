@@ -19,6 +19,7 @@ import { BackorderList } from "@/features/fulfillment/components/backorder-list"
 import { FulfillmentStats } from "@/features/fulfillment/components/fulfillment-stats";
 import { OverrideEditor } from "@/features/fulfillment/components/override-editor";
 import { SplitsTable } from "@/features/fulfillment/components/splits-table";
+import { AiFulfillmentPlannerCard } from "@/features/fulfillment/components/ai-fulfillment-planner-card";
 import {
   useAcceptPlan,
   useConsolidateBackorder,
@@ -188,6 +189,16 @@ export function FulfillmentPage() {
 
         {/* Headline KPI Ribbon */}
         <FulfillmentStats isLoading={isLoading} plan={plan} />
+
+        {/* AI Multi-Warehouse Planner (Agent 3) */}
+        <AiFulfillmentPlannerCard
+          quotationId={quotationId}
+          isPlanAccepted={isAccepted}
+          onApplyPlan={async (splits) => {
+            await overrideMutation.mutateAsync(splits);
+          }}
+          isApplying={overrideMutation.isPending}
+        />
 
         {/* Manual Override Editor or Shipment Group Splits */}
         {isEditing && !isAccepted ? (

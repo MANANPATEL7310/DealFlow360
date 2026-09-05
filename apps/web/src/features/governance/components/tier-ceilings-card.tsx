@@ -29,7 +29,7 @@ const TIER_METADATA: Record<
 > = {
   GOLD: {
     label: "Strategic Tier (Gold)",
-    description: "Enterprise strategic accounts with >$100k credit lines.",
+    description: "Enterprise strategic accounts with highest credit standing.",
     badgeTone: "primary",
   },
   SILVER: {

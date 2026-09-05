@@ -5,14 +5,16 @@ import {
   Settings as SettingsIcon,
   ShieldCheck,
   Sliders,
+  Sparkles,
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { useAuthStore } from "@/stores/auth-store";
 import { AuditLogTab } from "../components/audit-log-tab";
 import { GovernanceTab } from "../components/governance-tab";
 import { SettingsTab } from "../components/settings-tab";
+import { AiOperationsTab } from "../components/ai-operations-tab";
 
-type ActiveTab = "settings" | "audit" | "governance";
+type ActiveTab = "settings" | "audit" | "governance" | "ai";
 
 export function SettingsPage() {
   const user = useAuthStore((s) => s.user);
@@ -100,6 +102,19 @@ export function SettingsPage() {
           <ShieldCheck className="size-3.5" />
           <span>Discount Governance</span>
         </button>
+
+        <button
+          type="button"
+          onClick={() => setActiveTab("ai")}
+          className={`flex items-center gap-2 px-4 py-2.5 text-xs font-semibold rounded-t-xl transition-colors border-b-2 -mb-1 ${
+            activeTab === "ai"
+              ? "border-primary text-primary bg-primary/5"
+              : "border-transparent text-muted-foreground hover:text-foreground hover:bg-surface-muted/30"
+          }`}
+        >
+          <Sparkles className="size-3.5 text-primary" />
+          <span>AI Operations & Observability</span>
+        </button>
       </div>
 
       {/* Tab Panels */}
@@ -107,6 +122,7 @@ export function SettingsPage() {
         {activeTab === "settings" && <SettingsTab />}
         {activeTab === "audit" && <AuditLogTab />}
         {activeTab === "governance" && <GovernanceTab />}
+        {activeTab === "ai" && <AiOperationsTab />}
       </div>
     </div>
   );

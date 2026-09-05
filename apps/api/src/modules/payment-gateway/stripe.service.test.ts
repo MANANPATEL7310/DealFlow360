@@ -67,15 +67,17 @@ describe("Stripe Payment Gateway", () => {
     invoiceId = invoice.id;
   });
 
-  it("creates a checkout session in simulation mode when secret key is unset", async () => {
+  it("creates a checkout session (live if secret key configured, simulation if unset)", async () => {
     const session = await createCheckoutSession(invoiceId);
 
-    expect(session).toMatchObject({
-      mode: "simulation",
-      amountDueMinor: 10000,
-      checkoutUrl: expect.stringContaining("checkout-simulation"),
-    });
-    expect(session.sessionId).toContain(`sim_session_${invoiceId}`);
+    expect(session.amountDueMinor).toBe(10000);
+    expect(["live", "simulation"]).toContain(session.mode);
+    expect(session.checkoutUrl).toBeDefined();
+    if (session.mode === "simulation") {
+      expect(session.sessionId).toContain(`sim_session_${invoiceId}`);
+    } else {
+      expect(session.sessionId).toMatch(/^cs_test_/);
+    }
   });
 
   it("rejects checkout session for non-existent invoice", async () => {

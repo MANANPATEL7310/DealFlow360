@@ -9,6 +9,7 @@ import {
   Flame,
   PackageX,
   ShieldCheck,
+  Sparkles,
   TrendingDown,
 } from "lucide-react";
 import {
@@ -24,6 +25,7 @@ interface AnomalyAlertFeedProps {
   alerts: DealHealthAlert[];
   onAcknowledge: (alert: DealHealthAlert) => void;
   onOpenResolveModal: (alert: DealHealthAlert) => void;
+  onOpenNudgeModal?: (alert: DealHealthAlert) => void;
 }
 
 type FilterTab =
@@ -38,6 +40,7 @@ export function AnomalyAlertFeed({
   alerts,
   onAcknowledge,
   onOpenResolveModal,
+  onOpenNudgeModal,
 }: AnomalyAlertFeedProps) {
   const [filterTab, setFilterTab] = useState<FilterTab>("ALL");
 
@@ -311,6 +314,18 @@ export function AnomalyAlertFeed({
                         <ExternalLink className="size-3" />
                       </Button>
                     </Link>
+
+                    {isOpen && onOpenNudgeModal && (
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => onOpenNudgeModal(alert)}
+                        className="h-8 gap-1.5 text-xs font-semibold text-primary border-primary/30 hover:bg-primary/10"
+                      >
+                        <Sparkles className="size-3" />
+                        <span>AI Recovery Nudge</span>
+                      </Button>
+                    )}
 
                     {isOpen && (
                       <Button

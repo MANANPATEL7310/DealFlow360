@@ -21,6 +21,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { AiNegotiationSimulatorCard } from "./ai-negotiation-simulator-card";
 
 interface RepNegotiationModalProps {
   isOpen: boolean;
@@ -42,10 +43,10 @@ export function RepNegotiationModal({
   onAnswerNegotiation,
   onApplyLineDiscount,
 }: RepNegotiationModalProps) {
-  const [activeTab, setActiveTab] = useState<"SHARE" | "LOG">("SHARE");
-  const [copied, setCopied] = useState(false);
+  const [activeTab, setActiveTab] = useState<"SHARE" | "LOG">("LOG");
   const [repReplies, setRepReplies] = useState<Record<string, string>>({});
   const [isAnswering, setIsAnswering] = useState<string | null>(null);
+  const [copied, setCopied] = useState(false);
 
   if (!isOpen) return null;
 
@@ -69,7 +70,6 @@ export function RepNegotiationModal({
       // Fallback
     }
   };
-
   const handleAcceptNegotiation = async (neg: NegotiationRequest) => {
     setIsAnswering(neg.id);
     const reply =
@@ -317,7 +317,19 @@ export function RepNegotiationModal({
                           </div>
                         </div>
                       ) : (
-                        <div className="space-y-2 pt-1">
+                        <div className="space-y-3 pt-1">
+                          {/* Agent 6 AI Customer Negotiation Simulator */}
+                          <AiNegotiationSimulatorCard
+                            quotation={quotation}
+                            negotiation={neg}
+                            onApplyDraft={(draft) =>
+                              setRepReplies((prev) => ({
+                                ...prev,
+                                [neg.id]: draft,
+                              }))
+                            }
+                          />
+
                           <Input
                             placeholder="Add approval comment or concession note..."
                             value={repReplies[neg.id] ?? ""}

@@ -1,6 +1,7 @@
 import { Outlet } from "react-router";
 import { AppHeader } from "@/components/shared/app-header";
 import { AppSidebar } from "@/components/shared/app-sidebar";
+import { CopilotDrawer } from "@/features/ai";
 
 export function AppLayout() {
   return (
@@ -12,6 +13,7 @@ export function AppLayout() {
           <Outlet />
         </main>
       </div>
+      <CopilotDrawer />
     </div>
   );
 }
