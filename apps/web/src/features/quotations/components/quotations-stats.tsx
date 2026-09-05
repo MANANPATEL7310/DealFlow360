@@ -21,7 +21,9 @@ export function QuotationsStats({
     (q) => q.status === "PENDING_APPROVAL",
   ).length;
 
-  const validMarginQuotes = quotations.filter((q) => q.lines.length > 0);
+  const validMarginQuotes = quotations.filter(
+    (q) => (q.lines?.length ?? q._count?.lines ?? 0) > 0,
+  );
   const avgMargin =
     validMarginQuotes.length > 0
       ? (

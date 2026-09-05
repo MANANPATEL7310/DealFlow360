@@ -30,10 +30,18 @@ export function meta() {
 export default function FulfillmentIndexRoute() {
   const { data: quotations = [], isLoading } = useQuotations();
 
-  // Orders that have physical lines or confirmed status
-  const physicalQuotes = quotations.filter((q) =>
-    q.lines.some((l) => l.product?.category === "HARDWARE" || !l.product),
-  );
+  // Orders that have physical lines or confirmed status.
+  // List responses omit the nested `lines` array (they carry `_count.lines`
+  // instead), so guard the array and fall back to the aggregate count.
+  const physicalQuotes = quotations.filter((q) => {
+    const lines = q.lines ?? [];
+    if (lines.length > 0) {
+      return lines.some(
+        (l) => l.product?.category === "HARDWARE" || !l.product,
+      );
+    }
+    return (q._count?.lines ?? 0) > 0;
+  });
 
   return (
     <RoleGuard
@@ -136,9 +144,12 @@ export default function FulfillmentIndexRoute() {
                   </TableRow>
                 ) : (
                   physicalQuotes.map((q) => {
-                    const hwCount = q.lines.filter(
-                      (l) => l.product?.category === "HARDWARE" || !l.product,
-                    ).length;
+                    const lines = q.lines ?? [];
+                    const hwCount =
+                      lines.filter(
+                        (l) => l.product?.category === "HARDWARE" || !l.product,
+                      ).length ||
+                      (q._count?.lines ?? 0);
                     const totalFormatted = (
                       q.grandTotalMinor / 100
                     ).toLocaleString(undefined, {

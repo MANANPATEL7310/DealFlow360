@@ -106,6 +106,13 @@ export const quotationSchema = z.object({
   approvals: z.array(quotationApprovalStepSchema).default([]),
   createdAt: z.string().optional(),
   updatedAt: z.string().optional(),
+  // List endpoints omit nested arrays and return aggregate counts instead.
+  _count: z
+    .object({
+      lines: z.number().int().optional(),
+      approvals: z.number().int().optional(),
+    })
+    .optional(),
 });
 export type Quotation = z.infer<typeof quotationSchema>;
 

@@ -168,6 +168,10 @@ export function QuotationsTable({
                 maximumFractionDigits: 2,
               });
 
+              // List responses omit the nested `lines` array and carry an
+              // aggregate `_count.lines` instead.
+              const lineCount = quote.lines?.length ?? quote._count?.lines ?? 0;
+
               return (
                 <TableRow key={quote.id}>
                   <TableCell className="font-medium">
@@ -199,8 +203,7 @@ export function QuotationsTable({
                   </TableCell>
                   <TableCell>
                     <span className="font-mono text-xs text-foreground">
-                      {quote.lines.length}{" "}
-                      {quote.lines.length === 1 ? "line" : "lines"}
+                      {lineCount} {lineCount === 1 ? "line" : "lines"}
                     </span>
                   </TableCell>
                   <TableCell>
