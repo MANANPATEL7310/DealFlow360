@@ -13,6 +13,7 @@ import {
   confirmQuotation,
   createQuotation,
   deleteLine,
+  evaluateQuotationRisk,
   getQuotation,
   listQuotations,
   updateLine,
@@ -30,6 +31,27 @@ function handleError(res: Response, error: unknown) {
   );
 }
 
+// The database identifier is the authoritative quotation reference. Expose it
+// under the legacy client contract until a separate human-readable number is
+// added as a persisted column.
+function toQuotationDto<T extends { id: string }>(quotation: T) {
+  return { ...quotation, quotationNumber: quotation.id };
+}
+
+export async function riskController(req: Request, res: Response) {
+  try {
+    return sendOk(
+      res,
+      await evaluateQuotationRisk(req.params.id as string, {
+        id: req.user!.sub,
+        role: req.user!.role,
+      }),
+    );
+  } catch (e) {
+    return handleError(res, e);
+  }
+}
+
 export async function listQuotationsController(req: Request, res: Response) {
   try {
     const quotations = await listQuotations(
@@ -39,7 +61,7 @@ export async function listQuotationsController(req: Request, res: Response) {
       },
       { id: req.user!.sub, role: req.user!.role },
     );
-    return sendOk(res, quotations);
+    return sendOk(res, quotations.map(toQuotationDto));
   } catch (e) {
     return handleError(res, e);
   }
@@ -51,7 +73,7 @@ export async function getQuotationController(req: Request, res: Response) {
       id: req.user!.sub,
       role: req.user!.role,
     });
-    return sendOk(res, quotation);
+    return sendOk(res, toQuotationDto(quotation));
   } catch (e) {
     return handleError(res, e);
   }
@@ -60,7 +82,11 @@ export async function getQuotationController(req: Request, res: Response) {
 export async function createQuotationController(req: Request, res: Response) {
   try {
     const quotation = await createQuotation(req.body, req.user!.sub);
-    return sendCreated(res, quotation, "Quotation draft created.");
+    return sendCreated(
+      res,
+      toQuotationDto(quotation),
+      "Quotation draft created.",
+    );
   } catch (e) {
     return handleError(res, e);
   }

@@ -41,6 +41,7 @@ quotationRouter.delete("/:id/lines/:lineId", c.deleteLineController);
 
 // ── Confirm (Risk & Routing Trigger) ──────────────────────────────────────────
 quotationRouter.post("/:id/confirm", c.confirmController);
+quotationRouter.get("/:id/risk", c.riskController);
 
 // ── Approvals Decision (Sales Manager, Finance, Admin) ────────────────────────
 quotationRouter.post(

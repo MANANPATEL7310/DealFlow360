@@ -1,6 +1,7 @@
 import type { Request, Response } from "express";
 import { httpStatus } from "../../constants/http.js";
 import { sendError, sendOk } from "../../lib/response.js";
+import { db } from "../../lib/db.js";
 import {
   acceptPlan,
   consolidateBackorder,
@@ -18,6 +19,16 @@ function handleError(res: Response, error: unknown) {
     res,
     httpStatus.internalServerError,
     err.message || "Internal server error.",
+  );
+}
+
+export async function listWarehousesController(_req: Request, res: Response) {
+  return sendOk(
+    res,
+    await db.warehouse.findMany({
+      include: { stock: { include: { product: true } } },
+      orderBy: { name: "asc" },
+    }),
   );
 }
 

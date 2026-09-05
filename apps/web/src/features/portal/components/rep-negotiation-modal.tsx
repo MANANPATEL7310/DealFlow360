@@ -1,11 +1,8 @@
 import { useState } from "react";
 import {
-  Check,
   CheckCircle2,
   Clock,
-  Copy,
   CornerDownRight,
-  ExternalLink,
   Lock,
   MessageSquare,
   Sparkles,
@@ -20,7 +17,6 @@ import type {
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 
 interface RepNegotiationModalProps {
   isOpen: boolean;
@@ -29,7 +25,7 @@ interface RepNegotiationModalProps {
   negotiations: NegotiationRequest[];
   onAnswerNegotiation: (
     negotiationId: string,
-    input: AnswerNegotiationInput
+    input: AnswerNegotiationInput,
   ) => Promise<void>;
   onApplyLineDiscount?: (lineId: string, discountPct: number) => void;
 }
@@ -42,32 +38,11 @@ export function RepNegotiationModal({
   onAnswerNegotiation,
   onApplyLineDiscount,
 }: RepNegotiationModalProps) {
-  const [activeTab, setActiveTab] = useState<"SHARE" | "LOG">("SHARE");
-  const [copied, setCopied] = useState(false);
+  const [activeTab, setActiveTab] = useState<"SHARE" | "LOG">("LOG");
   const [repReplies, setRepReplies] = useState<Record<string, string>>({});
   const [isAnswering, setIsAnswering] = useState<string | null>(null);
 
   if (!isOpen) return null;
-
-  // Mint mock customer token for sharing
-  const tokenPayload = JSON.stringify({
-    quotationId: quotation.id,
-    contactId: quotation.customer?.contacts?.[0]?.id ?? "cst-01-c1",
-  });
-  const mockToken = btoa(tokenPayload);
-  const portalUrl = typeof window !== "undefined"
-    ? `${window.location.origin}/portal?token=${mockToken}`
-    : `/portal?token=${mockToken}`;
-
-  const handleCopyLink = async () => {
-    try {
-      await navigator.clipboard.writeText(portalUrl);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2500);
-    } catch {
-      // Fallback
-    }
-  };
 
   const handleAcceptNegotiation = async (neg: NegotiationRequest) => {
     setIsAnswering(neg.id);
@@ -95,7 +70,9 @@ export function RepNegotiationModal({
     }
   };
 
-  const openNegotiationsCount = negotiations.filter((n) => n.status === "OPEN").length;
+  const openNegotiationsCount = negotiations.filter(
+    (n) => n.status === "OPEN",
+  ).length;
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-sm animate-in fade-in duration-200">
@@ -121,7 +98,8 @@ export function RepNegotiationModal({
                 )}
               </div>
               <p className="text-xs text-muted-foreground">
-                Quotation {quotation.quotationNumber} • {quotation.customer?.name}
+                Quotation {quotation.quotationNumber} •{" "}
+                {quotation.customer?.name}
               </p>
             </div>
           </div>
@@ -177,56 +155,19 @@ export function RepNegotiationModal({
                   <span>Scoped Magic Link Protocol</span>
                 </div>
                 <p className="text-muted-foreground leading-relaxed">
-                  The client portal link below is scoped strictly to this proposal and contact. 
-                  Internal margins, cost floors, and approval routing rules are automatically stripped.
-                  When the customer opens the link, the security token is scrubbed from the address bar.
+                  The client portal link below is scoped strictly to this
+                  proposal and contact. Internal margins, cost floors, and
+                  approval routing rules are automatically stripped. When the
+                  customer opens the link, the security token is scrubbed from
+                  the address bar.
                 </p>
               </div>
 
-              <div className="space-y-2">
-                <Label className="text-xs font-semibold text-foreground">
-                  Magic Portal Link
-                </Label>
-                <div className="flex items-center gap-2">
-                  <Input
-                    readOnly
-                    value={portalUrl}
-                    className="font-mono text-xs bg-surface-muted/50 select-all"
-                  />
-                  <Button
-                    onClick={handleCopyLink}
-                    variant="outline"
-                    size="sm"
-                    className="gap-1.5 shrink-0"
-                  >
-                    {copied ? (
-                      <>
-                        <Check className="size-3.5 text-emerald-500" />
-                        <span>Copied!</span>
-                      </>
-                    ) : (
-                      <>
-                        <Copy className="size-3.5" />
-                        <span>Copy</span>
-                      </>
-                    )}
-                  </Button>
-                </div>
-              </div>
-
-              <div className="flex flex-col sm:flex-row gap-3 pt-2">
-                <a
-                  href={portalUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex-1"
-                >
-                  <Button variant="primary" size="md" className="w-full gap-2 text-xs">
-                    <ExternalLink className="size-4" />
-                    <span>Launch Customer View in New Tab</span>
-                  </Button>
-                </a>
-              </div>
+              <p className="rounded-lg border border-border bg-surface p-3 text-xs text-muted-foreground">
+                Send the quotation from the quotation workspace after selecting
+                a customer contact. The server then mints and returns a scoped
+                portal link.
+              </p>
             </div>
           ) : (
             /* Negotiations Log & Rep Workbench */
@@ -238,13 +179,17 @@ export function RepNegotiationModal({
                     No client inquiries or counter-offers yet.
                   </p>
                   <p className="text-xs text-muted-foreground mt-1">
-                    Once the customer accesses the portal and proposes an adjustment, it will appear here for review.
+                    Once the customer accesses the portal and proposes an
+                    adjustment, it will appear here for review.
                   </p>
                 </div>
               ) : (
                 negotiations.map((neg) => {
-                  const targetLine = quotation.lines.find((l) => l.id === neg.lineId);
-                  const isAnswered = neg.status === "ANSWERED" || neg.status === "ACCEPTED";
+                  const targetLine = quotation.lines.find(
+                    (l) => l.id === neg.lineId,
+                  );
+                  const isAnswered =
+                    neg.status === "ANSWERED" || neg.status === "ACCEPTED";
 
                   return (
                     <div
@@ -254,7 +199,9 @@ export function RepNegotiationModal({
                       <div className="flex flex-wrap items-center justify-between gap-2">
                         <div className="flex items-center gap-2">
                           <span className="text-xs font-bold text-foreground">
-                            {targetLine ? targetLine.product?.name ?? "Line Item" : "Proposal Level"}
+                            {targetLine
+                              ? (targetLine.product?.name ?? "Line Item")
+                              : "Proposal Level"}
                           </span>
                           {neg.counterDiscountPct !== undefined && (
                             <Badge tone="primary" className="text-xs font-mono">
@@ -278,8 +225,12 @@ export function RepNegotiationModal({
                       <div className="flex items-start gap-2.5 text-xs bg-surface rounded-lg p-3 border border-border/60">
                         <User className="size-3.5 text-primary mt-0.5 shrink-0" />
                         <div>
-                          <div className="font-semibold text-foreground">Client Request</div>
-                          <p className="text-muted-foreground mt-0.5">{neg.comment}</p>
+                          <div className="font-semibold text-foreground">
+                            Client Request
+                          </div>
+                          <p className="text-muted-foreground mt-0.5">
+                            {neg.comment}
+                          </p>
                         </div>
                       </div>
 
@@ -288,8 +239,12 @@ export function RepNegotiationModal({
                         <div className="flex items-start gap-2.5 text-xs bg-primary/5 rounded-lg p-3 border border-primary/20">
                           <CornerDownRight className="size-3.5 text-primary mt-0.5 shrink-0" />
                           <div>
-                            <div className="font-semibold text-primary">Your Response</div>
-                            <p className="text-foreground mt-0.5">{neg.repComment}</p>
+                            <div className="font-semibold text-primary">
+                              Your Response
+                            </div>
+                            <p className="text-foreground mt-0.5">
+                              {neg.repComment}
+                            </p>
                           </div>
                         </div>
                       ) : (

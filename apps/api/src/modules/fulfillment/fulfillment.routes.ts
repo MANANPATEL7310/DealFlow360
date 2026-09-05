@@ -6,10 +6,13 @@ import * as c from "./fulfillment.controller.js";
 import { overrideFulfillmentSchema } from "./fulfillment.schema.js";
 
 export const fulfillmentRouter = createRouter();
+export const warehouseRouter = createRouter();
 
 const canManageFulfillment = requireRole("sales_manager", "admin");
 
 fulfillmentRouter.use(requireAuth);
+warehouseRouter.use(requireAuth);
+warehouseRouter.get("/", c.listWarehousesController);
 
 fulfillmentRouter.get("/:id/fulfillment", c.getFulfillmentPlanController);
 fulfillmentRouter.post(

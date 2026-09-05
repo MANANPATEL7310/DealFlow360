@@ -1,12 +1,5 @@
 import { useEffect, useState } from "react";
-import {
-  ArrowRight,
-  CheckCircle2,
-  Lock,
-  RefreshCw,
-  ShieldCheck,
-  Sparkles,
-} from "lucide-react";
+import { CheckCircle2, Lock, RefreshCw, ShieldCheck } from "lucide-react";
 import type {
   CreateNegotiationInput,
   PortalConfirmResult,
@@ -22,7 +15,7 @@ import { PortalHistoryFeed } from "../components/portal-history-feed";
 import { PortalLinesTable } from "../components/portal-lines-table";
 import { PortalNegotiationDrawer } from "../components/portal-negotiation-drawer";
 import { PortalProposalSummary } from "../components/portal-proposal-summary";
-import { initPortalToken, setPortalToken } from "../lib/portal-token";
+import { initPortalToken } from "../lib/portal-token";
 
 export function PortalPage() {
   const [quotation, setQuotation] = useState<PortalQuotationView | null>(null);
@@ -31,7 +24,9 @@ export function PortalPage() {
 
   // Modals / Drawers state
   const [isNegotiateOpen, setIsNegotiateOpen] = useState(false);
-  const [selectedLine, setSelectedLine] = useState<PortalQuotationLine | null>(null);
+  const [selectedLine, setSelectedLine] = useState<PortalQuotationLine | null>(
+    null,
+  );
   const [isConfirmOpen, setIsConfirmOpen] = useState(false);
   const [bannerNotice, setBannerNotice] = useState<string | null>(null);
 
@@ -42,7 +37,10 @@ export function PortalPage() {
       const data = await portalApi.getQuotation();
       setQuotation(data);
     } catch (err: unknown) {
-      const msg = err instanceof Error ? err.message : "Unable to load quotation proposal.";
+      const msg =
+        err instanceof Error
+          ? err.message
+          : "Unable to load quotation proposal.";
       setError(msg);
     } finally {
       setIsLoading(false);
@@ -55,14 +53,6 @@ export function PortalPage() {
     loadQuotation();
   }, []);
 
-  const handleDemoAccess = () => {
-    // Set demo token and load
-    const demoPayload = JSON.stringify({ quotationId: "qt-101", contactId: "cst-01-c1" });
-    const demoToken = btoa(demoPayload);
-    setPortalToken(demoToken);
-    loadQuotation();
-  };
-
   const handleOpenNegotiate = (line?: PortalQuotationLine) => {
     setSelectedLine(line ?? null);
     setIsNegotiateOpen(true);
@@ -71,7 +61,9 @@ export function PortalPage() {
   const handleSubmitNegotiation = async (input: CreateNegotiationInput) => {
     const updated = await portalApi.submitNegotiation(input);
     setQuotation(updated);
-    setBannerNotice("Counter-offer submitted successfully to your sales representative!");
+    setBannerNotice(
+      "Counter-offer submitted successfully to your sales representative!",
+    );
     setTimeout(() => setBannerNotice(null), 6000);
   };
 
@@ -110,19 +102,11 @@ export function PortalPage() {
             Portal Authentication Required
           </h2>
           <p className="mt-2 text-xs text-muted-foreground leading-relaxed">
-            {error ?? "This customer proposal requires an authorized secure magic link to view."}
+            {error ??
+              "This customer proposal requires an authorized secure magic link to view."}
           </p>
 
           <div className="mt-6 flex flex-col gap-3">
-            <Button
-              onClick={handleDemoAccess}
-              className="w-full gap-2 font-semibold shadow-sm"
-            >
-              <Sparkles className="size-4" />
-              <span>Launch Demo Proposal (QT-2026-0101)</span>
-              <ArrowRight className="size-4" />
-            </Button>
-
             <Button
               variant="outline"
               onClick={loadQuotation}
@@ -210,7 +194,9 @@ export function PortalPage() {
         <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-3 px-4 sm:flex-row sm:px-6 lg:px-8">
           <div className="flex items-center gap-2">
             <ShieldCheck className="size-4 text-primary" />
-            <span>DealFlow360 External Enterprise Gateway • ISO 27001 Certified</span>
+            <span>
+              DealFlow360 External Enterprise Gateway • ISO 27001 Certified
+            </span>
           </div>
           <p>© 2026 DealFlow360 Technologies Inc. All rights reserved.</p>
         </div>

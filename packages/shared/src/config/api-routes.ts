@@ -52,6 +52,13 @@ export const apiRoutes = {
       auth: true,
       description: "Returns summary statistics for the authenticated user.",
     },
+    recent: {
+      path: "/dashboard/recent-quotations",
+      method: "GET",
+      auth: true,
+      description:
+        "Returns the most recently updated quotations visible to the user.",
+    },
   },
 
   // ─── Products & Price Lists ────────────────────────────────────────────────
@@ -189,7 +196,7 @@ export const apiRoutes = {
     },
     upsertDiscountTier: {
       path: "/governance/discount-tiers",
-      method: "POST",
+      method: "PUT",
       auth: true,
       description: "Upsert discount tier ceiling.",
     },
@@ -201,7 +208,7 @@ export const apiRoutes = {
     },
     upsertCategoryCeiling: {
       path: "/governance/category-ceilings",
-      method: "POST",
+      method: "PUT",
       auth: true,
       description: "Upsert category discount ceiling.",
     },
@@ -463,6 +470,12 @@ export const apiRoutes = {
 
   // ─── Hybrid Billing ────────────────────────────────────────────────────────
   billing: {
+    list: {
+      path: "/invoices/schedules",
+      method: "GET",
+      auth: true,
+      description: "Lists billing schedules visible to the authenticated user.",
+    },
     schedule: {
       path: "/quotations/:id/billing",
       method: "GET",

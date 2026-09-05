@@ -1,8 +1,4 @@
-import {
-  type UserRole,
-  DEMO_PERSONAS,
-  internalRoles,
-} from "@template/shared";
+import { type UserRole, internalRoles } from "@template/shared";
 import { ArrowRight, ShieldCheck } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -95,7 +91,6 @@ export function RegisterForm({ onSwitchToLogin }: RegisterFormProps) {
           </label>
           <div className="grid grid-cols-2 gap-2">
             {internalRoles.map((role) => {
-              const persona = DEMO_PERSONAS[role];
               const isSelected = selectedRole === role;
               return (
                 <button
@@ -112,7 +107,8 @@ export function RegisterForm({ onSwitchToLogin }: RegisterFormProps) {
                     {role.replace("_", " ")}
                   </span>
                   <span className="mt-1 line-clamp-2 text-xs text-muted-foreground">
-                    {persona.tagline}
+                    Assign this account to the {role.replace("_", " ")}{" "}
+                    workspace.
                   </span>
                 </button>
               );

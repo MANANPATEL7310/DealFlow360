@@ -3,7 +3,10 @@ import { adminRouter } from "../modules/admin/admin.routes.js";
 import { authRouter } from "../modules/auth/auth.routes.js";
 import { dashboardRouter } from "../modules/dashboard/dashboard.routes.js";
 import { dealHealthRouter } from "../modules/deal-health/deal-health.routes.js";
-import { fulfillmentRouter } from "../modules/fulfillment/fulfillment.routes.js";
+import {
+  fulfillmentRouter,
+  warehouseRouter,
+} from "../modules/fulfillment/fulfillment.routes.js";
 import { governanceRouter } from "../modules/governance/governance.routes.js";
 import { healthRouter } from "../modules/health/health.routes.js";
 // === M1: Products & Price Lists (Dev 2) ===
@@ -40,6 +43,7 @@ apiRouter.use("/governance", governanceRouter);
 // === M5 (Dev 1) ===
 apiRouter.use("/quotations", quotationRouter);
 apiRouter.use("/quotations", fulfillmentRouter);
+apiRouter.use("/warehouses", warehouseRouter);
 // === M6 (Dev 2) — second router on /quotations for upsell sub-routes ===
 apiRouter.use("/quotations", upsellRouter);
 // === M8 (Dev 2) ===

@@ -412,3 +412,22 @@ export async function confirmQuotation(quotationId: string, actorId: string) {
 
   return { status: "PENDING_APPROVAL", risk, requiredLevels: levels };
 }
+
+export async function evaluateQuotationRisk(
+  quotationId: string,
+  actor: { id: string; role: string },
+) {
+  const quotation = await loadQuotationWithLines(quotationId);
+  if (!quotation)
+    throw Object.assign(new Error("QUOTATION_NOT_FOUND"), { http: 404 });
+  assertOwnership(quotation, actor);
+  const config = await loadRiskConfig(quotation.customer.tier);
+  const risk = computeBlendedRisk(quotation.lines.map(toRiskLine), config);
+  const rules = await db.approvalChainRule.findMany({
+    orderBy: { minScore: "asc" },
+  });
+  return {
+    ...risk,
+    requiredLevels: resolveRequiredLevels(risk, config, rules),
+  };
+}

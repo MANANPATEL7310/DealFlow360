@@ -9,6 +9,7 @@
 import bcrypt from "bcryptjs";
 import { createCrudService } from "../../lib/crud-factory.js";
 import { db } from "../../lib/db.js";
+import { mintPortalToken } from "../portal/portal.token.js";
 
 /** Standard CRUD for Customer: findMany / findById / create / update / delete / count */
 export const customerService = createCrudService("customer");
@@ -50,6 +51,36 @@ export async function addContact(
   });
 
   return stripHash(row);
+}
+
+/**
+ * Customer-directory links are always tied to a real approved/sent quotation.
+ * This prevents a contact link from exposing an arbitrary customer account.
+ */
+export async function generateMagicLink(customerId: string, contactId: string) {
+  const contact = await db.customerContact.findFirst({
+    where: { id: contactId, customerId },
+  });
+  if (!contact)
+    throw Object.assign(new Error("CONTACT_NOT_FOUND"), { http: 404 });
+  const quotation = await db.quotation.findFirst({
+    where: {
+      customerId,
+      status: { in: ["APPROVED", "SENT", "UNDER_NEGOTIATION"] },
+    },
+    orderBy: { updatedAt: "desc" },
+    select: { id: true, customer: { select: { name: true } } },
+  });
+  if (!quotation)
+    throw Object.assign(new Error("NO_SHAREABLE_QUOTATION"), { http: 409 });
+  const token = mintPortalToken({ quotationId: quotation.id, contactId });
+  return {
+    token,
+    url: `/portal?token=${token}`,
+    expiresAt: new Date(Date.now() + 14 * 86_400_000).toISOString(),
+    contactEmail: contact.email,
+    customerName: quotation.customer.name,
+  };
 }
 
 /**

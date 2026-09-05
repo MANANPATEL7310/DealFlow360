@@ -10,6 +10,7 @@ import { requireAuth } from "../../middleware/require-auth.js";
 import { requireRole } from "../../middleware/require-role.js";
 import {
   getBillingScheduleHandler,
+  listBillingSchedulesHandler,
   recordPaymentHandler,
   subscriptionChangeHandler,
 } from "./billing.controller.js";
@@ -29,6 +30,8 @@ billingRouter.post(
 // ─── Invoice Router (mounted at /invoices) ─────────────────────────────────────
 export const invoiceRouter = createRouter();
 invoiceRouter.use(requireAuth);
+
+invoiceRouter.get("/schedules", listBillingSchedulesHandler);
 
 invoiceRouter.post(
   "/:invoiceId/payments",

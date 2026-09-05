@@ -250,12 +250,130 @@ export async function listAlerts(filters: AlertFilters) {
     },
   });
 
-  return rows.sort(
-    (a, b) =>
-      SEVERITY_RANK[b.severity as Severity] -
-        SEVERITY_RANK[a.severity as Severity] ||
-      b.createdAt.getTime() - a.createdAt.getTime(),
-  );
+  return rows
+    .sort(
+      (a, b) =>
+        SEVERITY_RANK[b.severity as Severity] -
+          SEVERITY_RANK[a.severity as Severity] ||
+        b.createdAt.getTime() - a.createdAt.getTime(),
+    )
+    .map((alert) => ({
+      id: alert.id,
+      quotationId: alert.quotationId,
+      quotationCode: alert.quotationId,
+      customerName: alert.quotation.customer.name,
+      customerTier: alert.quotation.customer.tier,
+      salesRepName: alert.quotation.owner.name,
+      type: alert.type,
+      severity: alert.severity,
+      title: alert.type.replaceAll("_", " "),
+      detail: alert.detail,
+      metrics: { atRiskAmountMinor: alert.quotation.grandTotalMinor },
+      recommendedAction: "Review the alert and record the corrective action.",
+      status: alert.status,
+      acknowledgedBy: null,
+      acknowledgedAt: null,
+      resolutionNote: null,
+      resolvedAt: alert.resolvedAt?.toISOString() ?? null,
+      createdAt: alert.createdAt.toISOString(),
+      updatedAt: alert.updatedAt.toISOString(),
+    }));
+}
+
+export async function getHealthSummary() {
+  const [quotations, alerts] = await Promise.all([
+    db.quotation.findMany({
+      include: { customer: true, owner: { select: { name: true } } },
+      orderBy: { updatedAt: "desc" },
+    }),
+    listAlerts({ status: "open" }),
+  ]);
+  const alertsByQuotation = new Map<string, typeof alerts>();
+  for (const alert of alerts)
+    alertsByQuotation.set(alert.quotationId, [
+      ...(alertsByQuotation.get(alert.quotationId) ?? []),
+      alert,
+    ]);
+  const scores = quotations.map((quotation) => {
+    const activeAlerts = alertsByQuotation.get(quotation.id) ?? [];
+    const severityPenalty = activeAlerts.reduce(
+      (total, alert) =>
+        total + ({ low: 10, medium: 25, high: 45 }[alert.severity] ?? 0),
+      0,
+    );
+    const score = Math.max(0, Math.min(100, 100 - severityPenalty));
+    const category: "HEALTHY" | "WATCH" | "AT_RISK" | "CRITICAL" =
+      score < 45
+        ? "CRITICAL"
+        : score < 65
+          ? "AT_RISK"
+          : score < 80
+            ? "WATCH"
+            : "HEALTHY";
+    const daysInStage = Math.max(
+      0,
+      Math.floor((Date.now() - quotation.updatedAt.getTime()) / 86_400_000),
+    );
+    return {
+      quotationId: quotation.id,
+      quotationCode: quotation.id,
+      customerName: quotation.customer.name,
+      customerTier: quotation.customer.tier,
+      salesRepName: quotation.owner.name,
+      score,
+      category,
+      stage: quotation.status,
+      netTotalMinor: quotation.grandTotalMinor,
+      marginPct: quotation.marginPct,
+      daysInStage,
+      factors: {
+        marginHealth: Math.max(0, Math.min(100, quotation.marginPct * 2.5)),
+        velocityHealth: Math.max(0, 100 - daysInStage * 5),
+        fulfillmentHealth: activeAlerts.some(
+          (alert) => alert.type === "DELIVERY_SLIPPAGE",
+        )
+          ? 40
+          : 100,
+        discountCompliance: activeAlerts.some(
+          (alert) => alert.type === "DISCOUNT_ANOMALY",
+        )
+          ? 40
+          : 100,
+      },
+      activeAlertCount: activeAlerts.length,
+      activeAnomalies: activeAlerts.map((alert) => alert.type),
+    };
+  });
+  const counts = { HEALTHY: 0, WATCH: 0, AT_RISK: 0, CRITICAL: 0 };
+  for (const score of scores) counts[score.category] += 1;
+  return {
+    summary: {
+      monitoredDealsCount: scores.length,
+      healthyDealsCount: counts.HEALTHY,
+      watchDealsCount: counts.WATCH,
+      atRiskDealsCount: counts.AT_RISK,
+      criticalDealsCount: counts.CRITICAL,
+      totalAtRiskValueMinor: scores
+        .filter(
+          (score) =>
+            score.category === "AT_RISK" || score.category === "CRITICAL",
+        )
+        .reduce((total, score) => total + score.netTotalMinor, 0),
+      openAlertsCount: alerts.length,
+      anomaliesByType: {
+        STALLED: alerts.filter((alert) => alert.type === "STALLED").length,
+        DISCOUNT_ANOMALY: alerts.filter(
+          (alert) => alert.type === "DISCOUNT_ANOMALY",
+        ).length,
+        DELIVERY_SLIPPAGE: alerts.filter(
+          (alert) => alert.type === "DELIVERY_SLIPPAGE",
+        ).length,
+        MARGIN_EROSION: 0,
+      },
+      lastScannedAt: new Date().toISOString(),
+    },
+    scores,
+  };
 }
 
 export async function acknowledgeAlert(id: string) {

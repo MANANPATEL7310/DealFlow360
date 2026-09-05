@@ -3,7 +3,12 @@ import type {
   CategoryDiscountCeiling,
   DiscountTierCeiling,
 } from "@template/shared";
-import { CheckCircle2, GitPullRequest, Layers, ShieldCheck } from "lucide-react";
+import {
+  CheckCircle2,
+  GitPullRequest,
+  Layers,
+  ShieldCheck,
+} from "lucide-react";
 import { MetricCard } from "@/components/ui/metric-card";
 
 interface GovernanceStatsProps {
@@ -20,14 +25,19 @@ export function GovernanceStats({
   isLoading,
 }: GovernanceStatsProps) {
   const goldTier = tiers.find((t) => t.customerTier === "GOLD");
-  const goldCeilingPct = goldTier ? `${goldTier.maxDiscountPct}%` : "15.0%";
+  const goldCeilingPct = goldTier ? `${goldTier.maxDiscountPct}%` : "—";
 
   const hardwareCeiling = ceilings.find((c) => c.category === "HARDWARE");
   const hardwareCeilingPct = hardwareCeiling
     ? `${hardwareCeiling.maxDiscountPct}%`
-    : "15.0%";
+    : "—";
 
   const activeRulesCount = rules.length.toString();
+
+  // Derive auto-approve baseline from the lowest rule band's minScore
+  const lowestBand =
+    rules.length > 0 ? Math.min(...rules.map((r) => r.minScore)) : 0;
+  const autoApproveLabel = rules.length > 0 ? `< ${lowestBand} Risk` : "—";
 
   return (
     <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
@@ -53,7 +63,7 @@ export function GovernanceStats({
         icon={CheckCircle2}
         loading={isLoading}
         title="Auto-Approve Baseline"
-        value="0.00 Risk"
+        value={autoApproveLabel}
       />
     </div>
   );

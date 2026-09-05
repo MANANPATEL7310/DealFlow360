@@ -4,15 +4,39 @@
 import type { Request, Response } from "express";
 import { sendCreated, sendNotFound, sendOk } from "../../lib/response.js";
 import { productService, variantService } from "./product.service.js";
+import { db } from "../../lib/db.js";
 
 // ─── Product controllers ──────────────────────────────────────────────────────
 
-export async function listProductsController(_req: Request, res: Response) {
-  return sendOk(res, await productService.findMany({}));
+export async function listProductsController(req: Request, res: Response) {
+  const query =
+    typeof req.query.query === "string" ? req.query.query.trim() : "";
+  const category =
+    typeof req.query.category === "string" && req.query.category !== "ALL"
+      ? req.query.category
+      : undefined;
+  const promotedOnly = req.query.promotedOnly === "true";
+  return sendOk(
+    res,
+    await db.product.findMany({
+      where: {
+        ...(category
+          ? { category: category as "HARDWARE" | "SERVICES" | "SUBSCRIPTIONS" }
+          : {}),
+        ...(promotedOnly ? { isPromoted: true } : {}),
+        ...(query ? { name: { contains: query, mode: "insensitive" } } : {}),
+      },
+      include: { variants: true },
+      orderBy: { updatedAt: "desc" },
+    }),
+  );
 }
 
 export async function getProductController(req: Request, res: Response) {
-  const product = await productService.findById(req.params.id as string);
+  const product = await db.product.findUnique({
+    where: { id: req.params.id as string },
+    include: { variants: true },
+  });
   return product
     ? sendOk(res, product)
     : sendNotFound(res, "Product not found.");
