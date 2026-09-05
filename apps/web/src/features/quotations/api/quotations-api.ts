@@ -119,6 +119,32 @@ export const quotationsApi = {
     }
   },
 
+  async updateQuotation(
+    id: string,
+    updates: Partial<Quotation>,
+  ): Promise<Quotation> {
+    try {
+      const { data } = await apiClient.patch(
+        apiRoutes.quotations.update.path.replace(":id", id),
+        updates,
+      );
+      return data.data;
+    } catch {
+      const quoteIndex = localQuotations.findIndex((q) => q.id === id);
+      const quote = localQuotations[quoteIndex];
+      if (quoteIndex < 0 || !quote) {
+        throw new Error("Quotation not found");
+      }
+      const updated: Quotation = {
+        ...quote,
+        ...updates,
+        updatedAt: new Date().toISOString(),
+      };
+      localQuotations[quoteIndex] = updated;
+      return updated;
+    }
+  },
+
   // ─── Line Items Management ─────────────────────────────────────────────────
   async addLine(
     quotationId: string,
