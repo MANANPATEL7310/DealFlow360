@@ -9,6 +9,7 @@ import {
   Flame,
   PackageX,
   ShieldCheck,
+  Sparkles,
   TrendingDown,
 } from "lucide-react";
 import {
@@ -24,25 +25,40 @@ interface AnomalyAlertFeedProps {
   alerts: DealHealthAlert[];
   onAcknowledge: (alert: DealHealthAlert) => void;
   onOpenResolveModal: (alert: DealHealthAlert) => void;
+  onOpenNudgeModal?: (alert: DealHealthAlert) => void;
 }
 
-type FilterTab = "ALL" | "CRITICAL" | "STALLED" | "DISCOUNT" | "DELIVERY" | "RESOLVED";
+type FilterTab =
+  | "ALL"
+  | "CRITICAL"
+  | "STALLED"
+  | "DISCOUNT"
+  | "DELIVERY"
+  | "RESOLVED";
 
 export function AnomalyAlertFeed({
   alerts,
   onAcknowledge,
   onOpenResolveModal,
+  onOpenNudgeModal,
 }: AnomalyAlertFeedProps) {
   const [filterTab, setFilterTab] = useState<FilterTab>("ALL");
 
   const filteredAlerts = alerts.filter((alert) => {
     switch (filterTab) {
       case "CRITICAL":
-        return alert.status === "open" && (alert.severity === "critical" || alert.severity === "high");
+        return (
+          alert.status === "open" &&
+          (alert.severity === "critical" || alert.severity === "high")
+        );
       case "STALLED":
         return alert.type === "STALLED" && alert.status === "open";
       case "DISCOUNT":
-        return (alert.type === "DISCOUNT_ANOMALY" || alert.type === "MARGIN_EROSION") && alert.status === "open";
+        return (
+          (alert.type === "DISCOUNT_ANOMALY" ||
+            alert.type === "MARGIN_EROSION") &&
+          alert.status === "open"
+        );
       case "DELIVERY":
         return alert.type === "DELIVERY_SLIPPAGE" && alert.status === "open";
       case "RESOLVED":
@@ -187,7 +203,8 @@ export function AnomalyAlertFeed({
             No Active Anomalies in this Stream
           </h4>
           <p className="mt-1 text-xs text-muted-foreground max-w-sm mx-auto">
-            All deals in this filter criteria are operating within expected margin, velocity, and stock delegation bounds.
+            All deals in this filter criteria are operating within expected
+            margin, velocity, and stock delegation bounds.
           </p>
         </div>
       ) : (
@@ -261,14 +278,18 @@ export function AnomalyAlertFeed({
                     <span className="font-semibold text-foreground">
                       Operational Recommendation:{" "}
                     </span>
-                    <span className="text-muted-foreground">{alert.recommendedAction}</span>
+                    <span className="text-muted-foreground">
+                      {alert.recommendedAction}
+                    </span>
                   </div>
                 </div>
 
                 {/* Resolution note if present */}
                 {alert.resolutionNote && (
                   <div className="rounded-lg bg-surface-muted p-2.5 text-xs text-muted-foreground border border-border/60">
-                    <span className="font-semibold text-foreground">Audit Log Note: </span>
+                    <span className="font-semibold text-foreground">
+                      Audit Log Note:{" "}
+                    </span>
                     {alert.resolutionNote}
                   </div>
                 )}
@@ -276,16 +297,35 @@ export function AnomalyAlertFeed({
                 {/* Action Bar */}
                 <div className="flex flex-wrap items-center justify-between gap-3 pt-1 border-t border-border/70 text-xs">
                   <div className="text-muted-foreground">
-                    Rep: <strong className="text-foreground">{alert.salesRepName}</strong>
+                    Rep:{" "}
+                    <strong className="text-foreground">
+                      {alert.salesRepName}
+                    </strong>
                   </div>
 
                   <div className="flex items-center gap-2">
                     <Link to={appRoutes.quotationBuilder(alert.quotationId)}>
-                      <Button variant="ghost" size="sm" className="h-8 gap-1 text-xs">
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        className="h-8 gap-1 text-xs"
+                      >
                         <span>Inspect Quotation</span>
                         <ExternalLink className="size-3" />
                       </Button>
                     </Link>
+
+                    {isOpen && onOpenNudgeModal && (
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => onOpenNudgeModal(alert)}
+                        className="h-8 gap-1.5 text-xs font-semibold text-primary border-primary/30 hover:bg-primary/10"
+                      >
+                        <Sparkles className="size-3" />
+                        <span>AI Recovery Nudge</span>
+                      </Button>
+                    )}
 
                     {isOpen && (
                       <Button

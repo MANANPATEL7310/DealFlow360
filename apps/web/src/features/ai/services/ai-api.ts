@@ -8,6 +8,9 @@ import type {
   ContextualSuggestion,
   DiscountReview,
   NegotiationEvaluation,
+  AiUpsellResponse,
+  AiDealHealthTriageResponse,
+  AiDraftNudgeResponse,
 } from "@template/shared";
 
 export async function fetchAiStatus(): Promise<AiStatus> {
@@ -71,6 +74,35 @@ export async function fetchNegotiationEvaluation(
   const { data } = await apiClient.post<NegotiationEvaluation>(
     apiRoutes.ai.negotiationEvaluate.path,
     { quotationId, counterDiscountPct, lineId: lineId ?? undefined },
+  );
+  return data;
+}
+
+export async function fetchAiUpsellRecommendations(
+  quotationId: string,
+): Promise<AiUpsellResponse> {
+  const { data } = await apiClient.post<AiUpsellResponse>(
+    apiRoutes.ai.upsellRecommendations.path,
+    { quotationId },
+  );
+  return data;
+}
+
+export async function fetchAiDealHealthTriage(): Promise<AiDealHealthTriageResponse> {
+  const { data } = await apiClient.post<AiDealHealthTriageResponse>(
+    apiRoutes.ai.dealHealthTriage.path,
+    {},
+  );
+  return data;
+}
+
+export async function fetchAiDraftNudge(
+  alertId: string,
+  tone?: string,
+): Promise<AiDraftNudgeResponse> {
+  const { data } = await apiClient.post<AiDraftNudgeResponse>(
+    apiRoutes.ai.draftNudge.path,
+    { alertId, tone },
   );
   return data;
 }

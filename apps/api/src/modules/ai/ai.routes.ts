@@ -8,6 +8,9 @@ import {
   getContextualSuggestions,
   getDiscountApprovalReview,
   evaluateNegotiationCounter,
+  getAiUpsellRecommendations,
+  getAiDealHealthTriage,
+  draftAiNudge,
 } from "./ai.service.js";
 import { HitlApprovalDecisionSchema } from "@template/shared";
 
@@ -90,6 +93,38 @@ aiRouter.post("/negotiation-evaluate", async (req, res, next) => {
       lineId,
     );
     res.json(evaluation);
+  } catch (err) {
+    next(err);
+  }
+});
+
+aiRouter.post("/upsell-recommendations", async (req, res, next) => {
+  try {
+    const quotationId =
+      typeof req.body?.quotationId === "string" ? req.body.quotationId : "";
+    const recommendations = await getAiUpsellRecommendations(quotationId);
+    res.json(recommendations);
+  } catch (err) {
+    next(err);
+  }
+});
+
+aiRouter.post("/deal-health-triage", async (_req, res, next) => {
+  try {
+    const triage = await getAiDealHealthTriage();
+    res.json(triage);
+  } catch (err) {
+    next(err);
+  }
+});
+
+aiRouter.post("/draft-nudge", async (req, res, next) => {
+  try {
+    const alertId =
+      typeof req.body?.alertId === "string" ? req.body.alertId : "";
+    const tone = typeof req.body?.tone === "string" ? req.body.tone : undefined;
+    const nudge = await draftAiNudge(alertId, tone);
+    res.json(nudge);
   } catch (err) {
     next(err);
   }

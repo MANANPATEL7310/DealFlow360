@@ -131,3 +131,75 @@ export const NegotiationEvaluationSchema = z.object({
   rationale: z.string(),
 });
 export type NegotiationEvaluation = z.infer<typeof NegotiationEvaluationSchema>;
+
+// ── Agent 2: AI Product & Upsell Recommendation ──
+export const AiUpsellTagSchema = z.enum([
+  "HIGHEST_MARGIN",
+  "FREQUENTLY_PAIRED",
+  "ENTERPRISE_ADDON",
+  "REDUCED_RISK",
+]);
+export type AiUpsellTag = z.infer<typeof AiUpsellTagSchema>;
+
+export const AiUpsellRecommendationSchema = z.object({
+  productId: z.string(),
+  productName: z.string(),
+  category: z.string(),
+  unitPriceMinor: z.number(),
+  marginDeltaPct: z.number(),
+  coPurchaseScore: z.number(),
+  fitScore: z.number().min(0).max(100),
+  reason: z.string(),
+  tag: AiUpsellTagSchema,
+});
+export type AiUpsellRecommendation = z.infer<
+  typeof AiUpsellRecommendationSchema
+>;
+
+export const AiUpsellResponseSchema = z.object({
+  suggestions: z.array(AiUpsellRecommendationSchema),
+  cartSummary: z.string().optional(),
+});
+export type AiUpsellResponse = z.infer<typeof AiUpsellResponseSchema>;
+
+// ── Agent 5: AI Deal Health Monitor & Recovery Nudge Assistant ──
+export const AiDealHealthPrioritySchema = z.enum([
+  "P1_CRITICAL",
+  "P2_ELEVATED",
+  "P3_WATCH",
+]);
+export type AiDealHealthPriority = z.infer<typeof AiDealHealthPrioritySchema>;
+
+export const AiDealHealthTriageAlertSchema = z.object({
+  alertId: z.string(),
+  quotationId: z.string(),
+  quotationCode: z.string(),
+  customerName: z.string(),
+  customerTier: z.string(),
+  priority: AiDealHealthPrioritySchema,
+  whySummary: z.string(),
+  escalationRiskScore: z.number().min(0).max(100),
+  suggestedAction: z.string(),
+  draftNudgeMessage: z.string(),
+});
+export type AiDealHealthTriageAlert = z.infer<
+  typeof AiDealHealthTriageAlertSchema
+>;
+
+export const AiDealHealthTriageResponseSchema = z.object({
+  triagedAlerts: z.array(AiDealHealthTriageAlertSchema),
+  stalledDealsCount: z.number(),
+  pipelineAtRiskMinor: z.number(),
+  executiveSummary: z.string(),
+});
+export type AiDealHealthTriageResponse = z.infer<
+  typeof AiDealHealthTriageResponseSchema
+>;
+
+export const AiDraftNudgeResponseSchema = z.object({
+  alertId: z.string(),
+  draftMessage: z.string(),
+  tone: z.string(),
+  suggestedSubject: z.string(),
+});
+export type AiDraftNudgeResponse = z.infer<typeof AiDraftNudgeResponseSchema>;

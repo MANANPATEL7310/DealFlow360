@@ -641,6 +641,26 @@ export const apiRoutes = {
       auth: true,
       description: "Agent 6 negotiation counter simulation and draft reply.",
     },
+    upsellRecommendations: {
+      path: "/ai/upsell-recommendations",
+      method: "POST",
+      auth: true,
+      description:
+        "Agent 2 AI product and upsell recommendations for quotation builder.",
+    },
+    dealHealthTriage: {
+      path: "/ai/deal-health-triage",
+      method: "POST",
+      auth: true,
+      description:
+        "Agent 5 AI deal health triage and prioritized anomaly radar.",
+    },
+    draftNudge: {
+      path: "/ai/draft-nudge",
+      method: "POST",
+      auth: true,
+      description: "Agent 5 AI personalized recovery nudge generator.",
+    },
   },
 } as const;
 

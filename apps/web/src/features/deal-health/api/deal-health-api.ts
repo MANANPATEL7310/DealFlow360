@@ -8,6 +8,7 @@ import {
   type DealHealthStatus,
   type DealHealthSummary,
   type ResolveAlertInput,
+  type NudgeInput,
 } from "@template/shared";
 import { apiClient } from "@/services/http/api-client";
 
@@ -50,6 +51,16 @@ export const dealHealthApi = {
   ): Promise<DealHealthAlert> {
     const { data } = await apiClient.post(
       apiRoutes.dealHealth.resolve.path.replace(":id", alertId),
+      input,
+    );
+    return data.data;
+  },
+  async nudgeAlert(
+    alertId: string,
+    input: NudgeInput,
+  ): Promise<DealHealthAlert> {
+    const { data } = await apiClient.post(
+      apiRoutes.dealHealth.nudge.path.replace(":id", alertId),
       input,
     );
     return data.data;

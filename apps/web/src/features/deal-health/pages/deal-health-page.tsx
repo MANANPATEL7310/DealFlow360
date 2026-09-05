@@ -19,6 +19,8 @@ import { AnomalyAlertFeed } from "../components/anomaly-alert-feed";
 import { DealHealthKpiGrid } from "../components/deal-health-kpi-grid";
 import { DealHealthRadarView } from "../components/deal-health-radar-view";
 import { DealHealthTable } from "../components/deal-health-table";
+import { AiDealHealthTriageCard } from "../components/ai-deal-health-triage-card";
+import { AiRecoveryNudgeModal } from "../components/ai-recovery-nudge-modal";
 import {
   useAcknowledgeAlert,
   useDealHealthAlerts,
@@ -28,12 +30,23 @@ import {
 } from "../hooks/use-deal-health";
 
 export function DealHealthPage() {
-  const [selectedCategory, setSelectedCategory] = useState<HealthCategory | "ALL">("ALL");
+  const [selectedCategory, setSelectedCategory] = useState<
+    HealthCategory | "ALL"
+  >("ALL");
   const [activeTab, setActiveTab] = useState<"FEED" | "TABLE">("FEED");
-  const [resolvingAlert, setResolvingAlert] = useState<DealHealthAlert | null>(null);
+  const [resolvingAlert, setResolvingAlert] = useState<DealHealthAlert | null>(
+    null,
+  );
+  const [nudgingAlert, setNudgingAlert] = useState<DealHealthAlert | null>(
+    null,
+  );
+  const [nudgePrefill, setNudgePrefill] = useState<string | undefined>(
+    undefined,
+  );
   const [notification, setNotification] = useState<string | null>(null);
 
-  const { data: summaryData, isLoading: isLoadingSummary } = useDealHealthSummary();
+  const { data: summaryData, isLoading: isLoadingSummary } =
+    useDealHealthSummary();
   const { data: alerts, isLoading: isLoadingAlerts } = useDealHealthAlerts();
 
   const triggerScan = useTriggerDetectionScan();
@@ -45,10 +58,17 @@ export function DealHealthPage() {
     setTimeout(() => setNotification(null), 5000);
   };
 
+  const handleOpenNudgeModal = (alert: DealHealthAlert, prefill?: string) => {
+    setNudgingAlert(alert);
+    setNudgePrefill(prefill);
+  };
+
   const handleRunScan = async () => {
     try {
       await triggerScan.mutateAsync();
-      showToast("Autonomous anomaly scan completed. All deal telemetry refreshed!");
+      showToast(
+        "Autonomous anomaly scan completed. All deal telemetry refreshed!",
+      );
     } catch {
       showToast("Scan failed to execute. Please try again.");
     }
@@ -128,7 +148,9 @@ export function DealHealthPage() {
               </Badge>
             </div>
             <p className="text-xs text-muted-foreground max-w-xl">
-              Real-time telemetry continuously monitoring pipeline stagnation, statistical discount anomalies, and warehouse fulfillment bottlenecks.
+              Real-time telemetry continuously monitoring pipeline stagnation,
+              statistical discount anomalies, and warehouse fulfillment
+              bottlenecks.
             </p>
           </div>
 
@@ -165,6 +187,9 @@ export function DealHealthPage() {
         selectedCategory={selectedCategory}
         onSelectCategory={setSelectedCategory}
       />
+
+      {/* Agent 5: Autonomous Deal Health Triage & Recovery Assistant */}
+      <AiDealHealthTriageCard onOpenNudgeModal={handleOpenNudgeModal} />
 
       {/* Section View Tabs */}
       <div className="flex border-b border-border gap-6">
@@ -207,12 +232,10 @@ export function DealHealthPage() {
           alerts={alerts ?? []}
           onAcknowledge={handleAcknowledge}
           onOpenResolveModal={(alert) => setResolvingAlert(alert)}
+          onOpenNudgeModal={handleOpenNudgeModal}
         />
       ) : (
-        <DealHealthTable
-          scores={scores}
-          selectedCategory={selectedCategory}
-        />
+        <DealHealthTable scores={scores} selectedCategory={selectedCategory} />
       )}
 
       {/* Resolve Alert Audit Modal */}
@@ -221,6 +244,18 @@ export function DealHealthPage() {
         onClose={() => setResolvingAlert(null)}
         alert={resolvingAlert}
         onResolve={handleResolve}
+      />
+
+      {/* Agent 5: AI Recovery Nudge HITL Modal */}
+      <AiRecoveryNudgeModal
+        isOpen={Boolean(nudgingAlert)}
+        onClose={() => {
+          setNudgingAlert(null);
+          setNudgePrefill(undefined);
+        }}
+        alert={nudgingAlert}
+        initialDraft={nudgePrefill}
+        onSuccess={showToast}
       />
     </div>
   );

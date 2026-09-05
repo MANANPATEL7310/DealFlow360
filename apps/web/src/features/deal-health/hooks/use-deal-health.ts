@@ -5,6 +5,7 @@ import type {
   DealHealthSeverity,
   DealHealthStatus,
   ResolveAlertInput,
+  NudgeInput,
 } from "@template/shared";
 import { dealHealthApi } from "../api/deal-health-api";
 
@@ -44,8 +45,13 @@ export function useAcknowledgeAlert() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: ({ alertId, input }: { alertId: string; input?: AcknowledgeAlertInput }) =>
-      dealHealthApi.acknowledgeAlert(alertId, input),
+    mutationFn: ({
+      alertId,
+      input,
+    }: {
+      alertId: string;
+      input?: AcknowledgeAlertInput;
+    }) => dealHealthApi.acknowledgeAlert(alertId, input),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: DEAL_HEALTH_KEYS.all });
     },
@@ -56,8 +62,13 @@ export function useResolveAlert() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: ({ alertId, input }: { alertId: string; input: ResolveAlertInput }) =>
-      dealHealthApi.resolveAlert(alertId, input),
+    mutationFn: ({
+      alertId,
+      input,
+    }: {
+      alertId: string;
+      input: ResolveAlertInput;
+    }) => dealHealthApi.resolveAlert(alertId, input),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: DEAL_HEALTH_KEYS.all });
     },
@@ -69,6 +80,18 @@ export function useTriggerDetectionScan() {
 
   return useMutation({
     mutationFn: () => dealHealthApi.triggerScan(),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: DEAL_HEALTH_KEYS.all });
+    },
+  });
+}
+
+export function useNudgeAlert() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: ({ alertId, input }: { alertId: string; input: NudgeInput }) =>
+      dealHealthApi.nudgeAlert(alertId, input),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: DEAL_HEALTH_KEYS.all });
     },
