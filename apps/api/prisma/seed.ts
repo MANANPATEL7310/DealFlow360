@@ -77,27 +77,69 @@ async function main() {
   //   ],
   // });
 
-  // ── M3: Discount Governance (uncomment after M3 lands) ───────────────────────
-  // await db.discountTier.createMany({
-  //   data: [
-  //     { customerTier: "BRONZE", maxDiscountPct: 5 },
-  //     { customerTier: "SILVER", maxDiscountPct: 10 },
-  //     { customerTier: "GOLD", maxDiscountPct: 15 },
-  //   ],
-  // });
-  // await db.categoryCeiling.createMany({
-  //   data: [
-  //     { category: "HARDWARE", maxDiscountPct: 15 },
-  //     { category: "SERVICES", maxDiscountPct: 10 },
-  //     { category: "SUBSCRIPTIONS", maxDiscountPct: 12 },
-  //   ],
-  // });
-  // await db.approvalChainRule.createMany({
-  //   data: [
-  //     { name: "small overage", minScore: 0.01, maxScore: 3, requiredLevels: ["SALES_MANAGER"] },
-  //     { name: "high risk", minScore: 3, maxScore: null, requiredLevels: ["SALES_MANAGER", "FINANCE"] },
-  //   ],
-  // });
+  // ── M3: Discount Governance ─────────────────────────────────────────────────
+  const discountTiers: {
+    customerTier: "BRONZE" | "SILVER" | "GOLD";
+    maxDiscountPct: number;
+  }[] = [
+    { customerTier: "BRONZE", maxDiscountPct: 5 },
+    { customerTier: "SILVER", maxDiscountPct: 10 },
+    { customerTier: "GOLD", maxDiscountPct: 15 },
+  ];
+  for (const dt of discountTiers) {
+    await db.discountTier.upsert({
+      where: { customerTier: dt.customerTier },
+      update: { maxDiscountPct: dt.maxDiscountPct },
+      create: dt,
+    });
+  }
+
+  const categoryCeilings: {
+    category: "HARDWARE" | "SERVICES" | "SUBSCRIPTIONS";
+    maxDiscountPct: number;
+  }[] = [
+    { category: "HARDWARE", maxDiscountPct: 15 },
+    { category: "SERVICES", maxDiscountPct: 10 },
+    { category: "SUBSCRIPTIONS", maxDiscountPct: 12 },
+  ];
+  for (const cc of categoryCeilings) {
+    await db.categoryCeiling.upsert({
+      where: { category: cc.category },
+      update: { maxDiscountPct: cc.maxDiscountPct },
+      create: cc,
+    });
+  }
+
+  const approvalRules = [
+    {
+      name: "small overage",
+      minScore: 0.01,
+      maxScore: 3,
+      requiredLevels: ["SALES_MANAGER"],
+    },
+    {
+      name: "high risk",
+      minScore: 3,
+      maxScore: null,
+      requiredLevels: ["SALES_MANAGER", "FINANCE"],
+    },
+  ];
+  for (const rule of approvalRules) {
+    const existing = await db.approvalChainRule.findFirst({
+      where: { name: rule.name },
+    });
+    if (existing) {
+      await db.approvalChainRule.update({
+        where: { id: existing.id },
+        data: rule,
+      });
+    } else {
+      await db.approvalChainRule.create({
+        data: rule,
+      });
+    }
+  }
+  console.log("✓ Discount Governance seeded");
 
   // ── M7: Warehouses + stock (uncomment after M7 lands) ────────────────────────
   // const mainWh = await db.warehouse.create({ data: { name: "Main Warehouse", location: "NY", shippingCostWeight: 1 } });

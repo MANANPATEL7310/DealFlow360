@@ -88,6 +88,64 @@ export const apiRoutes = {
       description: "Delete a product.",
     },
   },
+
+  // ─── Governance (M3) ──────────────────────────────────────────────────────
+  governance: {
+    discountTiers: {
+      list: {
+        path: "/governance/discount-tiers",
+        method: "GET",
+        auth: true,
+        description: "List all discount tier ceilings.",
+      },
+      upsert: {
+        path: "/governance/discount-tiers",
+        method: "PUT",
+        auth: true,
+        description: "Upsert a discount tier ceiling.",
+      },
+    },
+    categoryCeilings: {
+      list: {
+        path: "/governance/category-ceilings",
+        method: "GET",
+        auth: true,
+        description: "List all category discount ceilings.",
+      },
+      upsert: {
+        path: "/governance/category-ceilings",
+        method: "PUT",
+        auth: true,
+        description: "Upsert a category discount ceiling.",
+      },
+    },
+    approvalRules: {
+      list: {
+        path: "/governance/approval-rules",
+        method: "GET",
+        auth: true,
+        description: "List all approval chain rules.",
+      },
+      create: {
+        path: "/governance/approval-rules",
+        method: "POST",
+        auth: true,
+        description: "Create an approval chain rule.",
+      },
+      update: {
+        path: "/governance/approval-rules/:id",
+        method: "PATCH",
+        auth: true,
+        description: "Update an approval chain rule.",
+      },
+      remove: {
+        path: "/governance/approval-rules/:id",
+        method: "DELETE",
+        auth: true,
+        description: "Delete an approval chain rule.",
+      },
+    },
+  },
 } as const;
 
 // ─── Derived Types (auto-generated, do not edit manually) ─────────────────────

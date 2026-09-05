@@ -1,0 +1,6 @@
+# Architecture Documentation Index
+
+| Feature                         | Doc                                                             | Key Files                                                                                                                                                                               | Depends On               |
+| ------------------------------- | --------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
+| M0 — Foundation & Auth          | [m0-foundation.md](features/m0-foundation.md)                   | `packages/shared/src/schemas/auth.ts`, `apps/api/src/modules/auth/auth.service.ts`, `apps/api/src/middleware/require-auth.ts`, `apps/api/src/lib/money.ts`                              | None                     |
+| M3 — Discount Governance Config | [m3-discount-governance.md](features/m3-discount-governance.md) | `packages/shared/src/schemas/governance.ts`, `apps/api/src/modules/governance/governance.service.ts`, `apps/api/src/modules/governance/governance.routes.ts`, `apps/api/prisma/seed.ts` | `M0 — Foundation & Auth` |
