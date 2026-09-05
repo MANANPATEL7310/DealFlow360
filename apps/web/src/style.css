@@ -4,49 +4,78 @@
 @custom-variant dark (&:is(.dark *));
 
 :root {
+  /* DealFlow360 Executive Theme: Cobalt & Mint Emerald (Light Mode) */
   --background: #f8fafc;
-  --foreground: #0f172a;
+  --foreground: #090d16;
   --surface: #ffffff;
-  --surface-muted: #e2e8f0;
+  --surface-muted: #f1f5f9;
   --muted-foreground: #64748b;
-  --border: #d7e2f0;
-  --ring: #60a5fa;
+  --border: #e2e8f0;
+  --ring: #3b82f6;
 
+  /* Cobalt Primary */
   --primary-light: #60a5fa;
   --primary: #2563eb;
   --primary-dark: #1d4ed8;
 
-  --secondary-light: #5eead4;
-  --secondary: #0f766e;
-  --secondary-dark: #115e59;
+  /* Mint Emerald Secondary (Margin & Healthy Growth) */
+  --secondary-light: #34d399;
+  --secondary: #10b981;
+  --secondary-dark: #059669;
 
+  /* Status Colors */
   --success-light: #6ee7b7;
-  --success: #16a34a;
-  --success-dark: #15803d;
+  --success: #10b981;
+  --success-dark: #047857;
 
-  --warning-light: #fcd34d;
-  --warning: #d97706;
+  --warning-light: #fde68a;
+  --warning: #f59e0b;
   --warning-dark: #b45309;
 
   --danger-light: #fca5a5;
-  --danger: #dc2626;
+  --danger: #ef4444;
   --danger-dark: #b91c1c;
 
-  --neutral-light: #cbd5e1;
-  --neutral: #475569;
+  --neutral-light: #e2e8f0;
+  --neutral: #64748b;
   --neutral-dark: #0f172a;
 
-  --radius: 1rem;
+  --radius: 0.75rem;
 }
 
 .dark {
-  --background: #020617;
+  /* DealFlow360 Executive Theme: Cobalt & Mint Emerald (Dark Mode) */
+  --background: #080c14;
   --foreground: #f8fafc;
   --surface: #0f172a;
-  --surface-muted: #162235;
+  --surface-muted: #162032;
   --muted-foreground: #94a3b8;
-  --border: #203149;
-  --ring: #60a5fa;
+  --border: #1e293b;
+  --ring: #3b82f6;
+
+  --primary-light: #60a5fa;
+  --primary: #3b82f6;
+  --primary-dark: #1d4ed8;
+
+  --secondary-light: #34d399;
+  --secondary: #10b981;
+  --secondary-dark: #059669;
+
+  --success-light: #34d399;
+  --success: #10b981;
+  --success-dark: #047857;
+
+  --warning-light: #fbbf24;
+  --warning: #f59e0b;
+  --warning-dark: #d97706;
+
+  --danger-light: #f87171;
+  --danger: #ef4444;
+  --danger-dark: #dc2626;
+
+  --neutral-light: #334155;
+  --neutral: #94a3b8;
+  --neutral-dark: #f8fafc;
 }
 
 @theme inline {
@@ -83,16 +112,17 @@
   --color-neutral: var(--neutral);
   --color-neutral-dark: var(--neutral-dark);
 
-  --radius-xs: calc(var(--radius) - 10px);
-  --radius-sm: calc(var(--radius) - 6px);
-  --radius-md: calc(var(--radius) - 2px);
-  --radius-lg: var(--radius);
-  --radius-xl: calc(var(--radius) + 4px);
+  --radius-xs: calc(var(--radius) - 6px);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: var(--radius);
+  --radius-lg: calc(var(--radius) + 4px);
+  --radius-xl: calc(var(--radius) + 8px);
 
-  --animate-fade-in: fade-in 0.3s ease-out;
+  --animate-fade-in: fade-in 0.3s cubic-bezier(0.16, 1, 0.3, 1);
   --animate-slide-up: slide-up 0.4s cubic-bezier(0.16, 1, 0.3, 1);
   --animate-slide-down: slide-down 0.4s cubic-bezier(0.16, 1, 0.3, 1);
   --animate-scale-in: scale-in 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  --animate-pulse-subtle: pulse-subtle 3s ease-in-out infinite;
 
   @keyframes fade-in {
     from {
@@ -104,7 +134,7 @@
   }
   @keyframes slide-up {
     from {
-      transform: translateY(10px);
+      transform: translateY(12px);
       opacity: 0;
     }
     to {
@@ -114,7 +144,7 @@
   }
   @keyframes slide-down {
     from {
-      transform: translateY(-10px);
+      transform: translateY(-12px);
       opacity: 0;
     }
     to {
@@ -124,12 +154,20 @@
   }
   @keyframes scale-in {
     from {
-      transform: scale(0.95);
+      transform: scale(0.96);
       opacity: 0;
     }
     to {
       transform: scale(1);
       opacity: 1;
+    }
+  }
+  @keyframes pulse-subtle {
+    0%, 100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.7;
     }
   }
 }
@@ -144,22 +182,22 @@
   }
 
   body {
-    @apply min-h-screen bg-background font-sans text-foreground antialiased;
+    @apply min-h-screen bg-background font-sans text-foreground antialiased selection:bg-primary/20 selection:text-primary;
     background-image:
       radial-gradient(
-        circle at 15% 50%,
-        color-mix(in srgb, var(--primary) 20%, transparent) 0%,
-        transparent 40%
+        circle at 12% 15%,
+        color-mix(in srgb, var(--primary) 12%, transparent) 0%,
+        transparent 35%
       ),
       radial-gradient(
-        circle at 85% 30%,
-        color-mix(in srgb, var(--secondary) 25%, transparent) 0%,
-        transparent 40%
+        circle at 88% 18%,
+        color-mix(in srgb, var(--secondary) 10%, transparent) 0%,
+        transparent 32%
       ),
       radial-gradient(
-        circle at 50% 100%,
-        color-mix(in srgb, var(--primary-light) 15%, transparent) 0%,
-        transparent 50%
+        circle at 50% 90%,
+        color-mix(in srgb, var(--primary) 8%, transparent) 0%,
+        transparent 45%
       );
   }
 
@@ -170,9 +208,25 @@
 
 @layer components {
   .surface-card {
-    @apply rounded-2xl border border-white/10 bg-white/5 backdrop-blur-xl dark:bg-black/20;
-    box-shadow: 0 8px 32px 0
-      color-mix(in srgb, var(--neutral-dark) 20%, transparent);
+    @apply rounded-2xl border border-border bg-surface/80 backdrop-blur-xl transition-all duration-300;
+    box-shadow: 0 4px 20px -2px color-mix(in srgb, var(--foreground) 5%, transparent);
+  }
+
+  .surface-card-hover {
+    @apply rounded-2xl border border-border bg-surface/80 backdrop-blur-xl transition-all duration-300 hover:border-primary/40 hover:shadow-lg hover:shadow-primary/5;
+    box-shadow: 0 4px 20px -2px color-mix(in srgb, var(--foreground) 5%, transparent);
+  }
+
+  .glass-panel {
+    @apply rounded-2xl border border-border/80 bg-surface/70 backdrop-blur-md;
+  }
+
+  .glow-badge {
+    @apply inline-flex items-center gap-1.5 rounded-full border border-primary/30 bg-primary/10 px-3 py-1 text-xs font-semibold text-primary;
+  }
+
+  .glow-badge-success {
+    @apply inline-flex items-center gap-1.5 rounded-full border border-secondary/30 bg-secondary/10 px-3 py-1 text-xs font-semibold text-secondary;
   }
 
   .app-shell {
@@ -180,7 +234,7 @@
   }
 
   .page-title {
-    @apply text-3xl font-semibold tracking-tight md:text-4xl;
+    @apply text-3xl font-semibold tracking-tight md:text-4xl text-foreground;
   }
 
   .page-copy {
@@ -188,7 +242,7 @@
   }
 
   .input-shell {
-    @apply flex h-12 w-full rounded-lg border border-white/10 bg-white/5 dark:bg-black/20 backdrop-blur-md px-4 text-sm text-foreground placeholder:text-muted-foreground focus:border-primary/50 focus:ring-2 focus:ring-primary/20 transition-all;
+    @apply flex h-11 w-full rounded-lg border border-border bg-surface-muted/50 px-3.5 text-sm text-foreground placeholder:text-muted-foreground focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all;
   }
 
   .sidebar-layout {
