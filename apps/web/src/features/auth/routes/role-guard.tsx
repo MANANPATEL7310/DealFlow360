@@ -1,10 +1,6 @@
 import type { ReactNode } from "react";
 import { Link } from "react-router";
-import {
-  appRoutes,
-  DEMO_PERSONAS,
-  type UserRole,
-} from "@template/shared";
+import { appRoutes, DEMO_PERSONAS, type UserRole } from "@template/shared";
 import { ArrowLeft, ShieldAlert, UserCheck } from "lucide-react";
 import toast from "react-hot-toast";
 import { Button } from "@/components/ui/button";
@@ -21,7 +17,57 @@ export function RoleGuard({ allowedRoles, children }: RoleGuardProps) {
   const switchPersona = useAuthStore((state) => state.switchPersona);
 
   if (!user) {
-    return null;
+    const recommendedRole = allowedRoles[0] ?? "admin";
+    const recommendedPersona = DEMO_PERSONAS[recommendedRole];
+
+    const handleSwitch = () => {
+      switchPersona(recommendedRole);
+      toast.success(
+        `Signed in as ${recommendedPersona.name} (${recommendedPersona.title})`,
+      );
+    };
+
+    return (
+      <div className="flex min-h-120 items-center justify-center p-6">
+        <Card className="bg-card w-full max-w-lg space-y-6 border-amber-500/30 p-8 shadow-xl">
+          <div className="flex items-center gap-4">
+            <div className="flex size-12 shrink-0 items-center justify-center rounded-xl bg-amber-500/10 text-amber-500">
+              <ShieldAlert className="size-6" />
+            </div>
+            <div>
+              <h2 className="text-xl font-bold text-foreground">
+                Authentication Required
+              </h2>
+              <p className="text-xs text-muted-foreground">
+                This workbench requires elevated privileges. Select an
+                authorized demo persona to continue.
+              </p>
+            </div>
+          </div>
+
+          <div className="space-y-2">
+            <Button
+              className="w-full gap-2"
+              type="button"
+              onClick={handleSwitch}
+            >
+              <UserCheck className="size-4" />
+              <span>
+                Sign in as {recommendedPersona.name} ({recommendedPersona.title}
+                )
+              </span>
+            </Button>
+            <Link
+              className="bg-card hover:bg-muted flex w-full items-center justify-center gap-2 rounded-lg border border-border px-4 py-2 text-sm font-semibold text-foreground transition-colors"
+              to={appRoutes.dashboard}
+            >
+              <ArrowLeft className="size-4" />
+              <span>Return to Dashboard</span>
+            </Link>
+          </div>
+        </Card>
+      </div>
+    );
   }
 
   const hasAccess = allowedRoles.includes(user.role);
@@ -88,8 +134,7 @@ export function RoleGuard({ allowedRoles, children }: RoleGuardProps) {
             >
               <UserCheck className="size-4" />
               <span>
-                Switch to {recommendedPersona.name} (
-                {recommendedPersona.title})
+                Switch to {recommendedPersona.name} ({recommendedPersona.title})
               </span>
             </Button>
             <Link

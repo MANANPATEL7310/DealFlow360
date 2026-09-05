@@ -16,12 +16,32 @@ import { useSettings, useUpdateSetting } from "../hooks/use-admin-settings";
 
 const CATEGORY_META: Record<
   string,
-  { label: string; icon: typeof Sliders; tone: "primary" | "warning" | "secondary" | "neutral" }
+  {
+    label: string;
+    icon: typeof Sliders;
+    tone: "primary" | "warning" | "secondary" | "neutral";
+  }
 > = {
-  risk: { label: "Discount Risk & Finance Escalation", icon: ShieldCheck, tone: "warning" },
-  health: { label: "Deal Health Telemetry & Anomaly Horizon", icon: Sliders, tone: "primary" },
-  ai: { label: "Autonomous AI & Agent Foundation", icon: Bot, tone: "secondary" },
-  general: { label: "General System Settings", icon: Sparkles, tone: "neutral" },
+  risk: {
+    label: "Discount Risk & Finance Escalation",
+    icon: ShieldCheck,
+    tone: "warning",
+  },
+  health: {
+    label: "Deal Health Telemetry & Anomaly Horizon",
+    icon: Sliders,
+    tone: "primary",
+  },
+  ai: {
+    label: "Autonomous AI & Agent Foundation",
+    icon: Bot,
+    tone: "secondary",
+  },
+  general: {
+    label: "General System Settings",
+    icon: Sparkles,
+    tone: "neutral",
+  },
 };
 
 export function SettingsTab() {
@@ -37,12 +57,15 @@ export function SettingsTab() {
     );
   }
 
-  const grouped = (settings ?? []).reduce<Record<string, SystemSetting[]>>((acc, s) => {
-    const cat = s.category || "general";
-    if (!acc[cat]) acc[cat] = [];
-    acc[cat].push(s);
-    return acc;
-  }, {});
+  const grouped = (settings ?? []).reduce<Record<string, SystemSetting[]>>(
+    (acc, s) => {
+      const cat = s.category || "general";
+      if (!acc[cat]) acc[cat] = [];
+      acc[cat].push(s);
+      return acc;
+    },
+    {},
+  );
 
   const handleDraftChange = (key: string, value: unknown) => {
     setDrafts((prev) => ({
@@ -96,13 +119,19 @@ export function SettingsTab() {
                   <Icon className="size-4" />
                 </div>
                 <div>
-                  <h3 className="text-sm font-bold text-foreground">{meta.label}</h3>
+                  <h3 className="text-sm font-bold text-foreground">
+                    {meta.label}
+                  </h3>
                   <p className="text-xs text-muted-foreground">
-                    Runtime configurable parameters governing automated system decisions.
+                    Runtime configurable parameters governing automated system
+                    decisions.
                   </p>
                 </div>
               </div>
-              <Badge tone={meta.tone} className="text-xs capitalize font-semibold">
+              <Badge
+                tone={meta.tone}
+                className="text-xs capitalize font-semibold"
+              >
                 {category}
               </Badge>
             </div>
@@ -111,8 +140,10 @@ export function SettingsTab() {
             <div className="divide-y divide-border/60">
               {items.map((s) => {
                 const isBoolean = typeof s.value === "boolean";
-                const isDirty = drafts[s.key] !== undefined && drafts[s.key] !== s.value;
-                const currentValue = drafts[s.key] !== undefined ? drafts[s.key] : s.value;
+                const isDirty =
+                  drafts[s.key] !== undefined && drafts[s.key] !== s.value;
+                const currentValue =
+                  drafts[s.key] !== undefined ? drafts[s.key] : s.value;
 
                 return (
                   <div
@@ -128,12 +159,18 @@ export function SettingsTab() {
                           {s.key}
                         </code>
                       </div>
-                      <p className="text-xs text-muted-foreground">{s.description}</p>
-                      {s.key.includes("Minor") && typeof currentValue === "number" && (
-                        <p className="text-[11px] font-mono text-primary">
-                          Value representation: ${(currentValue / 100).toLocaleString("en-US", { minimumFractionDigits: 2 })}
-                        </p>
-                      )}
+                      <p className="text-xs text-muted-foreground">
+                        {s.description}
+                      </p>
+                      {s.key.includes("Minor") &&
+                        typeof currentValue === "number" && (
+                          <p className="text-[11px] font-mono text-primary">
+                            Value representation: $
+                            {(currentValue / 100).toLocaleString("en-US", {
+                              minimumFractionDigits: 2,
+                            })}
+                          </p>
+                        )}
                     </div>
 
                     {/* Value Controls */}
@@ -142,7 +179,9 @@ export function SettingsTab() {
                         <div className="flex items-center gap-2">
                           <button
                             type="button"
-                            onClick={() => handleToggle(s.key, Boolean(s.value))}
+                            onClick={() =>
+                              handleToggle(s.key, Boolean(s.value))
+                            }
                             disabled={updateMutation.isPending}
                             className={`relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 ${
                               s.value ? "bg-primary" : "bg-surface-muted"
@@ -166,7 +205,7 @@ export function SettingsTab() {
                             onChange={(e) =>
                               handleDraftChange(s.key, Number(e.target.value))
                             }
-                            className="h-8 w-28 text-xs font-mono"
+                            className="h-8 w-28 text-xs font-mono text-center px-2 font-semibold"
                           />
 
                           {isDirty && (
