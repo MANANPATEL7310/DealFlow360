@@ -9,6 +9,7 @@ export const appRoutes = {
   customers: "/app/customers",
   governance: "/app/governance",
   approvals: "/app/approvals",
+  approvalDetail: (id: string) => `/app/approvals/${id}`,
   fulfillment: "/app/fulfillment",
   billing: "/app/billing",
   dealHealth: "/app/deal-health",

@@ -131,6 +131,14 @@ export const updateLineSchema = z.object({
 });
 export type UpdateLineInput = z.infer<typeof updateLineSchema>;
 
+export const approvalDecisionInputSchema = z.object({
+  decision: z.enum(["APPROVED", "REJECTED", "RETURNED"]),
+  reason: z
+    .string()
+    .min(3, "A justification reason of at least 3 characters is required"),
+});
+export type ApprovalDecisionInput = z.infer<typeof approvalDecisionInputSchema>;
+
 // ─── Risk Breakdown Types ────────────────────────────────────────────────────
 export interface LineRiskBreakdown {
   lineId: string;

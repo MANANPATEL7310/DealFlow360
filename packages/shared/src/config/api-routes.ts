@@ -89,6 +89,13 @@ export const apiRoutes = {
     risk:        { path: "/quotations/:id/risk",           method: "GET",    auth: true,  description: "Evaluate live blended risk score and breakdown." },
   },
 
+  // ─── Approvals & Reviews ───────────────────────────────────────────────────
+  approvals: {
+    inbox:       { path: "/approvals",                               method: "GET",    auth: true, description: "List pending quotations requiring reviewer action." },
+    decision:    { path: "/quotations/:id/approvals/decision",       method: "POST",   auth: true, description: "Submit audited approval decision." },
+    steps:       { path: "/quotations/:id/approvals",                method: "GET",    auth: true, description: "Get ordered approval steps." },
+  },
+
   // ─── Discount Governance ───────────────────────────────────────────────────
   governance: {
     discountTiers:    { path: "/governance/discount-tiers",        method: "GET",   auth: true, description: "List or upsert discount tier ceilings." },
