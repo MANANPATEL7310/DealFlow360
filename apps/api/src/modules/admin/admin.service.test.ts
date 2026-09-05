@@ -1,5 +1,10 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { listAuditLogs, listSettings, updateSetting } from "./admin.service.js";
+import {
+  getAiUsageSummary,
+  listAuditLogs,
+  listSettings,
+  updateSetting,
+} from "./admin.service.js";
 import { writeAudit } from "../../lib/audit.js";
 
 vi.mock("../../lib/audit.js", () => ({
@@ -155,5 +160,54 @@ describe("admin settings service", () => {
       skip: 10,
     });
     expect(fake.auditLog.count).toHaveBeenCalledWith({ where });
+  });
+
+  it("summarizes AI usage for admin visibility", async () => {
+    const fake = {
+      agentRun: {
+        aggregate: vi.fn(async () => ({
+          _sum: { costUsd: 0.03, inputTokens: 300, outputTokens: 120 },
+          _count: { _all: 2 },
+        })),
+        findMany: vi.fn(async () => [
+          {
+            agent: "fulfillment",
+            status: "DONE",
+            costUsd: 0.01,
+            latencyMs: 100,
+            inputTokens: 100,
+            outputTokens: 40,
+          },
+          {
+            agent: "fulfillment",
+            status: "PAUSED_FOR_APPROVAL",
+            costUsd: 0.02,
+            latencyMs: 300,
+            inputTokens: 200,
+            outputTokens: 80,
+          },
+        ]),
+      },
+    };
+
+    await expect(
+      getAiUsageSummary(new Date("2026-09-05T00:00:00Z"), fake),
+    ).resolves.toMatchObject({
+      totalRuns: 2,
+      totalCostUsd: 0.03,
+      totalInputTokens: 300,
+      totalOutputTokens: 120,
+      p95LatencyMs: 300,
+      failureRate: 0,
+      hitlPauseRate: 0.5,
+      byAgent: [
+        {
+          agent: "fulfillment",
+          runs: 2,
+          p95LatencyMs: 300,
+          hitlPauseRate: 0.5,
+        },
+      ],
+    });
   });
 });

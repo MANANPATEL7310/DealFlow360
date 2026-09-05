@@ -22,6 +22,9 @@ import {
   invoiceRouter,
 } from "../modules/billing/billing.routes.js";
 import { reportsRouter } from "../modules/reports/reports.routes.js";
+import { aiFulfillmentRouter } from "../modules/ai/fulfillment/routes.js";
+import { aiDealHealthRouter } from "../modules/ai/deal-health/routes.js";
+import { aiInsightsRouter } from "../modules/ai/insights/routes.js";
 import { aiApprovalsRouter } from "../modules/ai/approvals/approvals.routes.js";
 import { discountApprovalRouter } from "../modules/ai/discount-approval/routes.js";
 import { negotiationRouter } from "../modules/ai/negotiation/routes.js";
@@ -54,3 +57,6 @@ apiRouter.use("/reports", reportsRouter);
 apiRouter.use("/ai", aiApprovalsRouter);
 apiRouter.use("/ai", discountApprovalRouter);
 apiRouter.use("/ai", negotiationRouter);
+apiRouter.use("/ai", aiFulfillmentRouter);
+apiRouter.use("/ai", aiDealHealthRouter);
+apiRouter.use("/ai", aiInsightsRouter);
