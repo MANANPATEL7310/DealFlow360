@@ -12,7 +12,6 @@
     "clean": "rm -rf dist node_modules .turbo"
   },
   "dependencies": {
-    "@prisma/client": "^5.22.0",
     "@template/shared": "workspace:*",
     "cors": "^2.8.5",
     "dotenv": "^17.2.3",
@@ -24,13 +23,14 @@
     "zod": "^4.3.6"
   },
   "devDependencies": {
+    "@prisma/client": "^6.19.3",
     "@template/eslint-config": "workspace:*",
     "@template/typescript-config": "workspace:*",
     "@types/cors": "^2.8.19",
     "@types/express": "^5.0.6",
     "@types/jsonwebtoken": "^9.0.10",
     "@types/node": "^24.10.13",
-    "prisma": "^5.22.0",
+    "prisma": "6.19.3",
     "tsx": "^4.21.0"
   }
 }
