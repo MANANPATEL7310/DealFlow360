@@ -13,8 +13,8 @@ export async function getPortalQuotationController(req: Request, res: Response) 
 
     const data = portalService.getQuotation(quotationId);
     sendOk(res, data);
-  } catch (error: any) {
-    sendError(res, httpStatus.badRequest, error.message || "Failed to load portal quotation.");
+  } catch (error: unknown) {
+    sendError(res, httpStatus.badRequest, (error as Error).message || "Failed to load portal quotation.");
   }
 }
 
@@ -28,8 +28,8 @@ export async function openPortalQuotationController(req: Request, res: Response)
 
     const data = portalService.markOpened(quotationId);
     sendOk(res, data);
-  } catch (error: any) {
-    sendError(res, httpStatus.badRequest, error.message || "Failed to mark quotation opened.");
+  } catch (error: unknown) {
+    sendError(res, httpStatus.badRequest, (error as Error).message || "Failed to mark quotation opened.");
   }
 }
 
@@ -45,8 +45,8 @@ export async function createPortalNegotiationController(req: Request, res: Respo
 
     const data = portalService.createNegotiation(quotationId, contactId, req.body);
     sendCreated(res, data);
-  } catch (error: any) {
-    sendError(res, httpStatus.badRequest, error.message || "Failed to submit negotiation request.");
+  } catch (error: unknown) {
+    sendError(res, httpStatus.badRequest, (error as Error).message || "Failed to submit negotiation request.");
   }
 }
 
@@ -60,7 +60,7 @@ export async function confirmPortalQuotationController(req: Request, res: Respon
 
     const data = portalService.confirmQuotation(quotationId);
     sendOk(res, data);
-  } catch (error: any) {
-    sendError(res, httpStatus.badRequest, error.message || "Failed to confirm quotation.");
+  } catch (error: unknown) {
+    sendError(res, httpStatus.badRequest, (error as Error).message || "Failed to confirm quotation.");
   }
 }

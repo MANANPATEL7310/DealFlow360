@@ -136,7 +136,7 @@ export const portalService = {
     const acceptedCounters = negotiations.filter((n) => n.status === "ACCEPTED");
 
     // Apply any accepted counter discounts to quotation lines
-    let updatedLines = quote.lines.map((line) => {
+    const updatedLines = quote.lines.map((line) => {
       const lineCounter = acceptedCounters.find((c) => c.lineId === line.id);
       const orderCounter = acceptedCounters.find((c) => !c.lineId);
 

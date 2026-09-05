@@ -1,10 +1,8 @@
 import {
-  type DealAnomalyType,
   type DealHealthAlert,
   type DealHealthScore,
   type HealthCategory,
   type Quotation,
-  SEED_WAREHOUSES,
 } from "@template/shared";
 
 interface RepBaseline {

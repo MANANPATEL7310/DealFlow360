@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-namespace */
 import type { NextFunction, Request, Response } from "express";
 import { httpStatus } from "../constants/http.js";
 import { sendError } from "../lib/response.js";

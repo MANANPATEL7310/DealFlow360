@@ -12,6 +12,7 @@ export * from "./schemas/fulfillment";
 export * from "./schemas/billing";
 export * from "./schemas/portal";
 export * from "./schemas/deal-health";
+export * from "./schemas/reports";
 export * from "./lib/quotation-math";
 export * from "./lib/upsell-engine";
 export * from "./lib/fulfillment-optimizer";

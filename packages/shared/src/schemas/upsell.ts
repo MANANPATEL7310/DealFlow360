@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { type Product, productSchema } from "./product";
+import { productSchema } from "./product";
 
 // ─── Upsell Rule Schema ──────────────────────────────────────────────────────
 export const upsellRuleSchema = z.object({
