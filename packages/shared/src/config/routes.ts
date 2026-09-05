@@ -4,4 +4,5 @@ export const appRoutes = {
   app: "/app",
   dashboard: "/app",
   settings: "/app/settings",
+  portal: "/portal",
 } as const;

@@ -1,5 +1,5 @@
 // apps/api/src/modules/quotation/lifecycle.ts
-import type { QuotationStatus } from "@prisma/client";
+import type { Prisma, QuotationStatus } from "@prisma/client";
 import { writeAudit } from "../../lib/audit.js";
 import { db } from "../../lib/db.js";
 
@@ -22,7 +22,10 @@ export const ALLOWED: Record<QuotationStatus, QuotationStatus[]> = {
 
 export function assertTransition(from: QuotationStatus, to: QuotationStatus) {
   if (!ALLOWED[from]?.includes(to)) {
-    throw Object.assign(new Error("ILLEGAL_TRANSITION"), { http: 409 });
+    throw Object.assign(new Error("ILLEGAL_TRANSITION"), {
+      http: 409,
+      code: "ILLEGAL_TRANSITION",
+    });
   }
 }
 
@@ -35,10 +38,12 @@ export async function recordEvent(
   q: QuotationRecord,
   from: QuotationStatus,
   to: QuotationStatus,
-  actorId?: string,
+  actorId?: string | null,
   reason?: string,
+  actorKind: "user" | "customer" | "system" = actorId ? "user" : "system",
+  prisma: Prisma.TransactionClient | typeof db = db,
 ) {
-  await db.quotationStatusEvent.create({
+  await prisma.quotationStatusEvent.create({
     data: {
       quotationId: q.id,
       fromStatus: from,
@@ -49,8 +54,8 @@ export async function recordEvent(
   });
 
   await writeAudit({
-    actorId,
-    actorKind: "user",
+    actorId: actorId ?? undefined,
+    actorKind,
     action: `quotation.${to.toLowerCase()}`,
     entity: "Quotation",
     entityId: q.id,
@@ -65,13 +70,15 @@ export async function recordEvent(
 export async function transition(
   q: QuotationRecord,
   to: QuotationStatus,
-  actorId: string,
+  actorId?: string | null,
   reason?: string,
   blendedRiskScore?: number,
+  actorKind: "user" | "customer" | "system" = actorId ? "user" : "system",
+  prisma: Prisma.TransactionClient | typeof db = db,
 ) {
   assertTransition(q.status, to);
 
-  await db.quotation.update({
+  await prisma.quotation.update({
     where: { id: q.id },
     data: {
       status: to,
@@ -80,5 +87,5 @@ export async function transition(
     },
   });
 
-  await recordEvent(q, q.status, to, actorId, reason);
+  await recordEvent(q, q.status, to, actorId, reason, actorKind, prisma);
 }

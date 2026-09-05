@@ -4,6 +4,7 @@ import { validateRequest } from "../../lib/validate-request.js";
 import { requireAuth } from "../../middleware/require-auth.js";
 import { requireRole } from "../../middleware/require-role.js";
 import * as c from "./quotation.controller.js";
+import { answerNegotiationSchema, sendQuotationSchema } from "@template/shared";
 import {
   addLineSchema,
   createQuotationSchema,
@@ -47,4 +48,19 @@ quotationRouter.post(
   requireRole("sales_manager", "finance", "admin"),
   validateRequest(decisionSchema),
   c.decisionController,
+);
+
+// ── Send to Customer (APPROVED -> SENT, mints portal token) ───────────────────
+quotationRouter.post(
+  "/:id/send",
+  validateRequest(sendQuotationSchema),
+  c.sendToCustomerController,
+);
+
+// ── Customer Negotiations (Internal Rep Views & Actions) ─────────────────────
+quotationRouter.get("/:id/negotiations", c.listNegotiationsController);
+quotationRouter.post(
+  "/:id/negotiations/:negId/answer",
+  validateRequest(answerNegotiationSchema),
+  c.answerNegotiationController,
 );
