@@ -15,7 +15,7 @@ export async function listPriceListsController(_req: Request, res: Response) {
 }
 
 export async function getPriceListController(req: Request, res: Response) {
-  const pl = await priceListService.findById(req.params.id);
+  const pl = await priceListService.findById(req.params.id as string);
   return pl ? sendOk(res, pl) : sendNotFound(res, "Price list not found.");
 }
 
@@ -30,14 +30,14 @@ export async function createPriceListController(req: Request, res: Response) {
 export async function updatePriceListController(req: Request, res: Response) {
   return sendOk(
     res,
-    await priceListService.update(req.params.id, req.body),
+    await priceListService.update(req.params.id as string, req.body),
     "Price list updated.",
   );
 }
 
 export async function deletePriceListController(req: Request, res: Response) {
-  await priceListService.delete(req.params.id);
-  return sendOk(res, { id: req.params.id }, "Price list deleted.");
+  await priceListService.delete(req.params.id as string);
+  return sendOk(res, { id: req.params.id as string }, "Price list deleted.");
 }
 
 // ─── Price List Item controllers ──────────────────────────────────────────────
@@ -47,7 +47,7 @@ export async function addPriceListItemController(req: Request, res: Response) {
     res,
     await priceListItemService.create({
       ...req.body,
-      priceListId: req.params.id,
+      priceListId: req.params.id as string,
     }),
     "Item added to price list.",
   );
@@ -57,6 +57,6 @@ export async function deletePriceListItemController(
   req: Request,
   res: Response,
 ) {
-  await priceListItemService.delete(req.params.itemId);
-  return sendOk(res, { id: req.params.itemId }, "Item removed.");
+  await priceListItemService.delete(req.params.itemId as string);
+  return sendOk(res, { id: req.params.itemId as string }, "Item removed.");
 }

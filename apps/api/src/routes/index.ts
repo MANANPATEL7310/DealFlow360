@@ -12,6 +12,11 @@ import { customerRouter } from "../modules/customer/customer.routes.js";
 import { quotationRouter } from "../modules/quotation/quotation.routes.js";
 // === M6: Upsell & Cross-sell (Dev 2) ===
 import { upsellRouter } from "../modules/upsell/upsell.routes.js";
+// === M8: Hybrid Billing & Invoicing (Dev 2) ===
+import {
+  billingRouter,
+  invoiceRouter,
+} from "../modules/billing/billing.routes.js";
 
 export const apiRouter = Router();
 
@@ -29,3 +34,6 @@ apiRouter.use("/governance", governanceRouter);
 apiRouter.use("/quotations", quotationRouter);
 // === M6 (Dev 2) — second router on /quotations for upsell sub-routes ===
 apiRouter.use("/quotations", upsellRouter);
+// === M8 (Dev 2) ===
+apiRouter.use("/quotations", billingRouter);
+apiRouter.use("/invoices", invoiceRouter);

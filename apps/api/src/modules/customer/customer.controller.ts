@@ -19,7 +19,7 @@ export async function listCustomersController(_req: Request, res: Response) {
 }
 
 export async function getCustomerController(req: Request, res: Response) {
-  const customer = await customerService.findById(req.params.id);
+  const customer = await customerService.findById(req.params.id as string);
   return customer
     ? sendOk(res, customer)
     : sendNotFound(res, "Customer not found.");
@@ -36,26 +36,26 @@ export async function createCustomerController(req: Request, res: Response) {
 export async function updateCustomerController(req: Request, res: Response) {
   return sendOk(
     res,
-    await customerService.update(req.params.id, req.body),
+    await customerService.update(req.params.id as string, req.body),
     "Customer updated.",
   );
 }
 
 export async function deleteCustomerController(req: Request, res: Response) {
-  await customerService.delete(req.params.id);
+  await customerService.delete(req.params.id as string);
   return sendOk(res, { id: req.params.id }, "Customer deleted.");
 }
 
 // ─── Contact controllers ──────────────────────────────────────────────────────
 
 export async function listContactsController(req: Request, res: Response) {
-  return sendOk(res, await listContacts(req.params.id));
+  return sendOk(res, await listContacts(req.params.id as string));
 }
 
 export async function addContactController(req: Request, res: Response) {
   return sendCreated(
     res,
-    await addContact(req.params.id, req.body),
+    await addContact(req.params.id as string, req.body),
     "Contact added.",
   );
 }

@@ -1,22 +1,12 @@
 // packages/shared/src/schemas/governance.ts
 import { z } from "zod";
 
+import { customerTierSchema, productCategorySchema } from "./product.js";
+
 // ── Enums & Consts ────────────────────────────────────────────────────────────
 export const approvalLevels = ["SALES_MANAGER", "FINANCE"] as const;
 export type ApprovalLevel = (typeof approvalLevels)[number];
 export const approvalLevelSchema = z.enum(approvalLevels);
-
-export const customerTiers = ["BRONZE", "SILVER", "GOLD"] as const;
-export type CustomerTier = (typeof customerTiers)[number];
-export const customerTierSchema = z.enum(customerTiers);
-
-export const productCategories = [
-  "HARDWARE",
-  "SERVICES",
-  "SUBSCRIPTIONS",
-] as const;
-export type ProductCategory = (typeof productCategories)[number];
-export const productCategorySchema = z.enum(productCategories);
 
 // ── Schemas ───────────────────────────────────────────────────────────────────
 export const upsertDiscountTierSchema = z.object({

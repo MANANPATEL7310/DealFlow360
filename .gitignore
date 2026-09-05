@@ -18,3 +18,4 @@ planning/
 .claude/
 
 docs/
+!docs/architecture/

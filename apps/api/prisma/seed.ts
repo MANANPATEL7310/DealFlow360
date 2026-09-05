@@ -52,30 +52,120 @@ async function main() {
   }
   console.log("✓ SystemSettings seeded");
 
-  // ── M2: Customers (uncomment after M2 lands) ─────────────────────────────────
-  // const acme = await db.customer.create({ data: { name: "Acme Corp", tier: "GOLD", currency: "USD" } });
-  // await db.customer.create({ data: { name: "Globex", tier: "SILVER", currency: "USD" } });
-  // await db.customer.create({ data: { name: "Initech", tier: "BRONZE", currency: "USD" } });
-  // await db.customerContact.create({ data: { customerId: acme.id, email: "buyer@acme.test", name: "Ada Buyer" } });
+  // ── M2: Customers ────────────────────────────────────────────────────────────
+  async function upsertCustomer(data: {
+    name: string;
+    tier: "GOLD" | "SILVER" | "BRONZE";
+    currency: string;
+  }) {
+    const existing = await db.customer.findFirst({
+      where: { name: data.name },
+    });
+    if (existing) {
+      return db.customer.update({ where: { id: existing.id }, data });
+    }
+    return db.customer.create({ data });
+  }
 
-  // ── M1: Catalog (uncomment after M1 lands) ────────────────────────────────────
-  // const laptop = await db.product.create({
-  //   data: { name: "Pro Laptop 15", category: "HARDWARE", unit: "unit", basePrice: 120000, unitCost: 90000, taxRatePct: 18, isPromoted: true },
-  // });
-  // const setup = await db.product.create({
-  //   data: { name: "Onboarding & Setup", category: "SERVICES", unit: "hour", basePrice: 15000, unitCost: 6000, taxRatePct: 18 },
-  // });
-  // const support = await db.product.create({
-  //   data: { name: "Priority Support", category: "SUBSCRIPTIONS", unit: "licence", basePrice: 5000, unitCost: 1500, taxRatePct: 18 },
-  // });
-  // const list = await db.priceList.create({ data: { name: "Default USD", currency: "USD" } });
-  // await db.priceListItem.createMany({
-  //   data: [
-  //     { priceListId: list.id, productId: laptop.id, price: 118000 },
-  //     { priceListId: list.id, productId: setup.id, price: 15000 },
-  //     { priceListId: list.id, productId: support.id, price: 5000 },
-  //   ],
-  // });
+  const acme = await upsertCustomer({
+    name: "Acme Corp",
+    tier: "GOLD",
+    currency: "USD",
+  });
+  await upsertCustomer({ name: "Globex", tier: "SILVER", currency: "USD" });
+  await upsertCustomer({ name: "Initech", tier: "BRONZE", currency: "USD" });
+
+  const existingContact = await db.customerContact.findFirst({
+    where: { email: "buyer@acme.test" },
+  });
+  if (existingContact) {
+    await db.customerContact.update({
+      where: { id: existingContact.id },
+      data: { customerId: acme.id, name: "Ada Buyer" },
+    });
+  } else {
+    await db.customerContact.create({
+      data: {
+        customerId: acme.id,
+        email: "buyer@acme.test",
+        name: "Ada Buyer",
+      },
+    });
+  }
+  console.log("✓ Customers seeded");
+
+  // ── M1: Catalog ─────────────────────────────────────────────────────────────
+  async function upsertProduct(data: {
+    name: string;
+    category: "HARDWARE" | "SERVICES" | "SUBSCRIPTIONS";
+    unit: string;
+    basePrice: number;
+    unitCost: number;
+    taxRatePct: number;
+    isPromoted?: boolean;
+  }) {
+    const existing = await db.product.findFirst({
+      where: { name: data.name },
+    });
+    if (existing) {
+      return db.product.update({ where: { id: existing.id }, data });
+    }
+    return db.product.create({ data });
+  }
+
+  const laptop = await upsertProduct({
+    name: "Pro Laptop 15",
+    category: "HARDWARE",
+    unit: "unit",
+    basePrice: 120000,
+    unitCost: 90000,
+    taxRatePct: 18,
+    isPromoted: true,
+  });
+  const setup = await upsertProduct({
+    name: "Onboarding & Setup",
+    category: "SERVICES",
+    unit: "hour",
+    basePrice: 15000,
+    unitCost: 6000,
+    taxRatePct: 18,
+  });
+  const support = await upsertProduct({
+    name: "Priority Support",
+    category: "SUBSCRIPTIONS",
+    unit: "licence",
+    basePrice: 5000,
+    unitCost: 1500,
+    taxRatePct: 18,
+  });
+
+  let defaultList = await db.priceList.findFirst({
+    where: { name: "Default USD" },
+  });
+  if (!defaultList) {
+    defaultList = await db.priceList.create({
+      data: { name: "Default USD", currency: "USD" },
+    });
+  }
+
+  const listItems = [
+    { priceListId: defaultList.id, productId: laptop.id, price: 118000 },
+    { priceListId: defaultList.id, productId: setup.id, price: 15000 },
+    { priceListId: defaultList.id, productId: support.id, price: 5000 },
+  ];
+  for (const item of listItems) {
+    await db.priceListItem.upsert({
+      where: {
+        priceListId_productId: {
+          priceListId: item.priceListId,
+          productId: item.productId,
+        },
+      },
+      update: { price: item.price },
+      create: item,
+    });
+  }
+  console.log("✓ Products & Price Lists seeded");
 
   // ── M3: Discount Governance ─────────────────────────────────────────────────
   const discountTiers: {
@@ -141,6 +231,36 @@ async function main() {
   }
   console.log("✓ Discount Governance seeded");
 
+  // ── M6: Upsell Rules ────────────────────────────────────────────────────────
+  const upsellRules = [
+    {
+      productId: laptop.id,
+      suggestedId: setup.id,
+      coPurchaseScore: 0.85,
+      minMarginPct: 10,
+    },
+    {
+      productId: laptop.id,
+      suggestedId: support.id,
+      coPurchaseScore: 0.7,
+      minMarginPct: 15,
+    },
+  ];
+  for (const rule of upsellRules) {
+    const existingRule = await db.upsellRule.findFirst({
+      where: { productId: rule.productId, suggestedId: rule.suggestedId },
+    });
+    if (existingRule) {
+      await db.upsellRule.update({
+        where: { id: existingRule.id },
+        data: rule,
+      });
+    } else {
+      await db.upsellRule.create({ data: rule });
+    }
+  }
+  console.log("✓ Upsell Rules seeded");
+
   // ── M7: Warehouses + stock (uncomment after M7 lands) ────────────────────────
   // const mainWh = await db.warehouse.create({ data: { name: "Main Warehouse", location: "NY", shippingCostWeight: 1 } });
   // const eastWh = await db.warehouse.create({ data: { name: "East Depot", location: "MA", shippingCostWeight: 1.4 } });
@@ -151,10 +271,30 @@ async function main() {
   //   ],
   // });
 
-  // ── M8: Subscription Plan (uncomment after M8 lands) ─────────────────────────
-  // await db.subscriptionPlan.create({
-  //   data: { name: "Priority Support — Monthly", interval: "MONTHLY", prorationEnabled: true, cancellationRule: "prorated_credit" },
-  // });
+  // ── M8: Subscription Plan ───────────────────────────────────────────────────
+  const existingPlan = await db.subscriptionPlan.findFirst({
+    where: { name: "Priority Support — Monthly" },
+  });
+  if (existingPlan) {
+    await db.subscriptionPlan.update({
+      where: { id: existingPlan.id },
+      data: {
+        interval: "MONTHLY",
+        prorationEnabled: true,
+        cancellationRule: "prorated_credit",
+      },
+    });
+  } else {
+    await db.subscriptionPlan.create({
+      data: {
+        name: "Priority Support — Monthly",
+        interval: "MONTHLY",
+        prorationEnabled: true,
+        cancellationRule: "prorated_credit",
+      },
+    });
+  }
+  console.log("✓ Subscription Plans seeded");
 
   console.log("✓ Seed complete");
 }

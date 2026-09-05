@@ -21,11 +21,10 @@ upsellRouter.get("/:id/upsell", async (req, res) =>
 upsellRouter.post("/:id/upsell/:suggestedId", async (req, res) =>
   sendOk(
     res,
-    await addUpsell(
-      req.params.id as string,
-      req.params.suggestedId as string,
-      req.user as { id: string; role: string },
-    ),
+    await addUpsell(req.params.id as string, req.params.suggestedId as string, {
+      id: req.user!.sub,
+      role: req.user!.role,
+    }),
     "Suggestion added.",
   ),
 );

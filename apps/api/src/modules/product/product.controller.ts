@@ -12,7 +12,7 @@ export async function listProductsController(_req: Request, res: Response) {
 }
 
 export async function getProductController(req: Request, res: Response) {
-  const product = await productService.findById(req.params.id);
+  const product = await productService.findById(req.params.id as string);
   return product
     ? sendOk(res, product)
     : sendNotFound(res, "Product not found.");
@@ -29,14 +29,14 @@ export async function createProductController(req: Request, res: Response) {
 export async function updateProductController(req: Request, res: Response) {
   return sendOk(
     res,
-    await productService.update(req.params.id, req.body),
+    await productService.update(req.params.id as string, req.body),
     "Product updated.",
   );
 }
 
 export async function deleteProductController(req: Request, res: Response) {
-  await productService.delete(req.params.id);
-  return sendOk(res, { id: req.params.id }, "Product deleted.");
+  await productService.delete(req.params.id as string);
+  return sendOk(res, { id: req.params.id as string }, "Product deleted.");
 }
 
 // ─── Variant controllers ──────────────────────────────────────────────────────
@@ -44,19 +44,26 @@ export async function deleteProductController(req: Request, res: Response) {
 export async function listVariantsController(req: Request, res: Response) {
   return sendOk(
     res,
-    await variantService.findMany({ productId: req.params.id }),
+    await variantService.findMany({ productId: req.params.id as string }),
   );
 }
 
 export async function createVariantController(req: Request, res: Response) {
   return sendCreated(
     res,
-    await variantService.create({ ...req.body, productId: req.params.id }),
+    await variantService.create({
+      ...req.body,
+      productId: req.params.id as string,
+    }),
     "Variant created.",
   );
 }
 
 export async function deleteVariantController(req: Request, res: Response) {
-  await variantService.delete(req.params.variantId);
-  return sendOk(res, { id: req.params.variantId }, "Variant deleted.");
+  await variantService.delete(req.params.variantId as string);
+  return sendOk(
+    res,
+    { id: req.params.variantId as string },
+    "Variant deleted.",
+  );
 }

@@ -9,4 +9,5 @@
 | M1 — Product & Price List | [m1-product-pricelist.md](features/m1-product-pricelist.md) | `pricing.service.ts`, `product.routes.ts`, `price-list.routes.ts`, `shared/schemas/product.ts` | M0 (`requireAuth`, `createCrudService`, `createRouter`, `response.ts`) |
 | M2 — Customer Management | [m2-customer-management.md](features/m2-customer-management.md) | `customer.service.ts`, `customer.routes.ts`, `shared/schemas/customer.ts` | M0 (`requireAuth`, `createCrudService`, `createRouter`, `response.ts`) |
 | M6 — Upsell & Cross-Sell | [m6-upsell-crosssell.md](features/m6-upsell-crosssell.md) | `ranking.ts`, `upsell.service.ts`, `upsell.routes.ts` | M0, M1 (`resolveUnitPrice`), M5 (`loadQuotationWithLines`, `addLine`) |
+| M8 — Hybrid Billing Engine ★ | [m8-hybrid-billing.md](features/m8-hybrid-billing.md) | `proration.ts`, `billing.service.ts`, `billing.controller.ts`, `billing.routes.ts` | M0, M5 (`Quotation`, `transition`), M1 (`SubscriptionPlan`) |
 
