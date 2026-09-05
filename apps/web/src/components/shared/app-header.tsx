@@ -14,9 +14,16 @@ export function AppHeader() {
         <p className="text-xs font-semibold tracking-widest text-primary uppercase">
           {appMeta.name}
         </p>
-        <h1 className="text-2xl font-semibold text-foreground">
-          Welcome back, {user?.name ?? "builder"}
-        </h1>
+        <div className="flex items-center gap-2.5">
+          <h1 className="text-2xl font-semibold text-foreground">
+            Welcome back, {user?.name ?? "builder"}
+          </h1>
+          {user?.role && (
+            <span className="rounded-full border border-primary/25 bg-primary/10 px-2.5 py-0.5 text-xs font-semibold text-primary capitalize">
+              {user.role.replace("_", " ")}
+            </span>
+          )}
+        </div>
       </div>
       <div className="flex flex-wrap items-center gap-3">
         <ThemeToggle />
