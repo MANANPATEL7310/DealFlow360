@@ -1,0 +1,17 @@
+node_modules
+dist
+build
+.turbo
+.DS_Store
+coverage
+*.log
+.env
+.env.local
+.env.*.local
+!.env.example
+
+graphify-out/
+graphify/
+.planning/
+planning/
+.claude/

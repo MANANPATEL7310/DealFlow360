@@ -1,0 +1,37 @@
+# ============================================================
+# CODEOWNERS — Auto-assign reviewers for critical files
+# ============================================================
+# When someone opens a PR that touches these files/folders,
+# GitHub will automatically request a review from the listed
+# team members. Replace @MANANPATEL7310 with your teammates'
+# GitHub usernames.
+#
+# Format:  <file-pattern>  @github-username @github-username
+# ============================================================
+
+# --- Critical Template Files (require review from YOU) ---
+# These are the "foundation" files. If someone changes these,
+# it could break the entire project for everyone.
+
+# Root config files
+package.json                    @MANANPATEL7310
+pnpm-lock.yaml                  @MANANPATEL7310
+turbo.json                      @MANANPATEL7310
+docker-compose.yml              @MANANPATEL7310
+tsconfig.json                   @MANANPATEL7310
+
+# CI/CD Pipeline
+.github/                        @MANANPATEL7310
+
+# Database schema (very dangerous to change without review)
+apps/api/prisma/                @MANANPATEL7310
+
+# Shared packages (changes here affect BOTH frontend & backend)
+packages/                       @MANANPATEL7310
+
+# Scaffolding scripts
+scripts/                        @MANANPATEL7310
+
+# AI Rules & Planning (Do not delete!)
+.agents/                        @MANANPATEL7310
+.planning/                      @MANANPATEL7310

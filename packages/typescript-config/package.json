@@ -1,0 +1,12 @@
+{
+  "name": "@template/typescript-config",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "exports": {
+    "./base": "./base.json",
+    "./react": "./react.json",
+    "./node": "./node.json",
+    "./library": "./library.json"
+  }
+}
