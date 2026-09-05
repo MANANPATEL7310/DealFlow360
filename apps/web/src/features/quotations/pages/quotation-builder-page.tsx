@@ -13,6 +13,7 @@ import {
   FileSpreadsheet,
   Package,
   Plus,
+  Receipt,
   ShieldCheck,
   Truck,
   User,
@@ -162,6 +163,12 @@ export function QuotationBuilderPage() {
             <Link to={appRoutes.quotationFulfillment(quote.id)}>
               <Button size="sm" variant="outline" className="h-9 gap-1.5 rounded-lg text-xs">
                 <Truck className="size-3.5" /> Fulfillment
+              </Button>
+            </Link>
+
+            <Link to={appRoutes.quotationBilling(quote.id)}>
+              <Button size="sm" variant="outline" className="h-9 gap-1.5 rounded-lg text-xs">
+                <Receipt className="size-3.5" /> Billing
               </Button>
             </Link>
 
