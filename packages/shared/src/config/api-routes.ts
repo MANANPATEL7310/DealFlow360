@@ -109,9 +109,11 @@ export const apiRoutes = {
 
   // ─── Deal Health ───────────────────────────────────────────────────────────
   dealHealth: {
+    summary:     { path: "/deal-health/summary",   method: "GET",    auth: true,  description: "Get deal health radar metrics and KPIs." },
     alerts:      { path: "/deal-health/alerts",    method: "GET",    auth: true,  description: "List deal health anomaly alerts." },
     detect:      { path: "/deal-health/detect",    method: "POST",   auth: true,  description: "Run deal health anomaly scan." },
     acknowledge: { path: "/deal-health/alerts/:id/acknowledge", method: "POST", auth: true, description: "Acknowledge deal health alert." },
+    resolve:     { path: "/deal-health/alerts/:id/resolve",     method: "POST", auth: true, description: "Resolve deal health alert with audit note." },
   },
 
   // ─── Upsell & Recommendations ───────────────────────────────────────────────

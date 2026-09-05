@@ -9,6 +9,7 @@ import {
   type NegotiationRequest,
 } from "@template/shared";
 import {
+  Activity,
   ArrowLeft,
   Calendar,
   Clock,
@@ -166,6 +167,29 @@ export function QuotationBuilderPage() {
               >
                 {customerTier} Tier
               </Badge>
+
+              <Link to={appRoutes.dealHealth} title="View in Deal Health Radar">
+                <Badge
+                  tone={
+                    quote.marginPct < 20 || (quote.blendedRiskScore ?? 0) > 40
+                      ? "danger"
+                      : quote.marginPct < 30
+                        ? "warning"
+                        : "success"
+                  }
+                  className="gap-1 text-xs cursor-pointer hover:opacity-80 transition-opacity"
+                >
+                  <Activity className="size-3" />
+                  <span>
+                    Health:{" "}
+                    {Math.round(
+                      Math.min(100, Math.max(25, quote.marginPct * 2.1 + 15)),
+                    )}
+                    /100
+                  </span>
+                </Badge>
+              </Link>
+
               <span className="flex items-center gap-1">
                 <Calendar className="size-3.5" />
                 {quote.createdAt
