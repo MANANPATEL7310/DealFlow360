@@ -249,6 +249,76 @@ export const apiRoutes = {
         "Customer confirms quote — folds accepted counters and re-evaluates risk governance gate.",
     },
   },
+
+  // ─── Fulfillment (M7) ─────────────────────────────────────────────────────
+  fulfillment: {
+    get: {
+      path: "/quotations/:id/fulfillment",
+      method: "GET",
+      auth: true,
+      description: "Get fulfillment plan for a quotation.",
+    },
+    moveToFulfillment: {
+      path: "/quotations/:id/fulfillment",
+      method: "POST",
+      auth: true,
+      description:
+        "Move a confirmed quotation into fulfillment and generate a plan.",
+    },
+    accept: {
+      path: "/quotations/:id/fulfillment/accept",
+      method: "POST",
+      auth: true,
+      description: "Accept the suggested fulfillment plan and commit stock.",
+    },
+    override: {
+      path: "/quotations/:id/fulfillment/override",
+      method: "POST",
+      auth: true,
+      description: "Override the fulfillment plan with manual splits.",
+    },
+    consolidate: {
+      path: "/quotations/:id/backorders/:backorderId/consolidate",
+      method: "POST",
+      auth: true,
+      description:
+        "Consolidate an outstanding backorder against current stock.",
+    },
+  },
+
+  // ─── Deal Health (M10) ────────────────────────────────────────────────────
+  dealHealth: {
+    alerts: {
+      path: "/deal-health/alerts",
+      method: "GET",
+      auth: true,
+      description: "List deal health alerts.",
+    },
+    detect: {
+      path: "/deal-health/detect",
+      method: "POST",
+      auth: true,
+      description: "Run deal health detection.",
+    },
+    acknowledge: {
+      path: "/deal-health/alerts/:id/acknowledge",
+      method: "POST",
+      auth: true,
+      description: "Acknowledge a deal health alert.",
+    },
+    resolve: {
+      path: "/deal-health/alerts/:id/resolve",
+      method: "POST",
+      auth: true,
+      description: "Resolve a deal health alert.",
+    },
+    nudge: {
+      path: "/deal-health/alerts/:id/nudge",
+      method: "POST",
+      auth: true,
+      description: "Nudge or escalate a deal health alert.",
+    },
+  },
 } as const;
 
 // ─── Derived Types (auto-generated, do not edit manually) ─────────────────────
