@@ -15,4 +15,5 @@ graphify-out/
 graphify/
 .planning/
 planning/
+docs/architecture/
 .claude/
