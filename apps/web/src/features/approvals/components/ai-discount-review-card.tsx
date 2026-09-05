@@ -27,11 +27,11 @@ import {
   fetchAiStatus,
 } from "@/features/ai/services/ai-api";
 import { DegradedModeBanner } from "@/features/ai/components/degraded-mode-banner";
-import type { QuotationWithDetails, RiskEvaluation } from "@template/shared";
+import type { Quotation, QuotationRiskEvaluation } from "@template/shared";
 
 interface AiDiscountReviewCardProps {
-  quotation: QuotationWithDetails;
-  risk?: RiskEvaluation | null;
+  quotation: Quotation;
+  risk?: QuotationRiskEvaluation | null;
   onApplyAdjustment?: (lineId: string, discountPct: number) => void;
 }
 
@@ -139,7 +139,7 @@ export function AiDiscountReviewCard({
             Governance & Margin Assessment
           </span>
           <span className="text-xs text-muted-foreground">
-            Account Tier: {quotation.customer.tier} • Risk:{" "}
+            Account Tier: {quotation.customer?.tier ?? "STANDARD"} • Risk:{" "}
             {risk?.blendedRiskScore ?? quotation.blendedRiskScore ?? 0}/100
           </span>
         </div>
@@ -251,7 +251,7 @@ export function AiDiscountReviewCard({
                         {deal.customerName}
                       </TableCell>
                       <TableCell className="py-2">
-                        <Badge tone="default" className="text-xs">
+                        <Badge tone="neutral" className="text-xs">
                           {deal.customerTier}
                         </Badge>
                       </TableCell>

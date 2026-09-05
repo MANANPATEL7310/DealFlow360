@@ -66,11 +66,11 @@ export async function fetchDiscountReview(
 export async function fetchNegotiationEvaluation(
   quotationId: string,
   counterDiscountPct: number,
-  lineId?: string,
+  lineId?: string | null,
 ): Promise<NegotiationEvaluation> {
   const { data } = await apiClient.post<NegotiationEvaluation>(
     apiRoutes.ai.negotiationEvaluate.path,
-    { quotationId, counterDiscountPct, lineId },
+    { quotationId, counterDiscountPct, lineId: lineId ?? undefined },
   );
   return data;
 }
