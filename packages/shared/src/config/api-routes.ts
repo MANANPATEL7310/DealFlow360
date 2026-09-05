@@ -78,11 +78,15 @@ export const apiRoutes = {
 
   // ─── Quotations ─────────────────────────────────────────────────────────────
   quotations: {
-    list:        { path: "/quotations",            method: "GET",    auth: true,  description: "List quotations with filtering." },
-    create:      { path: "/quotations",            method: "POST",   auth: true,  description: "Create a new quotation." },
-    getById:     { path: "/quotations/:id",        method: "GET",    auth: true,  description: "Get quotation by ID." },
-    update:      { path: "/quotations/:id",        method: "PATCH",  auth: true,  description: "Update quotation draft." },
-    confirm:     { path: "/quotations/:id/confirm",method: "POST",   auth: true,  description: "Confirm quotation through risk engine." },
+    list:        { path: "/quotations",                    method: "GET",    auth: true,  description: "List quotations with filtering." },
+    create:      { path: "/quotations",                    method: "POST",   auth: true,  description: "Create a new quotation." },
+    getById:     { path: "/quotations/:id",                method: "GET",    auth: true,  description: "Get quotation by ID." },
+    update:      { path: "/quotations/:id",                method: "PATCH",  auth: true,  description: "Update quotation draft." },
+    addLine:     { path: "/quotations/:id/lines",          method: "POST",   auth: true,  description: "Add a line item to quotation." },
+    updateLine:  { path: "/quotations/:id/lines/:lineId",  method: "PATCH",  auth: true,  description: "Update a quotation line item." },
+    removeLine:  { path: "/quotations/:id/lines/:lineId",  method: "DELETE", auth: true,  description: "Remove a quotation line item." },
+    confirm:     { path: "/quotations/:id/confirm",        method: "POST",   auth: true,  description: "Confirm quotation through risk engine." },
+    risk:        { path: "/quotations/:id/risk",           method: "GET",    auth: true,  description: "Evaluate live blended risk score and breakdown." },
   },
 
   // ─── Discount Governance ───────────────────────────────────────────────────

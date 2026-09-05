@@ -6,4 +6,6 @@ export * from "./schemas/dashboard";
 export * from "./schemas/product";
 export * from "./schemas/customer";
 export * from "./schemas/governance";
+export * from "./schemas/quotation";
+export * from "./lib/quotation-math";
 export * from "./types";

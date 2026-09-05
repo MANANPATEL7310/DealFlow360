@@ -4,6 +4,7 @@ export const appRoutes = {
   app: "/app",
   dashboard: "/app",
   quotations: "/app/quotations",
+  quotationBuilder: (id: string) => `/app/quotations/${id}`,
   products: "/app/products",
   customers: "/app/customers",
   governance: "/app/governance",
