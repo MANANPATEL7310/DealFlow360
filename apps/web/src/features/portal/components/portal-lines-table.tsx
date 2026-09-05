@@ -1,14 +1,5 @@
-import {
-  Clock,
-  Layers,
-  MessageSquare,
-  Package,
-  Sparkles,
-} from "lucide-react";
-import type {
-  NegotiationRequest,
-  PortalQuotationLine,
-} from "@template/shared";
+import { Clock, Layers, MessageSquare, Package, Sparkles } from "lucide-react";
+import type { NegotiationRequest, PortalQuotationLine } from "@template/shared";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -50,13 +41,16 @@ export function PortalLinesTable({
             Quoted Solutions & Deliverables
           </h2>
           <p className="text-xs text-muted-foreground">
-            Itemized breakdown of hardware, recurring subscriptions, and professional services.
+            Itemized breakdown of hardware, recurring subscriptions, and
+            professional services.
           </p>
         </div>
 
         <div className="flex items-center gap-2 text-xs text-muted-foreground">
           <Layers className="size-4 text-primary" />
-          <span>{lines.length} Line Item{lines.length === 1 ? "" : "s"}</span>
+          <span>
+            {lines.length} Line Item{lines.length === 1 ? "" : "s"}
+          </span>
         </div>
       </div>
 
@@ -79,17 +73,24 @@ export function PortalLinesTable({
           <TableBody>
             {lines.map((line) => {
               const activeNeg = lineNegotiationMap.get(line.id);
-              const formattedUnitPrice = (line.unitPriceMinor / 100).toLocaleString(
-                undefined,
-                { minimumFractionDigits: 2, maximumFractionDigits: 2 }
-              );
-              const formattedLineTotal = (line.lineTotalMinor / 100).toLocaleString(
-                undefined,
-                { minimumFractionDigits: 2, maximumFractionDigits: 2 }
-              );
+              const formattedUnitPrice = (
+                line.unitPriceMinor / 100
+              ).toLocaleString(undefined, {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2,
+              });
+              const formattedLineTotal = (
+                line.lineTotalMinor / 100
+              ).toLocaleString(undefined, {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2,
+              });
 
               return (
-                <TableRow key={line.id} className="hover:bg-surface-muted/40 transition-colors">
+                <TableRow
+                  key={line.id}
+                  className="hover:bg-surface-muted/40 transition-colors"
+                >
                   {/* Product & Variant info */}
                   <TableCell className="align-top py-4">
                     <div className="space-y-1">
@@ -116,14 +117,16 @@ export function PortalLinesTable({
                             <div className="inline-flex items-center gap-1.5 rounded-md bg-primary/10 px-2.5 py-1 text-xs font-medium text-primary border border-primary/20">
                               <Sparkles className="size-3" />
                               <span>
-                                Counter Concession: {activeNeg.counterDiscountPct}% applied
+                                Counter Concession:{" "}
+                                {activeNeg.counterDiscountPct}% applied
                               </span>
                             </div>
                           ) : activeNeg.status === "OPEN" ? (
                             <div className="inline-flex items-center gap-1.5 rounded-md bg-amber-500/10 px-2.5 py-1 text-xs font-medium text-amber-600 dark:text-amber-400 border border-amber-500/20">
                               <Clock className="size-3" />
                               <span>
-                                Counter Request: {activeNeg.counterDiscountPct}% (Awaiting Rep)
+                                Counter Request: {activeNeg.counterDiscountPct}%
+                                (Awaiting Rep)
                               </span>
                             </div>
                           ) : null}
@@ -135,7 +138,9 @@ export function PortalLinesTable({
                   {/* Line Type */}
                   <TableCell className="align-top py-4 text-center">
                     <Badge
-                      tone={line.lineType === "RECURRING" ? "primary" : "secondary"}
+                      tone={
+                        line.lineType === "RECURRING" ? "primary" : "secondary"
+                      }
                       className="text-xs font-medium"
                     >
                       {line.lineType}

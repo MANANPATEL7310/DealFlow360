@@ -114,7 +114,10 @@ export function WorkflowStepper() {
   const current = steps[activeStep] ?? steps[0]!;
 
   return (
-    <section id="workflow" className="relative border-t border-border/60 bg-surface/30 py-20">
+    <section
+      id="workflow"
+      className="relative border-t border-border/60 bg-surface/30 py-20"
+    >
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="mx-auto mb-16 max-w-3xl text-center">
           <div className="mb-3 inline-flex items-center gap-2 rounded-full border border-secondary/30 bg-secondary/10 px-3.5 py-1 text-xs font-semibold text-secondary">
@@ -124,8 +127,9 @@ export function WorkflowStepper() {
             The Complete Quotation-to-Cash Lifecycle
           </h2>
           <p className="mt-3 text-base text-muted-foreground sm:text-lg">
-            Every step is governed by deterministic business logic, connecting sales representatives,
-            approvers, customers, warehouse logistics, and finance in one seamless flow.
+            Every step is governed by deterministic business logic, connecting
+            sales representatives, approvers, customers, warehouse logistics,
+            and finance in one seamless flow.
           </p>
         </div>
 
@@ -147,12 +151,16 @@ export function WorkflowStepper() {
               >
                 <div
                   className={`mb-2 flex size-9 items-center justify-center rounded-lg transition-colors ${
-                    isSelected ? "bg-primary text-white" : "bg-surface-muted text-muted-foreground"
+                    isSelected
+                      ? "bg-primary text-white"
+                      : "bg-surface-muted text-muted-foreground"
                   }`}
                 >
                   <Icon className="size-5" />
                 </div>
-                <span className="line-clamp-1 text-xs font-bold">{step.title}</span>
+                <span className="line-clamp-1 text-xs font-bold">
+                  {step.title}
+                </span>
                 <span className="mt-0.5 line-clamp-1 text-xs text-muted-foreground">
                   {step.badge}
                 </span>
@@ -179,8 +187,12 @@ export function WorkflowStepper() {
               </div>
 
               <div>
-                <h3 className="text-2xl font-bold text-foreground">{current.title}</h3>
-                <p className="mt-1 text-sm font-medium text-primary">{current.subtitle}</p>
+                <h3 className="text-2xl font-bold text-foreground">
+                  {current.title}
+                </h3>
+                <p className="mt-1 text-sm font-medium text-primary">
+                  {current.subtitle}
+                </p>
                 <p className="mt-3 text-base leading-relaxed text-muted-foreground">
                   {current.summary}
                 </p>
@@ -219,20 +231,30 @@ export function WorkflowStepper() {
 
                 <div className="space-y-2.5 text-xs">
                   <div className="flex justify-between rounded-lg border border-border bg-surface p-2">
-                    <span className="text-muted-foreground">Current State:</span>
-                    <span className="font-mono font-bold text-foreground uppercase">{current.id}</span>
+                    <span className="text-muted-foreground">
+                      Current State:
+                    </span>
+                    <span className="font-mono font-bold text-foreground uppercase">
+                      {current.id}
+                    </span>
                   </div>
                   <div className="flex justify-between rounded-lg border border-border bg-surface p-2">
-                    <span className="text-muted-foreground">Governing Policy:</span>
-                    <span className="font-semibold text-foreground">{current.kpi}</span>
+                    <span className="text-muted-foreground">
+                      Governing Policy:
+                    </span>
+                    <span className="font-semibold text-foreground">
+                      {current.kpi}
+                    </span>
                   </div>
                   <div className="flex justify-between rounded-lg border border-border bg-surface p-2">
                     <span className="text-muted-foreground">Actor Access:</span>
-                    <span className="font-semibold text-primary">{current.badge}</span>
+                    <span className="font-semibold text-primary">
+                      {current.badge}
+                    </span>
                   </div>
                   <div className="rounded-lg border border-primary/20 bg-primary/5 p-3 text-xs leading-relaxed text-muted-foreground">
-                    Audit log auto-records actor, precise timestamp, and change diff into
-                    immutable compliance trail.
+                    Audit log auto-records actor, precise timestamp, and change
+                    diff into immutable compliance trail.
                   </div>
                 </div>
 
@@ -240,7 +262,9 @@ export function WorkflowStepper() {
                   <button
                     type="button"
                     disabled={activeStep === 0}
-                    onClick={() => setActiveStep((prev) => Math.max(0, prev - 1))}
+                    onClick={() =>
+                      setActiveStep((prev) => Math.max(0, prev - 1))
+                    }
                     className="cursor-pointer text-xs font-semibold text-muted-foreground hover:text-foreground disabled:opacity-30"
                   >
                     ← Previous Step
@@ -248,7 +272,11 @@ export function WorkflowStepper() {
                   <button
                     type="button"
                     disabled={activeStep === steps.length - 1}
-                    onClick={() => setActiveStep((prev) => Math.min(steps.length - 1, prev + 1))}
+                    onClick={() =>
+                      setActiveStep((prev) =>
+                        Math.min(steps.length - 1, prev + 1),
+                      )
+                    }
                     className="cursor-pointer text-xs font-semibold text-primary hover:text-primary-dark disabled:opacity-30"
                   >
                     Next Step →

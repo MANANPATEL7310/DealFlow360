@@ -32,10 +32,10 @@ export function PortalNegotiationDrawer({
   onSubmit,
 }: PortalNegotiationDrawerProps) {
   const [targetScope, setTargetScope] = useState<"ORDER" | "LINE">(
-    selectedLine ? "LINE" : "ORDER"
+    selectedLine ? "LINE" : "ORDER",
   );
   const [lineId, setLineId] = useState<string>(
-    selectedLine?.id ?? quotation.lines[0]?.id ?? ""
+    selectedLine?.id ?? quotation.lines[0]?.id ?? "",
   );
   const [counterDiscountPct, setCounterDiscountPct] = useState<string>("8.0");
   const [comment, setComment] = useState<string>("");
@@ -54,13 +54,17 @@ export function PortalNegotiationDrawer({
     const gross = currentLine.qty * currentLine.unitPriceMinor;
     proposedSavingsMinor = Math.round(gross * (parsedDiscount / 100));
   } else {
-    proposedSavingsMinor = Math.round(quotation.subtotalMinor * (parsedDiscount / 100));
+    proposedSavingsMinor = Math.round(
+      quotation.subtotalMinor * (parsedDiscount / 100),
+    );
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!comment.trim()) {
-      setErrorMessage("Please share a brief rationale or question for your sales representative.");
+      setErrorMessage(
+        "Please share a brief rationale or question for your sales representative.",
+      );
       return;
     }
 
@@ -80,7 +84,10 @@ export function PortalNegotiationDrawer({
       });
       onClose();
     } catch (err: unknown) {
-      const msg = err instanceof Error ? err.message : "Failed to submit negotiation request.";
+      const msg =
+        err instanceof Error
+          ? err.message
+          : "Failed to submit negotiation request.";
       setErrorMessage(msg);
     } finally {
       setIsSubmitting(false);
@@ -101,7 +108,8 @@ export function PortalNegotiationDrawer({
                 Propose Commercial Adjustment
               </h3>
               <p className="text-xs text-muted-foreground">
-                Submit a structured counter-offer or note to {quotation.salesRepName}.
+                Submit a structured counter-offer or note to{" "}
+                {quotation.salesRepName}.
               </p>
             </div>
           </div>
@@ -128,7 +136,9 @@ export function PortalNegotiationDrawer({
 
           {/* Scope Selector */}
           <div className="space-y-2">
-            <Label className="text-xs font-semibold text-foreground">Scope of Adjustment</Label>
+            <Label className="text-xs font-semibold text-foreground">
+              Scope of Adjustment
+            </Label>
             <div className="grid grid-cols-2 gap-3">
               <button
                 type="button"
@@ -139,7 +149,9 @@ export function PortalNegotiationDrawer({
                     : "border-border bg-surface-muted/30 hover:bg-surface-muted"
                 }`}
               >
-                <span className="text-xs font-semibold text-foreground">Specific Line Item</span>
+                <span className="text-xs font-semibold text-foreground">
+                  Specific Line Item
+                </span>
                 <span className="text-xs text-muted-foreground">
                   Counter a single product or license
                 </span>
@@ -154,7 +166,9 @@ export function PortalNegotiationDrawer({
                     : "border-border bg-surface-muted/30 hover:bg-surface-muted"
                 }`}
               >
-                <span className="text-xs font-semibold text-foreground">Overall Proposal</span>
+                <span className="text-xs font-semibold text-foreground">
+                  Overall Proposal
+                </span>
                 <span className="text-xs text-muted-foreground">
                   Concession across entire proposal
                 </span>
@@ -165,7 +179,10 @@ export function PortalNegotiationDrawer({
           {/* Line selection if Line scope */}
           {targetScope === "LINE" && (
             <div className="space-y-1.5">
-              <Label htmlFor="lineSelect" className="text-xs font-semibold text-foreground">
+              <Label
+                htmlFor="lineSelect"
+                className="text-xs font-semibold text-foreground"
+              >
                 Select Item
               </Label>
               <select
@@ -176,7 +193,8 @@ export function PortalNegotiationDrawer({
               >
                 {quotation.lines.map((l) => (
                   <option key={l.id} value={l.id}>
-                    {l.productName} ({l.qty}x @ ${(l.unitPriceMinor / 100).toFixed(2)})
+                    {l.productName} ({l.qty}x @ $
+                    {(l.unitPriceMinor / 100).toFixed(2)})
                   </option>
                 ))}
               </select>
@@ -186,11 +204,17 @@ export function PortalNegotiationDrawer({
           {/* Counter Discount % and Live calculation */}
           <div className="space-y-2">
             <div className="flex items-center justify-between">
-              <Label htmlFor="counterDiscount" className="text-xs font-semibold text-foreground">
+              <Label
+                htmlFor="counterDiscount"
+                className="text-xs font-semibold text-foreground"
+              >
                 Target Discount (%)
               </Label>
               <span className="text-xs text-muted-foreground font-mono">
-                Currently: {targetScope === "LINE" && currentLine ? `${currentLine.discountPct}%` : "Standard"}
+                Currently:{" "}
+                {targetScope === "LINE" && currentLine
+                  ? `${currentLine.discountPct}%`
+                  : "Standard"}
               </span>
             </div>
 
@@ -223,7 +247,10 @@ export function PortalNegotiationDrawer({
 
           {/* Rationale / Note */}
           <div className="space-y-1.5">
-            <Label htmlFor="comment" className="text-xs font-semibold text-foreground">
+            <Label
+              htmlFor="comment"
+              className="text-xs font-semibold text-foreground"
+            >
               Commercial Context / Justification
             </Label>
             <textarea

@@ -1,14 +1,6 @@
 import { useState } from "react";
 import type { AddLineInput, LineType, Product } from "@template/shared";
-import {
-  Briefcase,
-  Cpu,
-  Package,
-  Plus,
-  Repeat,
-  Search,
-  X,
-} from "lucide-react";
+import { Briefcase, Cpu, Package, Plus, Repeat, Search, X } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -102,8 +94,8 @@ export function ProductPickerModal({
                 Add Catalog Product to Quotation
               </h3>
               <p className="text-xs text-muted-foreground">
-                Browse catalog, select variant specifications, and configure line
-                pricing.
+                Browse catalog, select variant specifications, and configure
+                line pricing.
               </p>
             </div>
           </div>
@@ -131,22 +123,22 @@ export function ProductPickerModal({
                 />
               </div>
               <div className="flex gap-1">
-                {(["ALL", "HARDWARE", "SERVICES", "SUBSCRIPTIONS"] as const).map(
-                  (cat) => (
-                    <button
-                      key={cat}
-                      className={`rounded-lg px-2 py-1 text-xs font-semibold transition-colors ${
-                        selectedCategory === cat
-                          ? "bg-primary text-surface"
-                          : "bg-surface-muted/50 text-muted-foreground hover:bg-surface-muted"
-                      }`}
-                      type="button"
-                      onClick={() => setSelectedCategory(cat)}
-                    >
-                      {cat === "ALL" ? "All" : cat.slice(0, 4)}
-                    </button>
-                  ),
-                )}
+                {(
+                  ["ALL", "HARDWARE", "SERVICES", "SUBSCRIPTIONS"] as const
+                ).map((cat) => (
+                  <button
+                    key={cat}
+                    className={`rounded-lg px-2 py-1 text-xs font-semibold transition-colors ${
+                      selectedCategory === cat
+                        ? "bg-primary text-surface"
+                        : "bg-surface-muted/50 text-muted-foreground hover:bg-surface-muted"
+                    }`}
+                    type="button"
+                    onClick={() => setSelectedCategory(cat)}
+                  >
+                    {cat === "ALL" ? "All" : cat.slice(0, 4)}
+                  </button>
+                ))}
               </div>
             </div>
 
@@ -156,48 +148,50 @@ export function ProductPickerModal({
                 <div className="p-4 text-center text-xs text-muted-foreground">
                   Loading catalog products...
                 </div>
-              ) : filteredProducts.map((p) => {
-                const isSelected = p.id === selectedProductId;
-                return (
-                  <div
-                    key={p.id}
-                    className={`cursor-pointer rounded-lg border p-3 transition-all ${
-                      isSelected
-                        ? "border-primary bg-primary-light/10 shadow-xs"
-                        : "border-border bg-surface hover:bg-surface-muted/50"
-                    }`}
-                    onClick={() => handleSelectProduct(p)}
-                  >
-                    <div className="flex items-start justify-between gap-2">
-                      <div>
-                        <div className="flex items-center gap-1.5">
-                          <span className="text-xs font-bold text-foreground">
-                            {p.name}
-                          </span>
-                          <Badge
-                            className="text-xs"
-                            tone={
-                              p.category === "HARDWARE"
-                                ? "primary"
-                                : p.category === "SERVICES"
-                                  ? "secondary"
-                                  : "warning"
-                            }
-                          >
-                            {p.category}
-                          </Badge>
+              ) : (
+                filteredProducts.map((p) => {
+                  const isSelected = p.id === selectedProductId;
+                  return (
+                    <div
+                      key={p.id}
+                      className={`cursor-pointer rounded-lg border p-3 transition-all ${
+                        isSelected
+                          ? "border-primary bg-primary-light/10 shadow-xs"
+                          : "border-border bg-surface hover:bg-surface-muted/50"
+                      }`}
+                      onClick={() => handleSelectProduct(p)}
+                    >
+                      <div className="flex items-start justify-between gap-2">
+                        <div>
+                          <div className="flex items-center gap-1.5">
+                            <span className="text-xs font-bold text-foreground">
+                              {p.name}
+                            </span>
+                            <Badge
+                              className="text-xs"
+                              tone={
+                                p.category === "HARDWARE"
+                                  ? "primary"
+                                  : p.category === "SERVICES"
+                                    ? "secondary"
+                                    : "warning"
+                              }
+                            >
+                              {p.category}
+                            </Badge>
+                          </div>
+                          <p className="mt-0.5 line-clamp-1 text-xs text-muted-foreground">
+                            {p.description}
+                          </p>
                         </div>
-                        <p className="mt-0.5 line-clamp-1 text-xs text-muted-foreground">
-                          {p.description}
-                        </p>
+                        <span className="font-mono text-xs font-bold text-foreground">
+                          ${(p.basePrice / 100).toFixed(2)}
+                        </span>
                       </div>
-                      <span className="font-mono text-xs font-bold text-foreground">
-                        ${(p.basePrice / 100).toFixed(2)}
-                      </span>
                     </div>
-                  </div>
-                );
-              })}
+                  );
+                })
+              )}
             </div>
           </div>
 
@@ -285,7 +279,9 @@ export function ProductPickerModal({
                       min={1}
                       type="number"
                       value={qty}
-                      onChange={(e) => setQty(Math.max(1, parseInt(e.target.value) || 1))}
+                      onChange={(e) =>
+                        setQty(Math.max(1, parseInt(e.target.value) || 1))
+                      }
                     />
                   </div>
                   <div>
@@ -301,7 +297,10 @@ export function ProductPickerModal({
                       value={discountPct}
                       onChange={(e) =>
                         setDiscountPct(
-                          Math.min(100, Math.max(0, parseFloat(e.target.value) || 0)),
+                          Math.min(
+                            100,
+                            Math.max(0, parseFloat(e.target.value) || 0),
+                          ),
                         )
                       }
                     />

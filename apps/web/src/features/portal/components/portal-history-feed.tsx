@@ -6,10 +6,7 @@ import {
   Sparkles,
   User,
 } from "lucide-react";
-import type {
-  NegotiationRequest,
-  PortalQuotationLine,
-} from "@template/shared";
+import type { NegotiationRequest, PortalQuotationLine } from "@template/shared";
 import { Badge } from "@/components/ui/badge";
 
 interface PortalHistoryFeedProps {
@@ -33,8 +30,9 @@ export function PortalHistoryFeed({
           No Negotiation Records Yet
         </h3>
         <p className="mt-1 text-xs text-muted-foreground max-w-sm mx-auto">
-          Need a volume concession, payment terms adjustment, or technical clarification?
-          Click &quot;Negotiate&quot; above to submit a direct counter-offer.
+          Need a volume concession, payment terms adjustment, or technical
+          clarification? Click &quot;Negotiate&quot; above to submit a direct
+          counter-offer.
         </p>
       </div>
     );
@@ -48,7 +46,8 @@ export function PortalHistoryFeed({
             Negotiation & Concession Log
           </h2>
           <p className="text-xs text-muted-foreground">
-            Audit trail of requested counter-discounts and sales representative resolutions.
+            Audit trail of requested counter-discounts and sales representative
+            resolutions.
           </p>
         </div>
         <Badge tone="secondary" className="font-mono text-xs">
@@ -63,12 +62,15 @@ export function PortalHistoryFeed({
             ? `${targetedLine.productName} (Line Item)`
             : "Entire Commercial Proposal";
 
-          const createdDate = new Date(neg.createdAt).toLocaleDateString(undefined, {
-            month: "short",
-            day: "numeric",
-            hour: "2-digit",
-            minute: "2-digit",
-          });
+          const createdDate = new Date(neg.createdAt).toLocaleDateString(
+            undefined,
+            {
+              month: "short",
+              day: "numeric",
+              hour: "2-digit",
+              minute: "2-digit",
+            },
+          );
 
           return (
             <div
@@ -115,8 +117,12 @@ export function PortalHistoryFeed({
                   <User className="size-3" />
                 </div>
                 <div className="space-y-0.5">
-                  <div className="font-semibold text-foreground">Client Note</div>
-                  <p className="text-muted-foreground leading-relaxed">{neg.comment}</p>
+                  <div className="font-semibold text-foreground">
+                    Client Note
+                  </div>
+                  <p className="text-muted-foreground leading-relaxed">
+                    {neg.comment}
+                  </p>
                 </div>
               </div>
 
@@ -127,8 +133,12 @@ export function PortalHistoryFeed({
                     <CornerDownRight className="size-3.5" />
                   </div>
                   <div className="space-y-0.5">
-                    <div className="font-semibold text-primary">Sales Representative Response</div>
-                    <p className="text-foreground leading-relaxed">{neg.repComment}</p>
+                    <div className="font-semibold text-primary">
+                      Sales Representative Response
+                    </div>
+                    <p className="text-foreground leading-relaxed">
+                      {neg.repComment}
+                    </p>
                   </div>
                 </div>
               )}

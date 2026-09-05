@@ -28,13 +28,18 @@ export function CreditNotesList({ creditNotes }: CreditNotesListProps) {
             <ArrowDownLeft className="size-4" />
           </div>
           <div>
-            <h4 className="text-sm font-semibold text-white">Prorated Credit Notes</h4>
+            <h4 className="text-sm font-semibold text-white">
+              Prorated Credit Notes
+            </h4>
             <p className="text-xs text-slate-400">
               Audited adjustments and mid-cycle cancellation credits
             </p>
           </div>
         </div>
-        <Badge tone="success" className="border-emerald-500/30 text-xs text-emerald-400">
+        <Badge
+          tone="success"
+          className="border-emerald-500/30 text-xs text-emerald-400"
+        >
           {creditNotes.length} Note{creditNotes.length > 1 ? "s" : ""} Issued
         </Badge>
       </div>

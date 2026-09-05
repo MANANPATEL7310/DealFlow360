@@ -31,7 +31,9 @@ export const governanceApi = {
       );
       return data.data;
     } catch {
-      return [...localTiers].sort((a, b) => a.maxDiscountPct - b.maxDiscountPct);
+      return [...localTiers].sort(
+        (a, b) => a.maxDiscountPct - b.maxDiscountPct,
+      );
     }
   },
 
@@ -48,7 +50,8 @@ export const governanceApi = {
       const existingIndex = localTiers.findIndex(
         (t) => t.customerTier === input.customerTier,
       );
-      const existing = existingIndex >= 0 ? localTiers[existingIndex] : undefined;
+      const existing =
+        existingIndex >= 0 ? localTiers[existingIndex] : undefined;
       const updated: DiscountTierCeiling = {
         id: existing ? existing.id : `dt-${input.customerTier.toLowerCase()}`,
         customerTier: input.customerTier,

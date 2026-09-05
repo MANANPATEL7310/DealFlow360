@@ -1,10 +1,5 @@
 import { useState } from "react";
-import {
-  AlertTriangle,
-  CheckCircle2,
-  ShieldAlert,
-  X,
-} from "lucide-react";
+import { AlertTriangle, CheckCircle2, ShieldAlert, X } from "lucide-react";
 import type { DealHealthAlert, ResolveAlertInput } from "@template/shared";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
@@ -23,9 +18,8 @@ export function AlertActionModal({
   onResolve,
 }: AlertActionModalProps) {
   const [resolutionNote, setResolutionNote] = useState("");
-  const [actionTaken, setActionTaken] = useState<ResolveAlertInput["actionTaken"]>(
-    "MANAGER_OVERRIDE",
-  );
+  const [actionTaken, setActionTaken] =
+    useState<ResolveAlertInput["actionTaken"]>("MANAGER_OVERRIDE");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
@@ -48,7 +42,8 @@ export function AlertActionModal({
       });
       onClose();
     } catch (err: unknown) {
-      const msg = err instanceof Error ? err.message : "Failed to resolve anomaly.";
+      const msg =
+        err instanceof Error ? err.message : "Failed to resolve anomaly.";
       setErrorMsg(msg);
     } finally {
       setIsSubmitting(false);
@@ -105,28 +100,46 @@ export function AlertActionModal({
 
           {/* Action Taken Selector */}
           <div className="space-y-1.5">
-            <Label htmlFor="actionTaken" className="text-xs font-semibold text-foreground">
+            <Label
+              htmlFor="actionTaken"
+              className="text-xs font-semibold text-foreground"
+            >
               Operational Resolution Type
             </Label>
             <select
               id="actionTaken"
               value={actionTaken}
               onChange={(e) =>
-                setActionTaken(e.target.value as ResolveAlertInput["actionTaken"])
+                setActionTaken(
+                  e.target.value as ResolveAlertInput["actionTaken"],
+                )
               }
               className="w-full rounded-lg border border-border bg-surface px-3 py-2 text-xs font-medium text-foreground focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
             >
-              <option value="MANAGER_OVERRIDE">Sales Ops / Executive Override Authorized</option>
-              <option value="DISCOUNT_REVISED">Commercial Discount Concession Revised</option>
-              <option value="DEAL_ACCELERATED">Customer Re-engaged & Stage Accelerated</option>
-              <option value="STOCK_ALLOCATED">Multi-Depot Inventory Stock Reallocated</option>
-              <option value="FALSE_POSITIVE">Non-Material Deviation / False Positive</option>
+              <option value="MANAGER_OVERRIDE">
+                Sales Ops / Executive Override Authorized
+              </option>
+              <option value="DISCOUNT_REVISED">
+                Commercial Discount Concession Revised
+              </option>
+              <option value="DEAL_ACCELERATED">
+                Customer Re-engaged & Stage Accelerated
+              </option>
+              <option value="STOCK_ALLOCATED">
+                Multi-Depot Inventory Stock Reallocated
+              </option>
+              <option value="FALSE_POSITIVE">
+                Non-Material Deviation / False Positive
+              </option>
             </select>
           </div>
 
           {/* Audit Note Textarea */}
           <div className="space-y-1.5">
-            <Label htmlFor="resolutionNote" className="text-xs font-semibold text-foreground">
+            <Label
+              htmlFor="resolutionNote"
+              className="text-xs font-semibold text-foreground"
+            >
               Audit Resolution Note
             </Label>
             <textarea

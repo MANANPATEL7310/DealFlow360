@@ -38,9 +38,8 @@ export function CustomersPage() {
   // Modal states
   const [activeContactsCustomer, setActiveContactsCustomer] =
     useState<Customer | null>(null);
-  const [activeMagicLink, setActiveMagicLink] = useState<PortalMagicLink | null>(
-    null,
-  );
+  const [activeMagicLink, setActiveMagicLink] =
+    useState<PortalMagicLink | null>(null);
   const [isCustomerDialogOpen, setIsCustomerDialogOpen] = useState(false);
   const [editingCustomer, setEditingCustomer] = useState<Customer | null>(null);
 
@@ -191,10 +190,7 @@ export function CustomersPage() {
         onClose={() => setActiveContactsCustomer(null)}
         onGenerateMagicLink={(contact) => {
           if (activeContactsCustomer) {
-            handleGenerateMagicLinkForContact(
-              activeContactsCustomer,
-              contact,
-            );
+            handleGenerateMagicLinkForContact(activeContactsCustomer, contact);
           }
         }}
       />

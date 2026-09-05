@@ -91,7 +91,8 @@ export function UpsellPanel({ quotationId, className }: UpsellPanelProps) {
               </Badge>
             </div>
             <p className="text-xs text-muted-foreground">
-              Algorithmic recommendations matched to items currently in this quotation
+              Algorithmic recommendations matched to items currently in this
+              quotation
             </p>
           </div>
         </div>
@@ -156,7 +157,8 @@ export function UpsellPanel({ quotationId, className }: UpsellPanelProps) {
                 All recommendations in this filter applied or dismissed
               </p>
               <p className="mt-0.5 text-muted-foreground">
-                Switch filters or initialize more lines to discover complementary packages.
+                Switch filters or initialize more lines to discover
+                complementary packages.
               </p>
             </div>
           ) : (

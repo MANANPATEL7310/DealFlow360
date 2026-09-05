@@ -29,7 +29,8 @@ function checkCanReview(
 ): boolean {
   if (!stepLevel || !userRole) return false;
   if (userRole === "admin") return true;
-  if (stepLevel === "SALES_MANAGER" && userRole === "sales_manager") return true;
+  if (stepLevel === "SALES_MANAGER" && userRole === "sales_manager")
+    return true;
   if (stepLevel === "FINANCE" && userRole === "finance") return true;
   return false;
 }

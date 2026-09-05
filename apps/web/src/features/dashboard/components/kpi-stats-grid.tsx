@@ -37,7 +37,11 @@ export function KpiStatsGrid() {
       <MetricCard
         title="Avg. Blended Margin"
         value={marginDisplay}
-        subvalue={isHealthyMargin ? "Above 30% baseline threshold" : "Below target margin"}
+        subvalue={
+          isHealthyMargin
+            ? "Above 30% baseline threshold"
+            : "Below target margin"
+        }
         icon={Percent}
         tone={isHealthyMargin ? "secondary" : "warning"}
         loading={isLoading}

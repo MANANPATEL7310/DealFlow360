@@ -47,7 +47,9 @@ export function FulfillmentPage() {
 
   if (isLoading) {
     return (
-      <RoleGuard allowedRoles={["sales_rep", "sales_manager", "finance", "admin"]}>
+      <RoleGuard
+        allowedRoles={["sales_rep", "sales_manager", "finance", "admin"]}
+      >
         <div className="space-y-6 pb-12">
           <Skeleton className="h-10 w-48" />
           <Skeleton className="h-28 w-full" />
@@ -65,7 +67,9 @@ export function FulfillmentPage() {
 
   if (!plan) {
     return (
-      <RoleGuard allowedRoles={["sales_rep", "sales_manager", "finance", "admin"]}>
+      <RoleGuard
+        allowedRoles={["sales_rep", "sales_manager", "finance", "admin"]}
+      >
         <div className="flex min-h-80 flex-col items-center justify-center space-y-3 text-center">
           <FileSpreadsheet className="size-10 text-muted-foreground/50" />
           <h2 className="text-lg font-bold text-foreground">
@@ -76,7 +80,8 @@ export function FulfillmentPage() {
           </p>
           <Link to={appRoutes.quotationBuilder(quotationId)}>
             <Button size="sm" variant="outline">
-              <ArrowLeft className="mr-1.5 size-4" /> Return to Quotation Builder
+              <ArrowLeft className="mr-1.5 size-4" /> Return to Quotation
+              Builder
             </Button>
           </Link>
         </div>
@@ -87,7 +92,9 @@ export function FulfillmentPage() {
   const isAccepted = plan.status === "ACCEPTED";
 
   return (
-    <RoleGuard allowedRoles={["sales_rep", "sales_manager", "finance", "admin"]}>
+    <RoleGuard
+      allowedRoles={["sales_rep", "sales_manager", "finance", "admin"]}
+    >
       <div className="space-y-6 pb-12">
         {/* Navigation & Breadcrumb */}
         <div className="flex items-center justify-between">

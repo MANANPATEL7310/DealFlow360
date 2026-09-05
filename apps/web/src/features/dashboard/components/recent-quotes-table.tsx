@@ -1,5 +1,11 @@
 import { Link } from "react-router";
-import { FileSpreadsheet, Plus, ExternalLink, ShieldAlert, CheckCircle2 } from "lucide-react";
+import {
+  FileSpreadsheet,
+  Plus,
+  ExternalLink,
+  ShieldAlert,
+  CheckCircle2,
+} from "lucide-react";
 import { appRoutes } from "@template/shared";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -138,7 +144,8 @@ export function RecentQuotesTable() {
                     </span>
                   </td>
                   <td className="py-3 font-medium text-foreground">
-                    ${(q.netTotalMinor / 100).toLocaleString(undefined, {
+                    $
+                    {(q.netTotalMinor / 100).toLocaleString(undefined, {
                       minimumFractionDigits: 2,
                       maximumFractionDigits: 2,
                     })}

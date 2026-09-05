@@ -41,7 +41,8 @@ export function SettingsPage() {
             </Badge>
           </div>
           <p className="text-xs text-muted-foreground">
-            PS A1/A3 Centralized administration: runtime risk parameters, SOC2/ISO compliance audit trail, and discount governance.
+            PS A1/A3 Centralized administration: runtime risk parameters,
+            SOC2/ISO compliance audit trail, and discount governance.
           </p>
         </div>
       </div>
@@ -51,7 +52,10 @@ export function SettingsPage() {
         <div className="flex items-center gap-2.5 rounded-xl border border-amber-500/20 bg-amber-500/5 px-4 py-3 text-xs text-amber-600 dark:text-amber-400">
           <Lock className="size-4 shrink-0" />
           <span>
-            <strong>Read-Only Mode:</strong> You are signed in as a <strong>{role.replace(/_/g, " ")}</strong>. System settings modification and global compliance audit log mutations are restricted to users with the <strong>Administrator</strong> role.
+            <strong>Read-Only Mode:</strong> You are signed in as a{" "}
+            <strong>{role.replace(/_/g, " ")}</strong>. System settings
+            modification and global compliance audit log mutations are
+            restricted to users with the <strong>Administrator</strong> role.
           </span>
         </div>
       )}

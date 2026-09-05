@@ -17,8 +17,12 @@ import { SpotlightCard } from "@/components/ui/spotlight-card";
 
 export function HeroSection() {
   // Interactive Simulator state
-  const [customerTier, setCustomerTier] = useState<"BRONZE" | "SILVER" | "GOLD">("SILVER");
-  const [category, setCategory] = useState<"HARDWARE" | "SERVICES" | "SUBSCRIPTION">("SERVICES");
+  const [customerTier, setCustomerTier] = useState<
+    "BRONZE" | "SILVER" | "GOLD"
+  >("SILVER");
+  const [category, setCategory] = useState<
+    "HARDWARE" | "SERVICES" | "SUBSCRIPTION"
+  >("SERVICES");
   const [basePrice] = useState<number>(4500); // $4,500 base price
   const [quantity, setQuantity] = useState<number>(5);
   const [discountPct, setDiscountPct] = useState<number>(14);
@@ -36,7 +40,7 @@ export function HeroSection() {
   const grossTotal = basePrice * quantity;
   const discountAmount = grossTotal * (discountPct / 100);
   const netTotal = grossTotal - discountAmount;
-  
+
   // Cost assumption to simulate realistic margin %
   const estimatedCost = grossTotal * 0.55;
   const marginPct = useMemo(() => {
@@ -94,14 +98,18 @@ export function HeroSection() {
             </h1>
 
             <p className="mx-auto max-w-2xl text-base leading-relaxed text-muted-foreground sm:text-lg lg:mx-0">
-              Empower sales reps to configure multi-line deals in seconds while DealFlow360’s
-              blended-discount risk engine, multi-warehouse fulfillment split, and hybrid billing engine
-              safeguard margins without manual bottlenecks.
+              Empower sales reps to configure multi-line deals in seconds while
+              DealFlow360’s blended-discount risk engine, multi-warehouse
+              fulfillment split, and hybrid billing engine safeguard margins
+              without manual bottlenecks.
             </p>
 
             <div className="flex flex-wrap items-center justify-center gap-4 pt-2 lg:justify-start">
               <Link to={appRoutes.app}>
-                <Button size="lg" className="gap-2.5 px-6 font-semibold shadow-xl shadow-primary/25">
+                <Button
+                  size="lg"
+                  className="gap-2.5 px-6 font-semibold shadow-xl shadow-primary/25"
+                >
                   Launch Sales Workspace
                   <ArrowRight className="size-4" />
                 </Button>
@@ -119,22 +127,34 @@ export function HeroSection() {
               <div className="flex items-center gap-2.5 rounded-xl border border-border bg-surface/60 p-3 text-left backdrop-blur-md">
                 <ShieldCheck className="size-5 shrink-0 text-secondary" />
                 <div>
-                  <p className="text-xs font-bold text-foreground">Zero Discount Leakage</p>
-                  <p className="text-xs text-muted-foreground">Blended risk scoring</p>
+                  <p className="text-xs font-bold text-foreground">
+                    Zero Discount Leakage
+                  </p>
+                  <p className="text-xs text-muted-foreground">
+                    Blended risk scoring
+                  </p>
                 </div>
               </div>
               <div className="flex items-center gap-2.5 rounded-xl border border-border bg-surface/60 p-3 text-left backdrop-blur-md">
                 <Layers className="size-5 shrink-0 text-primary" />
                 <div>
-                  <p className="text-xs font-bold text-foreground">Multi-Warehouse Split</p>
-                  <p className="text-xs text-muted-foreground">Automated stock routing</p>
+                  <p className="text-xs font-bold text-foreground">
+                    Multi-Warehouse Split
+                  </p>
+                  <p className="text-xs text-muted-foreground">
+                    Automated stock routing
+                  </p>
                 </div>
               </div>
               <div className="col-span-2 flex items-center gap-2.5 rounded-xl border border-border bg-surface/60 p-3 text-left backdrop-blur-md sm:col-span-1">
                 <TrendingUp className="size-5 shrink-0 text-secondary" />
                 <div>
-                  <p className="text-xs font-bold text-foreground">Hybrid Cash Flow</p>
-                  <p className="text-xs text-muted-foreground">One-time + recurring billing</p>
+                  <p className="text-xs font-bold text-foreground">
+                    Hybrid Cash Flow
+                  </p>
+                  <p className="text-xs text-muted-foreground">
+                    One-time + recurring billing
+                  </p>
                 </div>
               </div>
             </div>
@@ -150,8 +170,12 @@ export function HeroSection() {
                     <Zap className="size-4" />
                   </div>
                   <div>
-                    <h3 className="text-sm font-bold text-foreground">Interactive Risk Engine</h3>
-                    <p className="text-xs text-muted-foreground">Live quotation calculation preview</p>
+                    <h3 className="text-sm font-bold text-foreground">
+                      Interactive Risk Engine
+                    </h3>
+                    <p className="text-xs text-muted-foreground">
+                      Live quotation calculation preview
+                    </p>
                   </div>
                 </div>
                 <span className="rounded-md border border-primary/20 bg-primary/10 px-2 py-0.5 text-xs font-semibold text-primary">
@@ -196,20 +220,22 @@ export function HeroSection() {
                     </span>
                   </div>
                   <div className="grid grid-cols-3 gap-2">
-                    {(["HARDWARE", "SERVICES", "SUBSCRIPTION"] as const).map((c) => (
-                      <button
-                        key={c}
-                        type="button"
-                        onClick={() => setCategory(c)}
-                        className={`rounded-lg py-1.5 text-xs font-semibold transition-all ${
-                          category === c
-                            ? "bg-primary text-white shadow-sm"
-                            : "border border-border bg-surface-muted/60 text-muted-foreground hover:text-foreground"
-                        }`}
-                      >
-                        {c}
-                      </button>
-                    ))}
+                    {(["HARDWARE", "SERVICES", "SUBSCRIPTION"] as const).map(
+                      (c) => (
+                        <button
+                          key={c}
+                          type="button"
+                          onClick={() => setCategory(c)}
+                          className={`rounded-lg py-1.5 text-xs font-semibold transition-all ${
+                            category === c
+                              ? "bg-primary text-white shadow-sm"
+                              : "border border-border bg-surface-muted/60 text-muted-foreground hover:text-foreground"
+                          }`}
+                        >
+                          {c}
+                        </button>
+                      ),
+                    )}
                   </div>
                 </div>
 
@@ -217,8 +243,12 @@ export function HeroSection() {
                 <div className="space-y-3 pt-1">
                   <div>
                     <div className="mb-1 flex items-center justify-between text-xs">
-                      <span className="text-muted-foreground">Applied Line Discount</span>
-                      <span className={`font-bold ${discountPct > effectiveCeiling ? "text-warning" : "text-foreground"}`}>
+                      <span className="text-muted-foreground">
+                        Applied Line Discount
+                      </span>
+                      <span
+                        className={`font-bold ${discountPct > effectiveCeiling ? "text-warning" : "text-foreground"}`}
+                      >
                         {discountPct}%
                       </span>
                     </div>
@@ -232,15 +262,21 @@ export function HeroSection() {
                     />
                     <div className="mt-0.5 flex justify-between text-xs text-muted-foreground">
                       <span>0%</span>
-                      <span className="font-semibold text-primary">Effective Ceiling: {effectiveCeiling}%</span>
+                      <span className="font-semibold text-primary">
+                        Effective Ceiling: {effectiveCeiling}%
+                      </span>
                       <span>35%</span>
                     </div>
                   </div>
 
                   <div>
                     <div className="mb-1 flex items-center justify-between text-xs">
-                      <span className="text-muted-foreground">Order Quantity</span>
-                      <span className="font-bold text-foreground">{quantity} units</span>
+                      <span className="text-muted-foreground">
+                        Order Quantity
+                      </span>
+                      <span className="font-bold text-foreground">
+                        {quantity} units
+                      </span>
                     </div>
                     <input
                       type="range"
@@ -262,20 +298,33 @@ export function HeroSection() {
                     </span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-muted-foreground">Total Discount:</span>
+                    <span className="text-muted-foreground">
+                      Total Discount:
+                    </span>
                     <span className="font-medium text-danger">
-                      -<AnimatedCounter value={Math.round(discountAmount)} prefix="$" />
+                      -
+                      <AnimatedCounter
+                        value={Math.round(discountAmount)}
+                        prefix="$"
+                      />
                     </span>
                   </div>
                   <div className="flex justify-between border-t border-border pt-1.5 font-bold">
                     <span className="text-foreground">Net Proposal Value:</span>
                     <span className="text-foreground">
-                      <AnimatedCounter value={Math.round(netTotal)} prefix="$" />
+                      <AnimatedCounter
+                        value={Math.round(netTotal)}
+                        prefix="$"
+                      />
                     </span>
                   </div>
                   <div className="flex items-center justify-between border-t border-border pt-1.5">
-                    <span className="text-muted-foreground">Estimated Margin:</span>
-                    <span className={`rounded px-2 py-0.5 font-bold ${marginPct >= 35 ? "bg-secondary/15 text-secondary" : "bg-warning/15 text-warning"}`}>
+                    <span className="text-muted-foreground">
+                      Estimated Margin:
+                    </span>
+                    <span
+                      className={`rounded px-2 py-0.5 font-bold ${marginPct >= 35 ? "bg-secondary/15 text-secondary" : "bg-warning/15 text-warning"}`}
+                    >
                       <AnimatedCounter value={marginPct} suffix="% Margin" />
                     </span>
                   </div>
@@ -287,8 +336,8 @@ export function HeroSection() {
                     routingStatus.tone === "success"
                       ? "border-secondary/30 bg-secondary/10"
                       : routingStatus.tone === "warning"
-                      ? "border-warning/30 bg-warning/10"
-                      : "border-danger/30 bg-danger/10"
+                        ? "border-warning/30 bg-warning/10"
+                        : "border-danger/30 bg-danger/10"
                   }`}
                 >
                   <div className="flex items-start gap-2.5">
@@ -305,8 +354,8 @@ export function HeroSection() {
                           routingStatus.tone === "success"
                             ? "text-secondary"
                             : routingStatus.tone === "warning"
-                            ? "text-warning"
-                            : "text-danger"
+                              ? "text-warning"
+                              : "text-danger"
                         }`}
                       >
                         {routingStatus.label}

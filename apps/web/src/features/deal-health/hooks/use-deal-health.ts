@@ -44,8 +44,13 @@ export function useAcknowledgeAlert() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: ({ alertId, input }: { alertId: string; input?: AcknowledgeAlertInput }) =>
-      dealHealthApi.acknowledgeAlert(alertId, input),
+    mutationFn: ({
+      alertId,
+      input,
+    }: {
+      alertId: string;
+      input?: AcknowledgeAlertInput;
+    }) => dealHealthApi.acknowledgeAlert(alertId, input),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: DEAL_HEALTH_KEYS.all });
     },
@@ -56,8 +61,13 @@ export function useResolveAlert() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: ({ alertId, input }: { alertId: string; input: ResolveAlertInput }) =>
-      dealHealthApi.resolveAlert(alertId, input),
+    mutationFn: ({
+      alertId,
+      input,
+    }: {
+      alertId: string;
+      input: ResolveAlertInput;
+    }) => dealHealthApi.resolveAlert(alertId, input),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: DEAL_HEALTH_KEYS.all });
     },

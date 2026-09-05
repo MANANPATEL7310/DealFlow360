@@ -1,14 +1,12 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import toast from "react-hot-toast";
-import {
-  billingApi,
-  type SubscriptionChangeParams,
-} from "../api/billing-api";
+import { billingApi, type SubscriptionChangeParams } from "../api/billing-api";
 
 export const billingKeys = {
   all: ["billing"] as const,
   lists: () => [...billingKeys.all, "list"] as const,
-  detail: (quotationId: string) => [...billingKeys.all, "detail", quotationId] as const,
+  detail: (quotationId: string) =>
+    [...billingKeys.all, "detail", quotationId] as const,
 };
 
 /**
@@ -60,7 +58,9 @@ export function useRecordPayment(quotationId: string) {
         reference,
       ),
     onSuccess: (data) => {
-      queryClient.invalidateQueries({ queryKey: billingKeys.detail(quotationId) });
+      queryClient.invalidateQueries({
+        queryKey: billingKeys.detail(quotationId),
+      });
       queryClient.invalidateQueries({ queryKey: billingKeys.lists() });
       queryClient.invalidateQueries({ queryKey: ["quotations"] });
       queryClient.invalidateQueries({ queryKey: ["quotation", quotationId] });
@@ -88,7 +88,9 @@ export function useSubscriptionChange(quotationId: string) {
     mutationFn: (params: SubscriptionChangeParams) =>
       billingApi.changeSubscription(quotationId, params),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: billingKeys.detail(quotationId) });
+      queryClient.invalidateQueries({
+        queryKey: billingKeys.detail(quotationId),
+      });
       queryClient.invalidateQueries({ queryKey: billingKeys.lists() });
       queryClient.invalidateQueries({ queryKey: ["quotations"] });
       toast.success("Subscription schedule updated with proration");

@@ -581,6 +581,86 @@ export const apiRoutes = {
       description: "List filtered audit log entries.",
     },
   },
+
+  // ─── Agentic AI (Phase 2) ────────────────────────────────────────────────
+  aiApprovals: {
+    list: {
+      path: "/ai/approvals",
+      method: "GET",
+      auth: true,
+      description: "List human-in-the-loop AI approval requests.",
+    },
+    decision: {
+      path: "/ai/approvals/:id/decision",
+      method: "POST",
+      auth: true,
+      description: "Approve or reject an AI proposed action.",
+    },
+  },
+
+  aiDiscountApproval: {
+    review: {
+      path: "/ai/discount-approval/:quotationId",
+      method: "POST",
+      auth: true,
+      description: "Get AI advisory review for a flagged quotation.",
+    },
+  },
+
+  aiRecommendations: {
+    list: {
+      path: "/ai/recommendations/:quotationId",
+      method: "POST",
+      auth: true,
+      description: "Get AI-ranked explanations for M6 upsell candidates.",
+    },
+  },
+
+  aiFulfillment: {
+    plan: {
+      path: "/ai/fulfillment/:quotationId",
+      method: "POST",
+      auth: true,
+      description: "Ask AI to propose or explain a fulfillment split.",
+    },
+  },
+
+  aiBilling: {
+    explain: {
+      path: "/ai/billing/:quotationId/explain",
+      method: "POST",
+      auth: true,
+      description: "Explain hybrid billing and optionally draft a credit note.",
+    },
+  },
+
+  aiDealHealth: {
+    triage: {
+      path: "/ai/deal-health/triage",
+      method: "POST",
+      auth: true,
+      description: "Triage deterministic M10 deal-health alerts with AI.",
+    },
+  },
+
+  aiNegotiation: {
+    assist: {
+      path: "/ai/negotiation/:requestId",
+      method: "POST",
+      auth: true,
+      description: "Draft an internal response to a customer negotiation.",
+    },
+  },
+
+  aiInsights: {
+    query: {
+      path: "/ai/insights/query",
+      method: "POST",
+      auth: true,
+      description:
+        "Translate natural language into whitelisted M11 report filters.",
+    },
+  },
 } as const;
 
 // ─── Derived Types (auto-generated, do not edit manually) ─────────────────────

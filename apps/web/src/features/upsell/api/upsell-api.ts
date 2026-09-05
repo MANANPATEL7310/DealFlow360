@@ -23,14 +23,15 @@ export const upsellApi = {
       }
 
       const allProducts = await productsApi.getProducts();
-      return evaluateUpsellSuggestions(quotation, allProducts, SEED_UPSELL_RULES);
+      return evaluateUpsellSuggestions(
+        quotation,
+        allProducts,
+        SEED_UPSELL_RULES,
+      );
     }
   },
 
-  async addSuggestion(
-    quotationId: string,
-    suggestedProductId: string,
-  ) {
+  async addSuggestion(quotationId: string, suggestedProductId: string) {
     try {
       const { data } = await apiClient.post(
         apiRoutes.upsell.add.path

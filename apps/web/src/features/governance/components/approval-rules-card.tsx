@@ -48,7 +48,9 @@ function RuleModalInner({
 }: Omit<RuleModalProps, "isOpen">) {
   const [name, setName] = useState(initialRule?.name ?? "");
   const [minScore, setMinScore] = useState(
-    initialRule?.minScore !== undefined ? initialRule.minScore.toString() : "0.01",
+    initialRule?.minScore !== undefined
+      ? initialRule.minScore.toString()
+      : "0.01",
   );
   const [maxScore, setMaxScore] = useState(
     initialRule?.maxScore !== null && initialRule?.maxScore !== undefined
@@ -229,7 +231,11 @@ function RuleModalInner({
               type="submit"
               variant="primary"
             >
-              {isSaving ? "Saving..." : initialRule ? "Update Rule" : "Create Rule"}
+              {isSaving
+                ? "Saving..."
+                : initialRule
+                  ? "Update Rule"
+                  : "Create Rule"}
             </Button>
           </div>
         </form>
@@ -245,7 +251,9 @@ export function ApprovalRulesCard() {
   const deleteRule = useDeleteApprovalRule();
 
   const [modalOpen, setModalOpen] = useState(false);
-  const [editingRule, setEditingRule] = useState<ApprovalChainRule | null>(null);
+  const [editingRule, setEditingRule] = useState<ApprovalChainRule | null>(
+    null,
+  );
 
   const handleOpenAdd = () => {
     setEditingRule(null);
@@ -386,8 +394,8 @@ export function ApprovalRulesCard() {
         </Table>
       ) : (
         <div className="rounded-lg border border-dashed border-border py-8 text-center text-muted-foreground">
-          No approval rules configured. All quotes exceeding ceiling will require
-          default sales manager review.
+          No approval rules configured. All quotes exceeding ceiling will
+          require default sales manager review.
         </div>
       )}
 

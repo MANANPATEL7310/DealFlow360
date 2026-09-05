@@ -55,7 +55,9 @@ export function DecisionModal({
     e.preventDefault();
     const trimmed = reason.trim();
     if (trimmed.length < 3) {
-      setValidationError("Please provide at least 3 characters of justification.");
+      setValidationError(
+        "Please provide at least 3 characters of justification.",
+      );
       return;
     }
     setValidationError(null);
@@ -169,27 +171,29 @@ export function DecisionModal({
               <span className="font-bold">Workflow Consequence: </span>
               {decision === "APPROVED" && isFinalStep && (
                 <span>
-                  Approving will complete the approval workflow and transition quotation to{" "}
-                  <strong>APPROVED</strong>, authorizing it for client issuance.
+                  Approving will complete the approval workflow and transition
+                  quotation to <strong>APPROVED</strong>, authorizing it for
+                  client issuance.
                 </span>
               )}
               {decision === "APPROVED" && !isFinalStep && (
                 <span>
                   Approving will sign off Tier 1 and advance this deal to{" "}
-                  <strong>Tier 2 (Finance Review)</strong>. Quotation status remains{" "}
-                  <strong>PENDING_APPROVAL</strong>.
+                  <strong>Tier 2 (Finance Review)</strong>. Quotation status
+                  remains <strong>PENDING_APPROVAL</strong>.
                 </span>
               )}
               {decision === "RETURNED" && (
                 <span>
-                  Returning will revert quotation to <strong>DRAFT</strong> status with your
-                  notes, enabling the sales rep to revise discounts.
+                  Returning will revert quotation to <strong>DRAFT</strong>{" "}
+                  status with your notes, enabling the sales rep to revise
+                  discounts.
                 </span>
               )}
               {decision === "REJECTED" && (
                 <span>
-                  Rejecting will lock this quotation as <strong>REJECTED</strong> and terminate
-                  the commercial deal.
+                  Rejecting will lock this quotation as{" "}
+                  <strong>REJECTED</strong> and terminate the commercial deal.
                 </span>
               )}
             </div>
@@ -220,7 +224,9 @@ export function DecisionModal({
               className="w-full rounded-xl border border-border bg-surface-muted/30 p-3 text-xs text-foreground placeholder:text-muted-foreground focus:border-primary focus:outline-hidden"
             />
             {validationError && (
-              <p className="text-xs font-medium text-danger">{validationError}</p>
+              <p className="text-xs font-medium text-danger">
+                {validationError}
+              </p>
             )}
           </div>
 
@@ -249,7 +255,12 @@ export function DecisionModal({
               }`}
             >
               {isPending && <Spinner className="size-3.5" />}
-              Confirm {decision === "APPROVED" ? "Approval" : decision === "RETURNED" ? "Return" : "Rejection"}
+              Confirm{" "}
+              {decision === "APPROVED"
+                ? "Approval"
+                : decision === "RETURNED"
+                  ? "Return"
+                  : "Rejection"}
             </Button>
           </div>
         </form>

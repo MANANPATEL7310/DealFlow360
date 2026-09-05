@@ -9,8 +9,12 @@ export function LogoMark({ className }: { className?: string }) {
       </div>
       <div>
         <div className="flex items-center gap-1.5">
-          <span className="text-base font-bold tracking-tight text-foreground">DealFlow</span>
-          <span className="rounded bg-primary/10 px-1.5 py-0.5 text-xs font-bold text-primary">360</span>
+          <span className="text-base font-bold tracking-tight text-foreground">
+            DealFlow
+          </span>
+          <span className="rounded bg-primary/10 px-1.5 py-0.5 text-xs font-bold text-primary">
+            360
+          </span>
         </div>
         <p className="text-xs font-medium tracking-wider text-muted-foreground uppercase">
           Sales Operations

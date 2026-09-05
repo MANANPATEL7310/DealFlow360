@@ -1,10 +1,5 @@
 import type { Quotation } from "@template/shared";
-import {
-  AlertTriangle,
-  Clock,
-  DollarSign,
-  TrendingUp,
-} from "lucide-react";
+import { AlertTriangle, Clock, DollarSign, TrendingUp } from "lucide-react";
 import { MetricCard } from "@/components/ui/metric-card";
 
 interface QuotationsStatsProps {

@@ -57,13 +57,16 @@ export function QuotationBuilderPage() {
 
   useEffect(() => {
     if (id) {
-      portalApi.getInternalNegotiations(id).then(setNegotiations).catch(() => {});
+      portalApi
+        .getInternalNegotiations(id)
+        .then(setNegotiations)
+        .catch(() => {});
     }
   }, [id]);
 
   const handleAnswerNegotiation = async (
     negId: string,
-    input: AnswerNegotiationInput
+    input: AnswerNegotiationInput,
   ) => {
     if (!id) return;
     const updated = await portalApi.answerNegotiation(id, negId, input);
@@ -211,13 +214,21 @@ export function QuotationBuilderPage() {
 
           <div className="flex items-center gap-2">
             <Link to={appRoutes.quotationFulfillment(quote.id)}>
-              <Button size="sm" variant="outline" className="h-9 gap-1.5 rounded-lg text-xs">
+              <Button
+                size="sm"
+                variant="outline"
+                className="h-9 gap-1.5 rounded-lg text-xs"
+              >
                 <Truck className="size-3.5" /> Fulfillment
               </Button>
             </Link>
 
             <Link to={appRoutes.quotationBilling(quote.id)}>
-              <Button size="sm" variant="outline" className="h-9 gap-1.5 rounded-lg text-xs">
+              <Button
+                size="sm"
+                variant="outline"
+                className="h-9 gap-1.5 rounded-lg text-xs"
+              >
                 <Receipt className="size-3.5" /> Billing
               </Button>
             </Link>
@@ -264,8 +275,8 @@ export function QuotationBuilderPage() {
                 </h2>
               </div>
               <div className="flex items-center gap-1 text-xs text-muted-foreground">
-                <ShieldCheck className="size-3.5 text-success-dark" /> Tier Ceilings
-                Active
+                <ShieldCheck className="size-3.5 text-success-dark" /> Tier
+                Ceilings Active
               </div>
             </div>
 

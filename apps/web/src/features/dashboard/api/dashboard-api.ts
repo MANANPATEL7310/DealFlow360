@@ -62,10 +62,12 @@ function computeMockSummary(): DashboardSummaryResponse {
 
   const stages: PipelineStageCount = {
     draft: quotes.filter((q) => q.status === "DRAFT").length,
-    pendingApproval: quotes.filter((q) => q.status === "PENDING_APPROVAL").length,
+    pendingApproval: quotes.filter((q) => q.status === "PENDING_APPROVAL")
+      .length,
     approved: quotes.filter((q) => q.status === "APPROVED").length,
     sent: quotes.filter((q) => q.status === "SENT").length,
-    underNegotiation: quotes.filter((q) => q.status === "UNDER_NEGOTIATION").length,
+    underNegotiation: quotes.filter((q) => q.status === "UNDER_NEGOTIATION")
+      .length,
     confirmed: quotes.filter((q) => q.status === "CONFIRMED").length,
   };
 
@@ -87,7 +89,8 @@ function computeMockRecentQuotations(limit = 6): QuotationSummaryItem[] {
     code: q.quotationNumber,
     customerId: q.customerId,
     customerName: q.customer?.name ?? "Acme Global Solutions",
-    customerTier: (q.customer?.tier as "BRONZE" | "SILVER" | "GOLD") ?? "SILVER",
+    customerTier:
+      (q.customer?.tier as "BRONZE" | "SILVER" | "GOLD") ?? "SILVER",
     salesRepName: "Alex Miller",
     subtotalMinor: q.subtotalMinor,
     netTotalMinor: q.grandTotalMinor ?? q.subtotalMinor,
@@ -106,7 +109,8 @@ let localAlerts: DealHealthAlertItem[] = [
     customerName: "Nordic Dynamics Oy",
     type: "DISCOUNT_ANOMALY",
     severity: "medium",
-    detail: "Blended discount 16.5% exceeds Silver Tier 12.0% ceiling without VP approval.",
+    detail:
+      "Blended discount 16.5% exceeds Silver Tier 12.0% ceiling without VP approval.",
     status: "open",
     createdAt: "2026-09-05T09:30:00.000Z",
   },
@@ -117,7 +121,8 @@ let localAlerts: DealHealthAlertItem[] = [
     customerName: "Vertex AI Labs",
     type: "DELIVERY_SLIPPAGE",
     severity: "high",
-    detail: "Warehouse Central stock deficit (4 units awaiting inter-facility transfer).",
+    detail:
+      "Warehouse Central stock deficit (4 units awaiting inter-facility transfer).",
     status: "open",
     createdAt: "2026-09-05T11:15:00.000Z",
   },

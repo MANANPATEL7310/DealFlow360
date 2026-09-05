@@ -3,7 +3,12 @@ import type {
   CategoryDiscountCeiling,
   DiscountTierCeiling,
 } from "@template/shared";
-import { CheckCircle2, GitPullRequest, Layers, ShieldCheck } from "lucide-react";
+import {
+  CheckCircle2,
+  GitPullRequest,
+  Layers,
+  ShieldCheck,
+} from "lucide-react";
 import { MetricCard } from "@/components/ui/metric-card";
 
 interface GovernanceStatsProps {

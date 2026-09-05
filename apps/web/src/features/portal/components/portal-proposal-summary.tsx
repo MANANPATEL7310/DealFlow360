@@ -28,12 +28,12 @@ export function PortalProposalSummary({
 
   const formattedGrandTotal = (quotation.grandTotalMinor / 100).toLocaleString(
     undefined,
-    { minimumFractionDigits: 2, maximumFractionDigits: 2 }
+    { minimumFractionDigits: 2, maximumFractionDigits: 2 },
   );
 
   const formattedSubtotal = (quotation.subtotalMinor / 100).toLocaleString(
     undefined,
-    { minimumFractionDigits: 2, maximumFractionDigits: 2 }
+    { minimumFractionDigits: 2, maximumFractionDigits: 2 },
   );
 
   const formattedDiscountTotal = (
@@ -45,7 +45,7 @@ export function PortalProposalSummary({
 
   const formattedTaxTotal = (quotation.taxTotalMinor / 100).toLocaleString(
     undefined,
-    { minimumFractionDigits: 2, maximumFractionDigits: 2 }
+    { minimumFractionDigits: 2, maximumFractionDigits: 2 },
   );
 
   const effectiveDiscountPct =
@@ -89,8 +89,12 @@ export function PortalProposalSummary({
           </h1>
 
           <p className="max-w-2xl text-sm text-muted-foreground">
-            Prepared by <strong className="text-foreground font-semibold">{quotation.salesRepName}</strong>. 
-            All pricing includes agreed volume concessions, warranty terms, and service-level commitments.
+            Prepared by{" "}
+            <strong className="text-foreground font-semibold">
+              {quotation.salesRepName}
+            </strong>
+            . All pricing includes agreed volume concessions, warranty terms,
+            and service-level commitments.
           </p>
 
           <div className="flex flex-wrap items-center gap-4 text-xs text-muted-foreground pt-1">
@@ -100,7 +104,14 @@ export function PortalProposalSummary({
             </span>
             <span className="flex items-center gap-1.5">
               <Receipt className="size-3.5 text-primary" />
-              Tax Included ({((quotation.taxTotalMinor / (quotation.subtotalMinor - quotation.discountTotalMinor || 1)) * 100).toFixed(0)}% GST)
+              Tax Included (
+              {(
+                (quotation.taxTotalMinor /
+                  (quotation.subtotalMinor - quotation.discountTotalMinor ||
+                    1)) *
+                100
+              ).toFixed(0)}
+              % GST)
             </span>
           </div>
         </div>
@@ -117,7 +128,8 @@ export function PortalProposalSummary({
             <div className="flex items-center gap-2 text-xs font-medium text-emerald-600 dark:text-emerald-400 justify-start lg:justify-end">
               <Percent className="size-3.5" />
               <span>
-                Total Savings: ${formattedDiscountTotal} ({effectiveDiscountPct}%)
+                Total Savings: ${formattedDiscountTotal} ({effectiveDiscountPct}
+                %)
               </span>
             </div>
           </div>
@@ -126,11 +138,15 @@ export function PortalProposalSummary({
           <div className="grid grid-cols-2 gap-3 w-full border-t border-border pt-3 text-xs">
             <div>
               <span className="text-muted-foreground">List Subtotal:</span>{" "}
-              <span className="font-mono font-medium text-foreground">${formattedSubtotal}</span>
+              <span className="font-mono font-medium text-foreground">
+                ${formattedSubtotal}
+              </span>
             </div>
             <div className="text-right">
               <span className="text-muted-foreground">Estimated Tax:</span>{" "}
-              <span className="font-mono font-medium text-foreground">${formattedTaxTotal}</span>
+              <span className="font-mono font-medium text-foreground">
+                ${formattedTaxTotal}
+              </span>
             </div>
           </div>
 

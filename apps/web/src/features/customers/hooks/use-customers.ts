@@ -1,7 +1,4 @@
-import type {
-  CreateContactInput,
-  CreateCustomerInput,
-} from "@template/shared";
+import type { CreateContactInput, CreateCustomerInput } from "@template/shared";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 import {
@@ -112,7 +109,9 @@ export function useGenerateMagicLink() {
       contactId: string;
     }) => customersApi.generateMagicLink(customerId, contactId),
     onSuccess: (link) => {
-      toast.success(`Generated portal negotiation link for ${link.contactEmail}`);
+      toast.success(
+        `Generated portal negotiation link for ${link.contactEmail}`,
+      );
     },
     onError: (error: { message: string }) => {
       toast.error(error.message || "Failed to generate portal magic link.");

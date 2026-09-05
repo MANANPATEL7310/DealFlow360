@@ -34,10 +34,12 @@ mockNegotiations.set("qt-101", [
     quotationId: "qt-101",
     contactId: "cst-01-c1",
     lineId: "qtl-101-1",
-    comment: "Can we get 8.0% volume discount on the Edge 2U servers if we commit to annual prepaid billing?",
+    comment:
+      "Can we get 8.0% volume discount on the Edge 2U servers if we commit to annual prepaid billing?",
     counterDiscountPct: 8.0,
     status: "ANSWERED",
-    repComment: "Approved by Account Team! 8.0% discount provisionally applied.",
+    repComment:
+      "Approved by Account Team! 8.0% discount provisionally applied.",
     createdAt: new Date(Date.now() - 3600000).toISOString(),
     updatedAt: new Date(Date.now() - 1800000).toISOString(),
   },
@@ -55,7 +57,8 @@ function decodeQuotationIdFromToken(token: string | null): string {
 }
 
 function buildMockPortalView(quotationId: string): PortalQuotationView {
-  const quote = mockQuotations.get(quotationId) ?? mockQuotations.get("qt-101")!;
+  const quote =
+    mockQuotations.get(quotationId) ?? mockQuotations.get("qt-101")!;
   const negotiations = mockNegotiations.get(quote.id) ?? [];
 
   const lines: PortalQuotationLine[] = quote.lines.map((line) => {
@@ -66,7 +69,9 @@ function buildMockPortalView(quotationId: string): PortalQuotationView {
       id: line.id,
       productId: line.productId,
       productName: line.product?.name ?? "Enterprise Solution",
-      variantName: line.variant ? `${line.variant.attribute}: ${line.variant.value}` : null,
+      variantName: line.variant
+        ? `${line.variant.attribute}: ${line.variant.value}`
+        : null,
       qty: line.qty,
       unitPriceMinor: line.unitPriceMinor,
       discountPct: line.discountPct,
@@ -81,7 +86,8 @@ function buildMockPortalView(quotationId: string): PortalQuotationView {
     id: quote.id,
     code: quote.quotationNumber,
     customerName: quote.customer?.name ?? "Global Enterprise Client",
-    customerTier: (quote.customer?.tier as "BRONZE" | "SILVER" | "GOLD") ?? "SILVER",
+    customerTier:
+      (quote.customer?.tier as "BRONZE" | "SILVER" | "GOLD") ?? "SILVER",
     contactName: "David Sterling",
     salesRepName: "Alex Miller",
     subtotalMinor: quote.subtotalMinor,
@@ -121,9 +127,14 @@ export const portalApi = {
     }
   },
 
-  async createNegotiation(input: CreateNegotiationInput): Promise<NegotiationRequest> {
+  async createNegotiation(
+    input: CreateNegotiationInput,
+  ): Promise<NegotiationRequest> {
     try {
-      const res = await portalHttp.post(apiRoutes.portal.negotiations.path, input);
+      const res = await portalHttp.post(
+        apiRoutes.portal.negotiations.path,
+        input,
+      );
       return res.data?.data ?? res.data;
     } catch {
       const qId = decodeQuotationIdFromToken(getPortalToken());
@@ -161,7 +172,9 @@ export const portalApi = {
       const qId = decodeQuotationIdFromToken(getPortalToken());
       const quote = mockQuotations.get(qId) ?? mockQuotations.get("qt-101")!;
       const negotiations = mockNegotiations.get(qId) ?? [];
-      const acceptedCounters = negotiations.filter((n) => n.status === "ACCEPTED");
+      const acceptedCounters = negotiations.filter(
+        (n) => n.status === "ACCEPTED",
+      );
 
       // Fold accepted counters into lines
       const updatedLines = quote.lines.map((line) => {
@@ -169,9 +182,15 @@ export const portalApi = {
         const orderCounter = acceptedCounters.find((c) => !c.lineId);
 
         let discount = line.discountPct;
-        if (lineCounter?.counterDiscountPct !== undefined && lineCounter.counterDiscountPct !== null) {
+        if (
+          lineCounter?.counterDiscountPct !== undefined &&
+          lineCounter.counterDiscountPct !== null
+        ) {
           discount = lineCounter.counterDiscountPct;
-        } else if (orderCounter?.counterDiscountPct !== undefined && orderCounter.counterDiscountPct !== null) {
+        } else if (
+          orderCounter?.counterDiscountPct !== undefined &&
+          orderCounter.counterDiscountPct !== null
+        ) {
           discount = orderCounter.counterDiscountPct;
         }
 
@@ -179,7 +198,8 @@ export const portalApi = {
       });
 
       const totals = computeTotals(updatedLines);
-      const tier = (quote.customer?.tier as "BRONZE" | "SILVER" | "GOLD") ?? "SILVER";
+      const tier =
+        (quote.customer?.tier as "BRONZE" | "SILVER" | "GOLD") ?? "SILVER";
       const risk = evaluateQuotationRisk(
         updatedLines,
         tier,
@@ -211,14 +231,17 @@ export const portalApi = {
       quote.status = "CONFIRMED";
       return {
         status: "CONFIRMED",
-        message: "Quotation officially confirmed! Hybrid billing schedules and order fulfillment have been initialized.",
+        message:
+          "Quotation officially confirmed! Hybrid billing schedules and order fulfillment have been initialized.",
         requiresApproval: false,
         requiredLevels: [],
       };
     }
   },
 
-  async submitNegotiation(input: CreateNegotiationInput): Promise<PortalQuotationView> {
+  async submitNegotiation(
+    input: CreateNegotiationInput,
+  ): Promise<PortalQuotationView> {
     await this.createNegotiation(input);
     return this.getQuotation();
   },
@@ -228,7 +251,9 @@ export const portalApi = {
   },
 
   // ─── Internal Sales Representative Operations ─────────────────────────────
-  async sendQuotation(quotationId: string): Promise<{ token: string; magicLink: string }> {
+  async sendQuotation(
+    quotationId: string,
+  ): Promise<{ token: string; magicLink: string }> {
     try {
       const path = apiRoutes.quotations.send.path.replace(":id", quotationId);
       const res = await apiClient.post(path);
@@ -240,7 +265,11 @@ export const portalApi = {
       }
 
       const token = Buffer.from(
-        JSON.stringify({ quotationId, contactId: "cst-01-c1", exp: Date.now() + 14 * 86400000 }),
+        JSON.stringify({
+          quotationId,
+          contactId: "cst-01-c1",
+          exp: Date.now() + 14 * 86400000,
+        }),
       ).toString("base64url");
 
       return {
@@ -250,9 +279,14 @@ export const portalApi = {
     }
   },
 
-  async getInternalNegotiations(quotationId: string): Promise<NegotiationRequest[]> {
+  async getInternalNegotiations(
+    quotationId: string,
+  ): Promise<NegotiationRequest[]> {
     try {
-      const path = apiRoutes.quotations.negotiations.path.replace(":id", quotationId);
+      const path = apiRoutes.quotations.negotiations.path.replace(
+        ":id",
+        quotationId,
+      );
       const res = await apiClient.get(path);
       return res.data?.data ?? res.data ?? [];
     } catch {

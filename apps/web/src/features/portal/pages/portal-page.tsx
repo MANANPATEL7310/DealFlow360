@@ -31,7 +31,9 @@ export function PortalPage() {
 
   // Modals / Drawers state
   const [isNegotiateOpen, setIsNegotiateOpen] = useState(false);
-  const [selectedLine, setSelectedLine] = useState<PortalQuotationLine | null>(null);
+  const [selectedLine, setSelectedLine] = useState<PortalQuotationLine | null>(
+    null,
+  );
   const [isConfirmOpen, setIsConfirmOpen] = useState(false);
   const [bannerNotice, setBannerNotice] = useState<string | null>(null);
 
@@ -42,7 +44,10 @@ export function PortalPage() {
       const data = await portalApi.getQuotation();
       setQuotation(data);
     } catch (err: unknown) {
-      const msg = err instanceof Error ? err.message : "Unable to load quotation proposal.";
+      const msg =
+        err instanceof Error
+          ? err.message
+          : "Unable to load quotation proposal.";
       setError(msg);
     } finally {
       setIsLoading(false);
@@ -57,7 +62,10 @@ export function PortalPage() {
 
   const handleDemoAccess = () => {
     // Set demo token and load
-    const demoPayload = JSON.stringify({ quotationId: "qt-101", contactId: "cst-01-c1" });
+    const demoPayload = JSON.stringify({
+      quotationId: "qt-101",
+      contactId: "cst-01-c1",
+    });
     const demoToken = btoa(demoPayload);
     setPortalToken(demoToken);
     loadQuotation();
@@ -71,7 +79,9 @@ export function PortalPage() {
   const handleSubmitNegotiation = async (input: CreateNegotiationInput) => {
     const updated = await portalApi.submitNegotiation(input);
     setQuotation(updated);
-    setBannerNotice("Counter-offer submitted successfully to your sales representative!");
+    setBannerNotice(
+      "Counter-offer submitted successfully to your sales representative!",
+    );
     setTimeout(() => setBannerNotice(null), 6000);
   };
 
@@ -110,7 +120,8 @@ export function PortalPage() {
             Portal Authentication Required
           </h2>
           <p className="mt-2 text-xs text-muted-foreground leading-relaxed">
-            {error ?? "This customer proposal requires an authorized secure magic link to view."}
+            {error ??
+              "This customer proposal requires an authorized secure magic link to view."}
           </p>
 
           <div className="mt-6 flex flex-col gap-3">
@@ -210,7 +221,9 @@ export function PortalPage() {
         <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-3 px-4 sm:flex-row sm:px-6 lg:px-8">
           <div className="flex items-center gap-2">
             <ShieldCheck className="size-4 text-primary" />
-            <span>DealFlow360 External Enterprise Gateway • ISO 27001 Certified</span>
+            <span>
+              DealFlow360 External Enterprise Gateway • ISO 27001 Certified
+            </span>
           </div>
           <p>© 2026 DealFlow360 Technologies Inc. All rights reserved.</p>
         </div>

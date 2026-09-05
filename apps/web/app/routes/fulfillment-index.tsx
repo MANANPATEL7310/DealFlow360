@@ -1,12 +1,6 @@
 import { Link } from "react-router";
 import { appRoutes } from "@template/shared";
-import {
-  ArrowRight,
-  Boxes,
-  Building2,
-  Calendar,
-  Truck,
-} from "lucide-react";
+import { ArrowRight, Boxes, Building2, Calendar, Truck } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -42,7 +36,9 @@ export default function FulfillmentIndexRoute() {
   );
 
   return (
-    <RoleGuard allowedRoles={["sales_rep", "sales_manager", "finance", "admin"]}>
+    <RoleGuard
+      allowedRoles={["sales_rep", "sales_manager", "finance", "admin"]}
+    >
       <div className="space-y-6 pb-12">
         {/* Header */}
         <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
@@ -57,8 +53,8 @@ export default function FulfillmentIndexRoute() {
               <Badge tone="primary">M3 Logistics</Badge>
             </div>
             <p className="mt-1 text-sm text-muted-foreground">
-              Multi-warehouse split optimizer, freight consolidation, and backorder
-              replenishment management.
+              Multi-warehouse split optimizer, freight consolidation, and
+              backorder replenishment management.
             </p>
           </div>
         </div>
@@ -71,7 +67,8 @@ export default function FulfillmentIndexRoute() {
                 Quotations with Physical Shipments
               </h2>
               <p className="text-xs text-muted-foreground">
-                Select an order to inspect and optimize multi-depot shipment allocation
+                Select an order to inspect and optimize multi-depot shipment
+                allocation
               </p>
             </div>
             <span className="text-xs font-semibold text-muted-foreground">
@@ -83,30 +80,58 @@ export default function FulfillmentIndexRoute() {
             <Table>
               <TableHeader>
                 <TableRow className="border-border bg-surface-muted/50">
-                  <TableHead className="text-xs font-semibold">Quotation</TableHead>
-                  <TableHead className="text-xs font-semibold">Customer Account</TableHead>
-                  <TableHead className="text-center text-xs font-semibold">Status</TableHead>
-                  <TableHead className="text-center text-xs font-semibold">Hardware Lines</TableHead>
-                  <TableHead className="text-right text-xs font-semibold">Order Total</TableHead>
-                  <TableHead className="text-right text-xs font-semibold">Action</TableHead>
+                  <TableHead className="text-xs font-semibold">
+                    Quotation
+                  </TableHead>
+                  <TableHead className="text-xs font-semibold">
+                    Customer Account
+                  </TableHead>
+                  <TableHead className="text-center text-xs font-semibold">
+                    Status
+                  </TableHead>
+                  <TableHead className="text-center text-xs font-semibold">
+                    Hardware Lines
+                  </TableHead>
+                  <TableHead className="text-right text-xs font-semibold">
+                    Order Total
+                  </TableHead>
+                  <TableHead className="text-right text-xs font-semibold">
+                    Action
+                  </TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
                 {isLoading ? (
                   Array.from({ length: 3 }).map((_, i) => (
                     <TableRow key={`skeleton-${i}`}>
-                      <TableCell><Skeleton className="h-4 w-28" /></TableCell>
-                      <TableCell><Skeleton className="h-4 w-32" /></TableCell>
-                      <TableCell className="text-center"><Skeleton className="mx-auto h-4 w-16" /></TableCell>
-                      <TableCell className="text-center"><Skeleton className="mx-auto h-4 w-12" /></TableCell>
-                      <TableCell className="text-right"><Skeleton className="ml-auto h-4 w-16" /></TableCell>
-                      <TableCell className="text-right"><Skeleton className="ml-auto h-8 w-24" /></TableCell>
+                      <TableCell>
+                        <Skeleton className="h-4 w-28" />
+                      </TableCell>
+                      <TableCell>
+                        <Skeleton className="h-4 w-32" />
+                      </TableCell>
+                      <TableCell className="text-center">
+                        <Skeleton className="mx-auto h-4 w-16" />
+                      </TableCell>
+                      <TableCell className="text-center">
+                        <Skeleton className="mx-auto h-4 w-12" />
+                      </TableCell>
+                      <TableCell className="text-right">
+                        <Skeleton className="ml-auto h-4 w-16" />
+                      </TableCell>
+                      <TableCell className="text-right">
+                        <Skeleton className="ml-auto h-8 w-24" />
+                      </TableCell>
                     </TableRow>
                   ))
                 ) : physicalQuotes.length === 0 ? (
                   <TableRow>
-                    <TableCell colSpan={6} className="py-8 text-center text-xs text-muted-foreground">
-                      No active quotations currently require physical hardware fulfillment.
+                    <TableCell
+                      colSpan={6}
+                      className="py-8 text-center text-xs text-muted-foreground"
+                    >
+                      No active quotations currently require physical hardware
+                      fulfillment.
                     </TableCell>
                   </TableRow>
                 ) : (
@@ -114,10 +139,12 @@ export default function FulfillmentIndexRoute() {
                     const hwCount = q.lines.filter(
                       (l) => l.product?.category === "HARDWARE" || !l.product,
                     ).length;
-                    const totalFormatted = (q.grandTotalMinor / 100).toLocaleString(
-                      undefined,
-                      { minimumFractionDigits: 2, maximumFractionDigits: 2 },
-                    );
+                    const totalFormatted = (
+                      q.grandTotalMinor / 100
+                    ).toLocaleString(undefined, {
+                      minimumFractionDigits: 2,
+                      maximumFractionDigits: 2,
+                    });
 
                     return (
                       <TableRow key={q.id} className="border-border">

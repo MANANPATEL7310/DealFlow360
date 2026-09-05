@@ -327,3 +327,72 @@ async function applyAcceptedCounters(tx: DbClient, q: { id: string }) {
 
   await recomputeTotals(q.id, tx);
 }
+
+export async function loadNegotiationRequest(requestId: string) {
+  const neg = await db.negotiationRequest.findUnique({
+    where: { id: requestId },
+    include: {
+      quotation: {
+        include: {
+          customer: { select: { id: true, tier: true, currency: true } },
+          lines: {
+            include: { product: true },
+          },
+        },
+      },
+    },
+  });
+
+  if (!neg) {
+    throw Object.assign(new Error("NEGOTIATION_NOT_FOUND"), { http: 404 });
+  }
+
+  return {
+    id: neg.id,
+    quotationId: neg.quotationId,
+    lineId: neg.lineId,
+    comment: neg.comment,
+    counterDiscountPct: neg.counterDiscountPct,
+    status: neg.status,
+    customerTier: neg.quotation.customer.tier,
+    currency: neg.quotation.customer.currency,
+    affectedLines: neg.lineId
+      ? neg.quotation.lines.filter((l) => l.id === neg.lineId)
+      : neg.quotation.lines,
+  };
+}
+
+/**
+ * Calculates in-memory hypothetical lines IF the counter discount were accepted.
+ * Crucial: Persists NOTHING to the database.
+ */
+export async function hypotheticalAcceptedLines(requestId: string) {
+  const neg = await loadNegotiationRequest(requestId);
+  const q = await loadQuotationWithLines(neg.quotationId);
+  if (!q) {
+    throw Object.assign(new Error("QUOTATION_NOT_FOUND"), { http: 404 });
+  }
+
+  // Clone lines in-memory and apply the hypothetical counter discount
+  const lines = q.lines.map((l) => {
+    let discountPct = l.discountPct;
+    if (
+      neg.counterDiscountPct !== null &&
+      neg.counterDiscountPct !== undefined
+    ) {
+      if (!neg.lineId || neg.lineId === l.id) {
+        discountPct = neg.counterDiscountPct;
+      }
+    }
+    return {
+      ...l,
+      discountPct,
+    };
+  });
+
+  return {
+    lines,
+    tier: q.customer.tier,
+    quotationId: q.id,
+  };
+}

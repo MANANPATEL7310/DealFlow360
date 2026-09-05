@@ -44,7 +44,8 @@ export function SplitsTable({ splits, warehouses }: SplitsTableProps) {
           No warehouse shipment splits allocated.
         </p>
         <p className="mt-1">
-          Add physical hardware products to generate an optimized fulfillment plan.
+          Add physical hardware products to generate an optimized fulfillment
+          plan.
         </p>
       </Card>
     );
@@ -88,11 +89,15 @@ export function SplitsTable({ splits, warehouses }: SplitsTableProps) {
 
               <div className="flex items-center gap-6 text-right">
                 <div>
-                  <span className="text-xs text-muted-foreground">Shipment Units</span>
+                  <span className="text-xs text-muted-foreground">
+                    Shipment Units
+                  </span>
                   <p className="font-bold text-foreground">{groupQty} Units</p>
                 </div>
                 <div>
-                  <span className="text-xs text-muted-foreground">Group Freight Share</span>
+                  <span className="text-xs text-muted-foreground">
+                    Group Freight Share
+                  </span>
                   <p className="font-mono text-sm font-bold text-foreground">
                     ${(groupFreightMinor / 100).toFixed(2)}
                   </p>
@@ -105,11 +110,21 @@ export function SplitsTable({ splits, warehouses }: SplitsTableProps) {
               <Table>
                 <TableHeader>
                   <TableRow className="border-border bg-surface-muted/50">
-                    <TableHead className="text-xs font-semibold">Allocated Product</TableHead>
-                    <TableHead className="text-center text-xs font-semibold">Category</TableHead>
-                    <TableHead className="text-center text-xs font-semibold">Quantity</TableHead>
-                    <TableHead className="text-right text-xs font-semibold">Freight Share</TableHead>
-                    <TableHead className="text-right text-xs font-semibold">Status</TableHead>
+                    <TableHead className="text-xs font-semibold">
+                      Allocated Product
+                    </TableHead>
+                    <TableHead className="text-center text-xs font-semibold">
+                      Category
+                    </TableHead>
+                    <TableHead className="text-center text-xs font-semibold">
+                      Quantity
+                    </TableHead>
+                    <TableHead className="text-right text-xs font-semibold">
+                      Freight Share
+                    </TableHead>
+                    <TableHead className="text-right text-xs font-semibold">
+                      Status
+                    </TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>

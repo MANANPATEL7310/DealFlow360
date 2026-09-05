@@ -22,35 +22,50 @@ function getPortalStatusBadge(status: QuotationStatus) {
   switch (status) {
     case "CONFIRMED":
       return (
-        <Badge tone="success" className="gap-1.5 px-2.5 py-1 text-xs font-semibold">
+        <Badge
+          tone="success"
+          className="gap-1.5 px-2.5 py-1 text-xs font-semibold"
+        >
           <CheckCircle2 className="size-3.5" />
           Confirmed & Accepted
         </Badge>
       );
     case "PENDING_APPROVAL":
       return (
-        <Badge tone="warning" className="gap-1.5 px-2.5 py-1 text-xs font-semibold">
+        <Badge
+          tone="warning"
+          className="gap-1.5 px-2.5 py-1 text-xs font-semibold"
+        >
           <Clock className="size-3.5" />
           Under Governance Review
         </Badge>
       );
     case "SENT":
       return (
-        <Badge tone="primary" className="gap-1.5 px-2.5 py-1 text-xs font-semibold">
+        <Badge
+          tone="primary"
+          className="gap-1.5 px-2.5 py-1 text-xs font-semibold"
+        >
           <Sparkles className="size-3.5" />
           Active Proposal
         </Badge>
       );
     case "APPROVED":
       return (
-        <Badge tone="success" className="gap-1.5 px-2.5 py-1 text-xs font-semibold">
+        <Badge
+          tone="success"
+          className="gap-1.5 px-2.5 py-1 text-xs font-semibold"
+        >
           <CheckCircle2 className="size-3.5" />
           Approved for Signing
         </Badge>
       );
     default:
       return (
-        <Badge tone="secondary" className="gap-1.5 px-2.5 py-1 text-xs font-semibold">
+        <Badge
+          tone="secondary"
+          className="gap-1.5 px-2.5 py-1 text-xs font-semibold"
+        >
           <FileText className="size-3.5" />
           {status}
         </Badge>
@@ -89,7 +104,9 @@ export function PortalHeader({ quotation }: PortalHeaderProps) {
           <Lock className="size-3 text-emerald-500" />
           <span>Scoped Token Session</span>
           <span className="text-border">•</span>
-          <span className="font-mono font-medium text-foreground">{quotation.code}</span>
+          <span className="font-mono font-medium text-foreground">
+            {quotation.code}
+          </span>
         </div>
 
         {/* Right Info & Actions */}
@@ -101,8 +118,12 @@ export function PortalHeader({ quotation }: PortalHeaderProps) {
               <User className="size-3.5 text-foreground" />
             </div>
             <div className="leading-tight">
-              <div className="font-medium text-foreground">{quotation.customerName}</div>
-              <div className="text-muted-foreground">Rep: {quotation.salesRepName}</div>
+              <div className="font-medium text-foreground">
+                {quotation.customerName}
+              </div>
+              <div className="text-muted-foreground">
+                Rep: {quotation.salesRepName}
+              </div>
             </div>
           </div>
 

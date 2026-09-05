@@ -5,13 +5,7 @@ import type {
   DiscountSimulationResult,
   ProductCategory,
 } from "@template/shared";
-import {
-  Calculator,
-  CheckCircle2,
-  HelpCircle,
-  Play,
-  Zap,
-} from "lucide-react";
+import { Calculator, CheckCircle2, HelpCircle, Play, Zap } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -167,7 +161,9 @@ export function DiscountSimulatorBench() {
               onClick={handleSimulate}
             >
               <Play className="mr-1.5 size-3.5 fill-current" />
-              {simulateMutation.isPending ? "Evaluating..." : "Run Risk Simulation"}
+              {simulateMutation.isPending
+                ? "Evaluating..."
+                : "Run Risk Simulation"}
             </Button>
           </div>
         </div>

@@ -35,7 +35,9 @@ export const billingApi = {
       );
       return data.data;
     } catch {
-      const existing = localSchedules.find((s) => s.quotationId === quotationId);
+      const existing = localSchedules.find(
+        (s) => s.quotationId === quotationId,
+      );
       if (existing) {
         return existing;
       }
@@ -55,7 +57,9 @@ export const billingApi = {
         (l) => l.lineType !== "RECURRING" && !l.subscriptionPlanId,
       );
       const oneTimeTotalMinor = oneTimeLines.reduce((sum, l) => {
-        const lineNet = Math.round(l.qty * l.unitPriceMinor * (1 - (l.discountPct ?? 0) / 100));
+        const lineNet = Math.round(
+          l.qty * l.unitPriceMinor * (1 - (l.discountPct ?? 0) / 100),
+        );
         return sum + lineNet;
       }, 0);
 
@@ -88,8 +92,19 @@ export const billingApi = {
         );
         // Generate 6 upcoming monthly periods
         for (let m = 0; m < 6; m++) {
-          const pStart = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth() + m, 1));
-          const pEnd = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth() + m + 1, 0, 23, 59, 59));
+          const pStart = new Date(
+            Date.UTC(now.getUTCFullYear(), now.getUTCMonth() + m, 1),
+          );
+          const pEnd = new Date(
+            Date.UTC(
+              now.getUTCFullYear(),
+              now.getUTCMonth() + m + 1,
+              0,
+              23,
+              59,
+              59,
+            ),
+          );
 
           invoices.push({
             id: `inv-${quotationId}-${line.id}-m${m + 1}`,
@@ -137,7 +152,11 @@ export const billingApi = {
     amountMinor: number,
     paymentMethod = "ACH Transfer",
     reference?: string,
-  ): Promise<{ schedule: BillingSchedule; invoice: Invoice; payment: Payment }> {
+  ): Promise<{
+    schedule: BillingSchedule;
+    invoice: Invoice;
+    payment: Payment;
+  }> {
     try {
       const { data } = await apiClient.post(
         apiRoutes.invoices.pay.path.replace(":id", invoiceId),
@@ -145,7 +164,9 @@ export const billingApi = {
       );
       return data.data;
     } catch {
-      const schedule = localSchedules.find((s) => s.quotationId === quotationId);
+      const schedule = localSchedules.find(
+        (s) => s.quotationId === quotationId,
+      );
       if (!schedule) {
         throw new Error(`Schedule not found for quotation ${quotationId}`);
       }
@@ -164,7 +185,9 @@ export const billingApi = {
         throw new Error("Payment amount must be greater than zero");
       }
       if (amountMinor > due) {
-        throw new Error(`Payment cannot exceed outstanding balance of $${(due / 100).toFixed(2)}`);
+        throw new Error(
+          `Payment cannot exceed outstanding balance of $${(due / 100).toFixed(2)}`,
+        );
       }
 
       const now = new Date().toISOString();
@@ -173,7 +196,8 @@ export const billingApi = {
         invoiceId,
         amountMinor,
         paymentMethod,
-        reference: reference || `REF-${Math.floor(100000 + Math.random() * 900000)}`,
+        reference:
+          reference || `REF-${Math.floor(100000 + Math.random() * 900000)}`,
         status: "recorded",
         createdAt: now,
         updatedAt: now,
@@ -187,8 +211,12 @@ export const billingApi = {
       }
 
       // Check if all invoices are paid
-      const nonVoidInvoices = schedule.invoices.filter((i) => i.status !== "VOID");
-      const allPaid = nonVoidInvoices.length > 0 && nonVoidInvoices.every((i) => i.status === "PAID");
+      const nonVoidInvoices = schedule.invoices.filter(
+        (i) => i.status !== "VOID",
+      );
+      const allPaid =
+        nonVoidInvoices.length > 0 &&
+        nonVoidInvoices.every((i) => i.status === "PAID");
 
       if (allPaid) {
         try {
@@ -217,7 +245,9 @@ export const billingApi = {
       );
       return data.data;
     } catch {
-      const schedule = localSchedules.find((s) => s.quotationId === quotationId);
+      const schedule = localSchedules.find(
+        (s) => s.quotationId === quotationId,
+      );
       if (!schedule) {
         throw new Error(`Schedule not found for quotation ${quotationId}`);
       }
@@ -226,22 +256,29 @@ export const billingApi = {
         (i) => i.kind === "RECURRING" && i.lineId === params.lineId,
       );
       if (lineInvoices.length === 0) {
-        throw new Error(`No recurring subscription invoices found for line ${params.lineId}`);
+        throw new Error(
+          `No recurring subscription invoices found for line ${params.lineId}`,
+        );
       }
 
       const now = params.changeDate ? new Date(params.changeDate) : new Date();
       const isoNow = now.toISOString();
 
       // Identify current active period (ISSUED) and future periods (DRAFT)
-      const currentPeriod = lineInvoices.find((i) => i.status === "ISSUED") ?? lineInvoices[0];
+      const currentPeriod =
+        lineInvoices.find((i) => i.status === "ISSUED") ?? lineInvoices[0];
       const futurePeriods = lineInvoices.filter((i) => i.status === "DRAFT");
 
       if (!currentPeriod) {
         throw new Error("No active subscription period found to modify");
       }
 
-      const pStart = currentPeriod.periodStart ? new Date(currentPeriod.periodStart) : now;
-      const pEnd = currentPeriod.periodEnd ? new Date(currentPeriod.periodEnd) : now;
+      const pStart = currentPeriod.periodStart
+        ? new Date(currentPeriod.periodStart)
+        : now;
+      const pEnd = currentPeriod.periodEnd
+        ? new Date(currentPeriod.periodEnd)
+        : now;
 
       // 1. CANCELLATION (newPeriodAmountMinor === 0)
       if (params.newPeriodAmountMinor === 0) {
@@ -263,7 +300,8 @@ export const billingApi = {
           const creditNote: CreditNote = {
             id: `cn-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`,
             scheduleId: schedule.id,
-            reason: params.reason || "Mid-cycle subscription cancellation proration",
+            reason:
+              params.reason || "Mid-cycle subscription cancellation proration",
             amountMinor: unearnedCreditMinor,
             sourceInvoiceId: currentPeriod.id,
             createdAt: isoNow,
@@ -308,7 +346,9 @@ export const billingApi = {
           const creditNote: CreditNote = {
             id: `cn-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`,
             scheduleId: schedule.id,
-            reason: params.reason || "Mid-cycle subscription seat downgrade proration",
+            reason:
+              params.reason ||
+              "Mid-cycle subscription seat downgrade proration",
             amountMinor: refundMinor,
             sourceInvoiceId: currentPeriod.id,
             createdAt: isoNow,

@@ -1,12 +1,5 @@
 import { type Customer, type CustomerTier } from "@template/shared";
-import {
-  Award,
-  Building2,
-  Edit2,
-  Send,
-  Trash2,
-  Users,
-} from "lucide-react";
+import { Award, Building2, Edit2, Send, Trash2, Users } from "lucide-react";
 import { EmptyState } from "@/components/ui/empty-state";
 import { Skeleton } from "@/components/ui/skeleton";
 import { cn } from "@/lib/cn";

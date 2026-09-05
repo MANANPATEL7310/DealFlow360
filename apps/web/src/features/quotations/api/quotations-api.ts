@@ -167,7 +167,7 @@ export const quotationsApi = {
       if (!product) throw new Error("Product not found");
 
       const variant = input.variantId
-        ? product.variants.find((v) => v.id === input.variantId) ?? null
+        ? (product.variants.find((v) => v.id === input.variantId) ?? null)
         : null;
 
       const basePrice = product.basePrice + (variant?.extraPrice ?? 0);
@@ -363,7 +363,9 @@ export const quotationsApi = {
         SEED_APPROVAL_RULES,
       );
 
-      const targetStatus = risk.isAutoApproved ? "APPROVED" : "PENDING_APPROVAL";
+      const targetStatus = risk.isAutoApproved
+        ? "APPROVED"
+        : "PENDING_APPROVAL";
 
       const newEvent: QuotationStatusEvent = {
         id: `qte-${Date.now()}`,

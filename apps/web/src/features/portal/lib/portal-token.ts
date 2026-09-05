@@ -18,7 +18,11 @@ export function initPortalToken(): string | null {
 
       // Scrub token from address bar
       url.searchParams.delete("token");
-      window.history.replaceState({}, document.title, url.pathname + url.search + url.hash);
+      window.history.replaceState(
+        {},
+        document.title,
+        url.pathname + url.search + url.hash,
+      );
       return tokenFromUrl;
     }
 

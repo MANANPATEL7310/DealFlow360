@@ -87,11 +87,16 @@ export function SubscriptionChangeModal({
     setError(null);
 
     if (!reason.trim()) {
-      setError("Please provide a reason for the subscription change or cancellation.");
+      setError(
+        "Please provide a reason for the subscription change or cancellation.",
+      );
       return;
     }
 
-    if (mode === "modify" && (Number.isNaN(parsedNewAmount) || parsedNewAmount < 0)) {
+    if (
+      mode === "modify" &&
+      (Number.isNaN(parsedNewAmount) || parsedNewAmount < 0)
+    ) {
       setError("Please enter a valid positive new per-period amount.");
       return;
     }
@@ -104,7 +109,8 @@ export function SubscriptionChangeModal({
       });
       onClose();
     } catch (err: unknown) {
-      const msg = err instanceof Error ? err.message : "Failed to change subscription.";
+      const msg =
+        err instanceof Error ? err.message : "Failed to change subscription.";
       setError(msg);
     }
   };
@@ -116,10 +122,13 @@ export function SubscriptionChangeModal({
         <div className="flex items-center justify-between border-b border-white/10 pb-4">
           <div>
             <h3 className="text-lg font-semibold text-white">
-              {mode === "cancel" ? "Cancel Subscription" : "Modify Subscription Seats / Tier"}
+              {mode === "cancel"
+                ? "Cancel Subscription"
+                : "Modify Subscription Seats / Tier"}
             </h3>
             <p className="text-xs text-slate-400">
-              Target Line: <span className="font-medium text-slate-200">{lineTitle}</span>
+              Target Line:{" "}
+              <span className="font-medium text-slate-200">{lineTitle}</span>
             </p>
           </div>
           <button
@@ -162,7 +171,9 @@ export function SubscriptionChangeModal({
             <div>
               <div className="mb-1.5 flex justify-between text-xs text-slate-400">
                 <span>New Per-Period Amount ($ USD)</span>
-                <span>Current: ${(currentAmountMinor / 100).toFixed(2)}/mo</span>
+                <span>
+                  Current: ${(currentAmountMinor / 100).toFixed(2)}/mo
+                </span>
               </div>
               <div className="relative">
                 <DollarSign className="absolute top-1/2 left-3 size-4 -translate-y-1/2 text-slate-400" />
@@ -184,7 +195,8 @@ export function SubscriptionChangeModal({
                 <strong className="mb-1 block font-semibold">
                   Immediate mid-cycle termination
                 </strong>
-                Cancelling will mark all future DRAFT invoices as VOID and issue a prorated credit note for unearned days in the current cycle.
+                Cancelling will mark all future DRAFT invoices as VOID and issue
+                a prorated credit note for unearned days in the current cycle.
               </div>
             </div>
           )}
@@ -208,7 +220,11 @@ export function SubscriptionChangeModal({
               </div>
               <div>Cycle Utilization:</div>
               <div className="text-right font-mono text-slate-200">
-                {(((totalCycleDays - remainingDays) / totalCycleDays) * 100).toFixed(1)}%
+                {(
+                  ((totalCycleDays - remainingDays) / totalCycleDays) *
+                  100
+                ).toFixed(1)}
+                %
               </div>
             </div>
 
@@ -300,7 +316,9 @@ export function SubscriptionChangeModal({
               ) : (
                 <>
                   <CheckCircle className="mr-2 size-4" />
-                  {mode === "cancel" ? "Confirm Cancellation" : "Apply Schedule Change"}
+                  {mode === "cancel"
+                    ? "Confirm Cancellation"
+                    : "Apply Schedule Change"}
                 </>
               )}
             </Button>

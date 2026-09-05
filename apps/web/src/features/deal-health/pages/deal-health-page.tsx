@@ -28,12 +28,17 @@ import {
 } from "../hooks/use-deal-health";
 
 export function DealHealthPage() {
-  const [selectedCategory, setSelectedCategory] = useState<HealthCategory | "ALL">("ALL");
+  const [selectedCategory, setSelectedCategory] = useState<
+    HealthCategory | "ALL"
+  >("ALL");
   const [activeTab, setActiveTab] = useState<"FEED" | "TABLE">("FEED");
-  const [resolvingAlert, setResolvingAlert] = useState<DealHealthAlert | null>(null);
+  const [resolvingAlert, setResolvingAlert] = useState<DealHealthAlert | null>(
+    null,
+  );
   const [notification, setNotification] = useState<string | null>(null);
 
-  const { data: summaryData, isLoading: isLoadingSummary } = useDealHealthSummary();
+  const { data: summaryData, isLoading: isLoadingSummary } =
+    useDealHealthSummary();
   const { data: alerts, isLoading: isLoadingAlerts } = useDealHealthAlerts();
 
   const triggerScan = useTriggerDetectionScan();
@@ -48,7 +53,9 @@ export function DealHealthPage() {
   const handleRunScan = async () => {
     try {
       await triggerScan.mutateAsync();
-      showToast("Autonomous anomaly scan completed. All deal telemetry refreshed!");
+      showToast(
+        "Autonomous anomaly scan completed. All deal telemetry refreshed!",
+      );
     } catch {
       showToast("Scan failed to execute. Please try again.");
     }
@@ -128,7 +135,9 @@ export function DealHealthPage() {
               </Badge>
             </div>
             <p className="text-xs text-muted-foreground max-w-xl">
-              Real-time telemetry continuously monitoring pipeline stagnation, statistical discount anomalies, and warehouse fulfillment bottlenecks.
+              Real-time telemetry continuously monitoring pipeline stagnation,
+              statistical discount anomalies, and warehouse fulfillment
+              bottlenecks.
             </p>
           </div>
 
@@ -209,10 +218,7 @@ export function DealHealthPage() {
           onOpenResolveModal={(alert) => setResolvingAlert(alert)}
         />
       ) : (
-        <DealHealthTable
-          scores={scores}
-          selectedCategory={selectedCategory}
-        />
+        <DealHealthTable scores={scores} selectedCategory={selectedCategory} />
       )}
 
       {/* Resolve Alert Audit Modal */}

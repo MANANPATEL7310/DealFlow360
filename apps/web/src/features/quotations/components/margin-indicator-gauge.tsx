@@ -51,7 +51,7 @@ export function MarginIndicatorGauge({
 
   // Blended risk display
   const riskScore = risk?.blendedRiskScore ?? quote.blendedRiskScore;
-  const isAutoApproved = risk?.isAutoApproved ?? (riskScore === 0);
+  const isAutoApproved = risk?.isAutoApproved ?? riskScore === 0;
   const requiredLevels = risk?.requiredLevels ?? [];
 
   return (
@@ -66,7 +66,8 @@ export function MarginIndicatorGauge({
           <div className="flex justify-between text-muted-foreground">
             <span>List Subtotal:</span>
             <span className="font-mono text-foreground">
-              ${(liveTotals.subtotalMinor / 100).toLocaleString(undefined, {
+              $
+              {(liveTotals.subtotalMinor / 100).toLocaleString(undefined, {
                 minimumFractionDigits: 2,
                 maximumFractionDigits: 2,
               })}
@@ -76,7 +77,8 @@ export function MarginIndicatorGauge({
           <div className="flex justify-between text-danger-dark">
             <span>Total Discounts:</span>
             <span className="font-mono">
-              -${(liveTotals.discountTotalMinor / 100).toLocaleString(undefined, {
+              -$
+              {(liveTotals.discountTotalMinor / 100).toLocaleString(undefined, {
                 minimumFractionDigits: 2,
                 maximumFractionDigits: 2,
               })}
@@ -86,7 +88,8 @@ export function MarginIndicatorGauge({
           <div className="flex justify-between text-muted-foreground">
             <span>Estimated Tax (8%):</span>
             <span className="font-mono text-foreground">
-              ${(liveTotals.taxTotalMinor / 100).toLocaleString(undefined, {
+              $
+              {(liveTotals.taxTotalMinor / 100).toLocaleString(undefined, {
                 minimumFractionDigits: 2,
                 maximumFractionDigits: 2,
               })}
@@ -96,7 +99,8 @@ export function MarginIndicatorGauge({
           <div className="flex justify-between border-t border-border pt-2 text-sm font-bold text-foreground">
             <span>Grand Total:</span>
             <span className="font-mono text-primary">
-              ${(liveTotals.grandTotalMinor / 100).toLocaleString(undefined, {
+              $
+              {(liveTotals.grandTotalMinor / 100).toLocaleString(undefined, {
                 minimumFractionDigits: 2,
                 maximumFractionDigits: 2,
               })}
@@ -195,11 +199,10 @@ export function MarginIndicatorGauge({
                   key={l.lineId}
                   className="flex justify-between text-xs text-muted-foreground"
                 >
-                  <span className="max-w-36 truncate">
-                    {l.productTitle}:
-                  </span>
+                  <span className="max-w-36 truncate">{l.productTitle}:</span>
                   <span className="font-mono font-semibold text-danger-dark">
-                    +{l.excessDiscountPct.toFixed(1)}% over {l.effectiveCeilingPct}% cap
+                    +{l.excessDiscountPct.toFixed(1)}% over{" "}
+                    {l.effectiveCeilingPct}% cap
                   </span>
                 </div>
               ))}

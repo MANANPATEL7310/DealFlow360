@@ -1,7 +1,6 @@
 export const appMeta = {
   name: "DealFlow360",
-  description:
-    "Intelligent Autonomous Quotation & Sales Operations Engine.",
+  description: "Intelligent Autonomous Quotation & Sales Operations Engine.",
   supportEmail: "support@dealflow360.internal",
 } as const;
 

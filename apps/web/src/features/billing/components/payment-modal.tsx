@@ -32,8 +32,8 @@ function PaymentModalContent({
   const totalMinor = invoice.amountMinor;
   const alreadyPaidMinor = paidMinor(invoice);
 
-  const [amountDollars, setAmountDollars] = useState<string>(
-    () => (dueMinor / 100).toFixed(2),
+  const [amountDollars, setAmountDollars] = useState<string>(() =>
+    (dueMinor / 100).toFixed(2),
   );
   const [paymentMethod, setPaymentMethod] = useState<string>("ACH Transfer");
   const [reference, setReference] = useState<string>(
@@ -68,7 +68,8 @@ function PaymentModalContent({
       });
       onClose();
     } catch (err: unknown) {
-      const msg = err instanceof Error ? err.message : "Failed to record payment.";
+      const msg =
+        err instanceof Error ? err.message : "Failed to record payment.";
       setError(msg);
     }
   };
@@ -88,9 +89,12 @@ function PaymentModalContent({
               <CreditCard className="size-5" />
             </div>
             <div>
-              <h3 className="text-lg font-semibold text-white">Record Invoice Payment</h3>
+              <h3 className="text-lg font-semibold text-white">
+                Record Invoice Payment
+              </h3>
               <p className="text-xs text-slate-400">
-                Invoice <span className="font-mono text-slate-300">{invoice.id}</span>
+                Invoice{" "}
+                <span className="font-mono text-slate-300">{invoice.id}</span>
                 {lineTitle ? ` • ${lineTitle}` : ""}
               </p>
             </div>
@@ -113,7 +117,13 @@ function PaymentModalContent({
                 {invoice.kind}
               </Badge>
               <Badge
-                tone={invoice.status === "PAID" ? "success" : invoice.status === "ISSUED" ? "warning" : "neutral"}
+                tone={
+                  invoice.status === "PAID"
+                    ? "success"
+                    : invoice.status === "ISSUED"
+                      ? "warning"
+                      : "neutral"
+                }
                 className="text-xs uppercase"
               >
                 {invoice.status}
@@ -125,7 +135,8 @@ function PaymentModalContent({
             <div className="flex items-center justify-between text-xs text-slate-400">
               <span>Billing Period</span>
               <span className="font-mono text-slate-300">
-                {invoice.periodStart.slice(0, 10)} → {invoice.periodEnd.slice(0, 10)}
+                {invoice.periodStart.slice(0, 10)} →{" "}
+                {invoice.periodEnd.slice(0, 10)}
               </span>
             </div>
           )}

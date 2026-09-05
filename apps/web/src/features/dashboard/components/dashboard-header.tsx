@@ -29,8 +29,11 @@ export function DashboardHeader() {
           </span>
         </div>
         <p className="mt-1 text-sm text-muted-foreground">
-          Welcome back, <span className="font-semibold text-foreground">{userName}</span> ·{" "}
-          <span className="capitalize">{roleLabelMap[userRole] ?? userRole}</span>
+          Welcome back,{" "}
+          <span className="font-semibold text-foreground">{userName}</span> ·{" "}
+          <span className="capitalize">
+            {roleLabelMap[userRole] ?? userRole}
+          </span>
         </p>
       </div>
 
@@ -48,7 +51,10 @@ export function DashboardHeader() {
           </Button>
         </Link>
         <Link to={appRoutes.quotations}>
-          <Button size="sm" className="gap-2 text-xs font-semibold shadow-md shadow-primary/20">
+          <Button
+            size="sm"
+            className="gap-2 text-xs font-semibold shadow-md shadow-primary/20"
+          >
             <Plus className="size-4" />
             New Quotation
           </Button>

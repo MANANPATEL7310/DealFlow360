@@ -1,5 +1,12 @@
 import { useState } from "react";
-import { UserCheck, Shield, DollarSign, Settings, Globe, CheckCircle2 } from "lucide-react";
+import {
+  UserCheck,
+  Shield,
+  DollarSign,
+  Settings,
+  Globe,
+  CheckCircle2,
+} from "lucide-react";
 
 export function RolePersonasSection() {
   const [selectedRole, setSelectedRole] = useState(0);
@@ -86,7 +93,10 @@ export function RolePersonasSection() {
   const Icon = current.icon;
 
   return (
-    <section id="roles" className="border-t border-border/60 bg-surface/30 py-20">
+    <section
+      id="roles"
+      className="border-t border-border/60 bg-surface/30 py-20"
+    >
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="mx-auto mb-14 max-w-3xl text-center">
           <div className="mb-3 inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/10 px-3.5 py-1 text-xs font-semibold text-primary">
@@ -96,8 +106,9 @@ export function RolePersonasSection() {
             Designed for Every Stakeholder
           </h2>
           <p className="mt-3 text-base text-muted-foreground sm:text-lg">
-            DealFlow360 provides specialized workspaces with strict role-based access control (RBAC),
-            ensuring each role operates at peak efficiency.
+            DealFlow360 provides specialized workspaces with strict role-based
+            access control (RBAC), ensuring each role operates at peak
+            efficiency.
           </p>
         </div>
 
@@ -133,12 +144,16 @@ export function RolePersonasSection() {
               </div>
               <div>
                 <div className="flex items-center gap-2">
-                  <h3 className="text-xl font-bold text-foreground">{current.name}</h3>
+                  <h3 className="text-xl font-bold text-foreground">
+                    {current.name}
+                  </h3>
                   <span className="rounded-full border border-secondary/30 bg-secondary/15 px-2.5 py-0.5 text-xs font-bold text-secondary">
                     {current.badge}
                   </span>
                 </div>
-                <p className="mt-0.5 text-sm text-muted-foreground">{current.tagline}</p>
+                <p className="mt-0.5 text-sm text-muted-foreground">
+                  {current.tagline}
+                </p>
               </div>
             </div>
           </div>
@@ -150,7 +165,10 @@ export function RolePersonasSection() {
               </p>
               <div className="space-y-2.5">
                 {current.responsibilities.map((resp, i) => (
-                  <div key={i} className="flex items-start gap-2.5 text-sm text-muted-foreground">
+                  <div
+                    key={i}
+                    className="flex items-start gap-2.5 text-sm text-muted-foreground"
+                  >
                     <CheckCircle2 className="mt-1 size-4 shrink-0 text-primary" />
                     <span>{resp}</span>
                   </div>
@@ -159,10 +177,14 @@ export function RolePersonasSection() {
             </div>
 
             <div className="flex flex-col justify-center rounded-xl border border-border bg-surface-muted/60 p-6">
-              <p className="text-sm leading-relaxed text-foreground italic">{current.quote}</p>
+              <p className="text-sm leading-relaxed text-foreground italic">
+                {current.quote}
+              </p>
               <div className="mt-4 flex items-center justify-between border-t border-border pt-3 text-xs text-muted-foreground">
                 <span>Access Security:</span>
-                <span className="font-mono font-semibold text-primary">RBAC Enforced</span>
+                <span className="font-mono font-semibold text-primary">
+                  RBAC Enforced
+                </span>
               </div>
             </div>
           </div>

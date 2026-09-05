@@ -19,12 +19,18 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { RoleGuard } from "@/features/auth/routes/role-guard";
-import { useQuotation, useQuotations } from "@/features/quotations/hooks/use-quotations";
+import {
+  useQuotation,
+  useQuotations,
+} from "@/features/quotations/hooks/use-quotations";
 import { BillingStats } from "../components/billing-stats";
 import { CreditNotesList } from "../components/credit-notes-list";
 import { OneTimeInvoice } from "../components/one-time-invoice";
 import { SubscriptionSchedule } from "../components/subscription-schedule";
-import { useAllBillingSchedules, useBillingSchedule } from "../hooks/use-billing";
+import {
+  useAllBillingSchedules,
+  useBillingSchedule,
+} from "../hooks/use-billing";
 
 export function BillingPage() {
   const { id } = useParams<{ id: string }>();
@@ -49,7 +55,9 @@ function QuotationBillingWorkspace({ quotationId }: { quotationId: string }) {
 
   if (isLoading) {
     return (
-      <RoleGuard allowedRoles={["sales_rep", "sales_manager", "finance", "admin"]}>
+      <RoleGuard
+        allowedRoles={["sales_rep", "sales_manager", "finance", "admin"]}
+      >
         <div className="space-y-6 pb-12">
           <Skeleton className="h-10 w-48" />
           <Skeleton className="h-28 w-full" />
@@ -68,7 +76,9 @@ function QuotationBillingWorkspace({ quotationId }: { quotationId: string }) {
 
   if (!schedule) {
     return (
-      <RoleGuard allowedRoles={["sales_rep", "sales_manager", "finance", "admin"]}>
+      <RoleGuard
+        allowedRoles={["sales_rep", "sales_manager", "finance", "admin"]}
+      >
         <div className="rounded-2xl border border-white/10 bg-slate-900/60 p-12 text-center">
           <div className="mx-auto flex size-12 items-center justify-center rounded-2xl bg-white/5 text-slate-400">
             <Receipt className="size-6" />
@@ -77,7 +87,8 @@ function QuotationBillingWorkspace({ quotationId }: { quotationId: string }) {
             No Billing Schedule Found
           </h3>
           <p className="mt-1 text-xs text-slate-400">
-            Confirm the quotation or submit it to fulfillment to generate a hybrid billing schedule.
+            Confirm the quotation or submit it to fulfillment to generate a
+            hybrid billing schedule.
           </p>
           <div className="mt-6">
             <Link to={appRoutes.quotationBuilder(quotationId)}>
@@ -103,7 +114,9 @@ function QuotationBillingWorkspace({ quotationId }: { quotationId: string }) {
     return `Subscription Line (${lineId})`;
   };
 
-  const getQuoteStatusTone = (status?: string): "success" | "warning" | "danger" | "neutral" => {
+  const getQuoteStatusTone = (
+    status?: string,
+  ): "success" | "warning" | "danger" | "neutral" => {
     switch (status) {
       case "PAID":
         return "success";
@@ -117,7 +130,9 @@ function QuotationBillingWorkspace({ quotationId }: { quotationId: string }) {
   };
 
   return (
-    <RoleGuard allowedRoles={["sales_rep", "sales_manager", "finance", "admin"]}>
+    <RoleGuard
+      allowedRoles={["sales_rep", "sales_manager", "finance", "admin"]}
+    >
       <div className="space-y-6 pb-12">
         {/* Navigation Breadcrumb */}
         <div className="flex items-center justify-between">
@@ -164,7 +179,9 @@ function QuotationBillingWorkspace({ quotationId }: { quotationId: string }) {
                 </div>
                 <div className="flex items-center gap-1.5">
                   <Receipt className="size-4 text-muted-foreground" />
-                  <span className="font-mono text-muted-foreground">Schedule: {schedule.id}</span>
+                  <span className="font-mono text-muted-foreground">
+                    Schedule: {schedule.id}
+                  </span>
                 </div>
               </div>
             </div>
@@ -199,7 +216,8 @@ function QuotationBillingWorkspace({ quotationId }: { quotationId: string }) {
             <OneTimeInvoice invoice={oneTime} quotationId={quotationId} />
           ) : (
             <div className="surface-card p-5 text-xs text-muted-foreground">
-              No one-time hardware or professional services charges on this order.
+              No one-time hardware or professional services charges on this
+              order.
             </div>
           )}
         </div>
@@ -214,13 +232,15 @@ function QuotationBillingWorkspace({ quotationId }: { quotationId: string }) {
               </h2>
             </div>
             <span className="text-xs text-muted-foreground">
-              {recurring.size} Active Recurring Line{recurring.size === 1 ? "" : "s"}
+              {recurring.size} Active Recurring Line
+              {recurring.size === 1 ? "" : "s"}
             </span>
           </div>
 
           {recurring.size === 0 ? (
             <div className="surface-card p-5 text-xs text-muted-foreground">
-              No recurring SaaS subscription line items configured for this order.
+              No recurring SaaS subscription line items configured for this
+              order.
             </div>
           ) : (
             <div className="space-y-4">
@@ -262,7 +282,9 @@ function BillingOperationsOverview() {
   const isLoading = isSchedulesLoading || isQuotesLoading;
 
   // Aggregate stats across all schedules
-  const allInvoices = schedules.flatMap((s) => s.invoices).filter((i) => i.status !== "VOID");
+  const allInvoices = schedules
+    .flatMap((s) => s.invoices)
+    .filter((i) => i.status !== "VOID");
 
   const mockScheduleSummary = {
     id: "global",
@@ -273,7 +295,9 @@ function BillingOperationsOverview() {
   };
 
   return (
-    <RoleGuard allowedRoles={["sales_rep", "sales_manager", "finance", "admin"]}>
+    <RoleGuard
+      allowedRoles={["sales_rep", "sales_manager", "finance", "admin"]}
+    >
       <div className="space-y-6 pb-12">
         {/* Header */}
         <div className="flex flex-col justify-between gap-4 md:flex-row md:items-center">
@@ -286,7 +310,8 @@ function BillingOperationsOverview() {
               Hybrid Billing Operations
             </h1>
             <p className="mt-1 text-xs text-muted-foreground">
-              Enterprise split billing management across one-time hardware charges and multi-tier recurring subscription series.
+              Enterprise split billing management across one-time hardware
+              charges and multi-tier recurring subscription series.
             </p>
           </div>
           <div className="flex items-center gap-2">
@@ -310,11 +335,13 @@ function BillingOperationsOverview() {
                 Active Order Billing Schedules
               </h2>
               <p className="text-xs text-muted-foreground">
-                Direct access to hybrid invoice timelines and payment reconciliation
+                Direct access to hybrid invoice timelines and payment
+                reconciliation
               </p>
             </div>
             <span className="text-xs text-muted-foreground">
-              {schedules.length} Active Schedule{schedules.length === 1 ? "" : "s"}
+              {schedules.length} Active Schedule
+              {schedules.length === 1 ? "" : "s"}
             </span>
           </div>
 
@@ -344,10 +371,20 @@ function BillingOperationsOverview() {
                 </thead>
                 <tbody className="divide-y divide-border">
                   {schedules.map((sch) => {
-                    const quote = quotations.find((q) => q.id === sch.quotationId);
-                    const nonVoid = sch.invoices.filter((i) => i.status !== "VOID");
-                    const billed = nonVoid.reduce((s, i) => s + i.amountMinor, 0);
-                    const collected = nonVoid.reduce((s, i) => s + paidMinor(i), 0);
+                    const quote = quotations.find(
+                      (q) => q.id === sch.quotationId,
+                    );
+                    const nonVoid = sch.invoices.filter(
+                      (i) => i.status !== "VOID",
+                    );
+                    const billed = nonVoid.reduce(
+                      (s, i) => s + i.amountMinor,
+                      0,
+                    );
+                    const collected = nonVoid.reduce(
+                      (s, i) => s + paidMinor(i),
+                      0,
+                    );
                     const due = nonVoid
                       .filter((i) => i.status === "ISSUED")
                       .reduce((s, i) => s + remainingMinor(i), 0);
@@ -371,29 +408,38 @@ function BillingOperationsOverview() {
                           </span>
                         </td>
                         <td className="py-3 font-mono font-medium">
-                          ${(billed / 100).toLocaleString("en-US", { minimumFractionDigits: 2 })}
+                          $
+                          {(billed / 100).toLocaleString("en-US", {
+                            minimumFractionDigits: 2,
+                          })}
                         </td>
                         <td className="py-3 font-mono font-medium text-emerald-500">
-                          ${(collected / 100).toLocaleString("en-US", { minimumFractionDigits: 2 })}
+                          $
+                          {(collected / 100).toLocaleString("en-US", {
+                            minimumFractionDigits: 2,
+                          })}
                         </td>
                         <td className="py-3 font-mono font-medium text-amber-500">
-                          ${(due / 100).toLocaleString("en-US", { minimumFractionDigits: 2 })}
+                          $
+                          {(due / 100).toLocaleString("en-US", {
+                            minimumFractionDigits: 2,
+                          })}
                         </td>
                         <td className="py-3">
                           {sch.creditNotes.length > 0 ? (
                             <Badge tone="success" className="text-xs">
-                              {sch.creditNotes.length} Note{sch.creditNotes.length > 1 ? "s" : ""}
+                              {sch.creditNotes.length} Note
+                              {sch.creditNotes.length > 1 ? "s" : ""}
                             </Badge>
                           ) : (
                             <span className="text-muted-foreground">—</span>
                           )}
                         </td>
                         <td className="py-3 pr-2 text-right">
-                          <Link to={appRoutes.quotationBilling(sch.quotationId)}>
-                            <Button
-                              size="sm"
-                              className="h-7 gap-1 text-xs"
-                            >
+                          <Link
+                            to={appRoutes.quotationBilling(sch.quotationId)}
+                          >
+                            <Button size="sm" className="h-7 gap-1 text-xs">
                               <span>Open Workspace</span>
                               <ArrowRight className="size-3" />
                             </Button>

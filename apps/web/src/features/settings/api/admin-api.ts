@@ -38,7 +38,10 @@ export const adminApi = {
 
   async updateSetting(key: string, value: unknown): Promise<SystemSetting> {
     try {
-      const path = apiRoutes.admin.updateSetting.path.replace(":key", encodeURIComponent(key));
+      const path = apiRoutes.admin.updateSetting.path.replace(
+        ":key",
+        encodeURIComponent(key),
+      );
       const res = await apiClient.put(path, { value });
       if (res.data?.data) {
         return res.data.data as SystemSetting;
@@ -57,7 +60,9 @@ export const adminApi = {
     totalPages: number;
   }> {
     try {
-      const res = await apiClient.get(apiRoutes.admin.auditLogs.path, { params: filters });
+      const res = await apiClient.get(apiRoutes.admin.auditLogs.path, {
+        params: filters,
+      });
       if (res.data?.data) {
         return res.data.data;
       }
@@ -74,12 +79,16 @@ function updateFallbackSetting(key: string, value: unknown): SystemSetting {
   const oldValue = index !== -1 ? fallbackSettings[index]?.value : undefined;
 
   const updated: SystemSetting = {
-    id: index !== -1 ? fallbackSettings[index]!.id : `set-${key.replace(/\./g, "-")}`,
+    id:
+      index !== -1
+        ? fallbackSettings[index]!.id
+        : `set-${key.replace(/\./g, "-")}`,
     key,
     value,
     category: index !== -1 ? fallbackSettings[index]!.category : "general",
     label: index !== -1 ? fallbackSettings[index]!.label : key,
-    description: index !== -1 ? fallbackSettings[index]!.description : "Runtime parameter",
+    description:
+      index !== -1 ? fallbackSettings[index]!.description : "Runtime parameter",
     scope: "global",
     updatedAt: new Date().toISOString(),
   };

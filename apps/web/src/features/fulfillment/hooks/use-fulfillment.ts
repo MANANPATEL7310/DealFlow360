@@ -9,8 +9,7 @@ export const FULFILLMENT_QUERY_KEY = ["fulfillment"] as const;
 export function useFulfillmentPlan(quotationId?: string) {
   return useQuery({
     queryKey: [...FULFILLMENT_QUERY_KEY, "plan", quotationId],
-    queryFn: () =>
-      quotationId ? fulfillmentApi.getPlan(quotationId) : null,
+    queryFn: () => (quotationId ? fulfillmentApi.getPlan(quotationId) : null),
     enabled: Boolean(quotationId),
     staleTime: 10000,
   });

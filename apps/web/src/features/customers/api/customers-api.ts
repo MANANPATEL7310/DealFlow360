@@ -113,7 +113,9 @@ export const customersApi = {
 
   async deleteCustomer(id: string): Promise<void> {
     try {
-      await apiClient.delete(apiRoutes.customers.remove.path.replace(":id", id));
+      await apiClient.delete(
+        apiRoutes.customers.remove.path.replace(":id", id),
+      );
     } catch {
       localCustomers = localCustomers.filter((c) => c.id !== id);
     }

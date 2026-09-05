@@ -163,7 +163,8 @@
     }
   }
   @keyframes pulse-subtle {
-    0%, 100% {
+    0%,
+    100% {
       opacity: 1;
     }
     50% {
@@ -209,12 +210,14 @@
 @layer components {
   .surface-card {
     @apply rounded-2xl border border-border bg-surface/80 backdrop-blur-xl transition-all duration-300;
-    box-shadow: 0 4px 20px -2px color-mix(in srgb, var(--foreground) 5%, transparent);
+    box-shadow: 0 4px 20px -2px
+      color-mix(in srgb, var(--foreground) 5%, transparent);
   }
 
   .surface-card-hover {
     @apply rounded-2xl border border-border bg-surface/80 backdrop-blur-xl transition-all duration-300 hover:border-primary/40 hover:shadow-lg hover:shadow-primary/5;
-    box-shadow: 0 4px 20px -2px color-mix(in srgb, var(--foreground) 5%, transparent);
+    box-shadow: 0 4px 20px -2px
+      color-mix(in srgb, var(--foreground) 5%, transparent);
   }
 
   .glass-panel {

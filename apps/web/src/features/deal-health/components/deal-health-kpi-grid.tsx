@@ -1,9 +1,4 @@
-import {
-  AlertTriangle,
-  Clock,
-  DollarSign,
-  PackageX,
-} from "lucide-react";
+import { AlertTriangle, Clock, DollarSign, PackageX } from "lucide-react";
 import type { DealHealthSummary } from "@template/shared";
 import { MetricCard } from "@/components/ui/metric-card";
 
@@ -19,7 +14,8 @@ export function DealHealthKpiGrid({ summary }: DealHealthKpiGridProps) {
     maximumFractionDigits: 0,
   });
 
-  const criticalAndAtRiskCount = summary.criticalDealsCount + summary.atRiskDealsCount;
+  const criticalAndAtRiskCount =
+    summary.criticalDealsCount + summary.atRiskDealsCount;
 
   return (
     <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
@@ -32,7 +28,11 @@ export function DealHealthKpiGrid({ summary }: DealHealthKpiGridProps) {
         tone={summary.criticalDealsCount > 0 ? "danger" : "warning"}
         trend={
           summary.criticalDealsCount > 0
-            ? { value: `${summary.criticalDealsCount}`, label: "Critical", positive: false }
+            ? {
+                value: `${summary.criticalDealsCount}`,
+                label: "Critical",
+                positive: false,
+              }
             : undefined
         }
       />
@@ -52,7 +52,9 @@ export function DealHealthKpiGrid({ summary }: DealHealthKpiGridProps) {
         value={(summary.anomaliesByType.STALLED || 0).toString()}
         icon={Clock}
         subvalue="Non-terminal quotes idle without touchpoints"
-        tone={(summary.anomaliesByType.STALLED || 0) > 0 ? "warning" : "secondary"}
+        tone={
+          (summary.anomaliesByType.STALLED || 0) > 0 ? "warning" : "secondary"
+        }
       />
 
       {/* Warehouse Stock Bottlenecks */}
@@ -61,7 +63,11 @@ export function DealHealthKpiGrid({ summary }: DealHealthKpiGridProps) {
         value={(summary.anomaliesByType.DELIVERY_SLIPPAGE || 0).toString()}
         icon={PackageX}
         subvalue="Physical stock shortages threatening promise dates"
-        tone={(summary.anomaliesByType.DELIVERY_SLIPPAGE || 0) > 0 ? "danger" : "primary"}
+        tone={
+          (summary.anomaliesByType.DELIVERY_SLIPPAGE || 0) > 0
+            ? "danger"
+            : "primary"
+        }
       />
     </div>
   );

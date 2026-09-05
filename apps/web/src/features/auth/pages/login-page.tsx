@@ -35,8 +35,8 @@ export function LoginPage() {
                   Multi-Tier Approval Routing
                 </h4>
                 <p className="text-xs text-muted-foreground">
-                  Automated Tier 0 pass-through, Manager Tier 1 (&lt;15%), and VP
-                  Finance Tier 2 gates.
+                  Automated Tier 0 pass-through, Manager Tier 1 (&lt;15%), and
+                  VP Finance Tier 2 gates.
                 </p>
               </div>
             </div>
@@ -50,8 +50,8 @@ export function LoginPage() {
                   PS §10 Real-time Risk Engine
                 </h4>
                 <p className="text-xs text-muted-foreground">
-                  Live blended margin calculation, customer tier risk scores, and
-                  automated routing badges.
+                  Live blended margin calculation, customer tier risk scores,
+                  and automated routing badges.
                 </p>
               </div>
             </div>

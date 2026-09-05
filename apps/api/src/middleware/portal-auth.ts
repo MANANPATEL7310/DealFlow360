@@ -2,7 +2,10 @@
 import type { NextFunction, Request, Response } from "express";
 import { httpStatus } from "../constants/http.js";
 import { sendError } from "../lib/response.js";
-import { verifyPortalToken, type PortalClaims } from "../modules/portal/portal.token.js";
+import {
+  verifyPortalToken,
+  type PortalClaims,
+} from "../modules/portal/portal.token.js";
 
 declare global {
   namespace Express {
@@ -20,7 +23,11 @@ export function requirePortalAuth(
   const authHeader = req.headers.authorization;
 
   if (!authHeader?.startsWith("Bearer ")) {
-    sendError(res, httpStatus.unauthorized, "Missing or malformed portal authorization token.");
+    sendError(
+      res,
+      httpStatus.unauthorized,
+      "Missing or malformed portal authorization token.",
+    );
     return;
   }
 

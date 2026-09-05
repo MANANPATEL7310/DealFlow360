@@ -1,6 +1,14 @@
 import { useState } from "react";
 import { type PortalMagicLink } from "@template/shared";
-import { Check, Clock, Copy, ExternalLink, Link2, ShieldCheck, X } from "lucide-react";
+import {
+  Check,
+  Clock,
+  Copy,
+  ExternalLink,
+  Link2,
+  ShieldCheck,
+  X,
+} from "lucide-react";
 import toast from "react-hot-toast";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";

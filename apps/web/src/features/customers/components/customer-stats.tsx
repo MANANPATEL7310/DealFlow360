@@ -1,5 +1,11 @@
 import type { Customer } from "@template/shared";
-import { Award, Building2, CreditCard, ShieldAlert, ShieldCheck } from "lucide-react";
+import {
+  Award,
+  Building2,
+  CreditCard,
+  ShieldAlert,
+  ShieldCheck,
+} from "lucide-react";
 import { MetricCard } from "@/components/ui/metric-card";
 
 interface CustomerStatsProps {

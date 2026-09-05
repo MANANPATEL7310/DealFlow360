@@ -1,9 +1,5 @@
 import { useState } from "react";
-import {
-  DEMO_PERSONAS,
-  internalRoles,
-  type UserRole,
-} from "@template/shared";
+import { DEMO_PERSONAS, internalRoles, type UserRole } from "@template/shared";
 import { Check, ChevronDown, Users } from "lucide-react";
 import toast from "react-hot-toast";
 import { LogoMark } from "@/components/shared/logo-mark";
@@ -23,9 +19,7 @@ export function AppSidebar() {
   const handleRoleSelect = (role: UserRole) => {
     switchPersona(role);
     const targetPersona = DEMO_PERSONAS[role];
-    toast.success(
-      `Switched to ${targetPersona.name} (${targetPersona.title})`,
-    );
+    toast.success(`Switched to ${targetPersona.name} (${targetPersona.title})`);
     setIsSwitcherOpen(false);
   };
 
@@ -37,43 +31,43 @@ export function AppSidebar() {
         </div>
 
         <nav className="flex flex-col gap-5">
-        {navigationSections.map((section) => {
-          const visibleItems = section.items.filter((item) => {
-            if (!item.roles || item.roles.length === 0) return true;
-            return item.roles.includes(activeRole);
-          });
+          {navigationSections.map((section) => {
+            const visibleItems = section.items.filter((item) => {
+              if (!item.roles || item.roles.length === 0) return true;
+              return item.roles.includes(activeRole);
+            });
 
-          if (visibleItems.length === 0) return null;
+            if (visibleItems.length === 0) return null;
 
-          return (
-            <div key={section.title} className="flex flex-col gap-1.5">
-              <p className="px-3 text-xs font-bold tracking-wider text-muted-foreground/70 uppercase">
-                {section.title}
-              </p>
-              <div className="flex flex-col gap-1">
-                {visibleItems.map((item) => (
-                  <PrefetchNavLink
-                    key={item.href}
-                    to={item.href}
-                    end={item.href === "/app"}
-                    className={({ isActive }) =>
-                      cn(
-                        "flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-all duration-200",
-                        isActive
-                          ? "border border-primary/20 bg-primary/10 font-semibold text-primary shadow-sm"
-                          : "text-muted-foreground hover:translate-x-0.5 hover:bg-surface-muted/60 hover:text-foreground",
-                      )
-                    }
-                  >
-                    <item.icon className="size-4 shrink-0" />
-                    <span className="truncate">{item.title}</span>
-                  </PrefetchNavLink>
-                ))}
+            return (
+              <div key={section.title} className="flex flex-col gap-1.5">
+                <p className="px-3 text-xs font-bold tracking-wider text-muted-foreground/70 uppercase">
+                  {section.title}
+                </p>
+                <div className="flex flex-col gap-1">
+                  {visibleItems.map((item) => (
+                    <PrefetchNavLink
+                      key={item.href}
+                      to={item.href}
+                      end={item.href === "/app"}
+                      className={({ isActive }) =>
+                        cn(
+                          "flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-all duration-200",
+                          isActive
+                            ? "border border-primary/20 bg-primary/10 font-semibold text-primary shadow-sm"
+                            : "text-muted-foreground hover:translate-x-0.5 hover:bg-surface-muted/60 hover:text-foreground",
+                        )
+                      }
+                    >
+                      <item.icon className="size-4 shrink-0" />
+                      <span className="truncate">{item.title}</span>
+                    </PrefetchNavLink>
+                  ))}
+                </div>
               </div>
-            </div>
-          );
-        })}
-      </nav>
+            );
+          })}
+        </nav>
       </div>
 
       {/* Role Persona Switcher Footer */}

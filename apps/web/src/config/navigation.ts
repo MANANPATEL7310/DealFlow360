@@ -74,7 +74,7 @@ export const navigationSections: NavigationSection[] = [
         title: "Approvals Inbox",
         href: appRoutes.approvals,
         icon: GitPullRequest,
-        roles: ["sales_manager", "finance", "admin"],
+        roles: ["sales_rep", "sales_manager", "finance", "admin"],
       },
       {
         title: "Fulfillment & Stock",
