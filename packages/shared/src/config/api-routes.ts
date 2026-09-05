@@ -661,6 +661,27 @@ export const apiRoutes = {
       auth: true,
       description: "Agent 5 AI personalized recovery nudge generator.",
     },
+    fulfillmentOptimize: {
+      path: "/ai/fulfillment-optimize",
+      method: "POST",
+      auth: true,
+      description:
+        "Agent 3 AI autonomous multi-warehouse fulfillment optimization.",
+    },
+    billingExplain: {
+      path: "/ai/billing-explain",
+      method: "POST",
+      auth: true,
+      description:
+        "Agent 4 AI hybrid billing schedule and proration explanation.",
+    },
+    draftCreditNote: {
+      path: "/ai/draft-credit-note",
+      method: "POST",
+      auth: true,
+      description:
+        "Agent 4 AI draft credit note generator with Finance HITL routing.",
+    },
   },
 } as const;
 

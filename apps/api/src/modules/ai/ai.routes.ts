@@ -11,8 +11,14 @@ import {
   getAiUpsellRecommendations,
   getAiDealHealthTriage,
   draftAiNudge,
+  getAiFulfillmentProposal,
+  getAiBillingExplanation,
+  draftAiCreditNote,
 } from "./ai.service.js";
-import { HitlApprovalDecisionSchema } from "@template/shared";
+import {
+  HitlApprovalDecisionSchema,
+  AiDraftCreditNoteRequestSchema,
+} from "@template/shared";
 
 export const aiRouter = createRouter();
 
@@ -125,6 +131,39 @@ aiRouter.post("/draft-nudge", async (req, res, next) => {
     const tone = typeof req.body?.tone === "string" ? req.body.tone : undefined;
     const nudge = await draftAiNudge(alertId, tone);
     res.json(nudge);
+  } catch (err) {
+    next(err);
+  }
+});
+
+aiRouter.post("/fulfillment-optimize", async (req, res, next) => {
+  try {
+    const quotationId =
+      typeof req.body?.quotationId === "string" ? req.body.quotationId : "";
+    const proposal = await getAiFulfillmentProposal(quotationId);
+    res.json(proposal);
+  } catch (err) {
+    next(err);
+  }
+});
+
+aiRouter.post("/billing-explain", async (req, res, next) => {
+  try {
+    const quotationId =
+      typeof req.body?.quotationId === "string" ? req.body.quotationId : "";
+    const explanation = await getAiBillingExplanation(quotationId);
+    res.json(explanation);
+  } catch (err) {
+    next(err);
+  }
+});
+
+aiRouter.post("/draft-credit-note", async (req, res, next) => {
+  try {
+    const parsed = AiDraftCreditNoteRequestSchema.parse(req.body);
+    const userId = req.user?.sub ?? "user";
+    const draft = await draftAiCreditNote(parsed, userId);
+    res.json(draft);
   } catch (err) {
     next(err);
   }

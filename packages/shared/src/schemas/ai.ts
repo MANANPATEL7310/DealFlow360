@@ -203,3 +203,73 @@ export const AiDraftNudgeResponseSchema = z.object({
   suggestedSubject: z.string(),
 });
 export type AiDraftNudgeResponse = z.infer<typeof AiDraftNudgeResponseSchema>;
+
+// ── Agent 3: AI Fulfillment Planner ──
+export const AiFulfillmentProposalSchema = z.object({
+  planId: z.string(),
+  quotationId: z.string(),
+  rationale: z.string(),
+  estShipmentCostMinor: z.number(),
+  estShipmentCount: z.number(),
+  baselineCostMinor: z.number(),
+  costDeltaMinor: z.number(),
+  costDeltaPct: z.number(),
+  transitDaysBenchmark: z.number(),
+  tradeoffScore: z.number().min(0).max(100),
+  requiresManagerApproval: z.boolean(),
+  proposedSplits: z.array(
+    z.object({
+      warehouseId: z.string(),
+      warehouseName: z.string(),
+      productId: z.string(),
+      productName: z.string(),
+      qty: z.number(),
+      shipmentCostMinor: z.number(),
+    }),
+  ),
+  backorders: z.array(
+    z.object({
+      productId: z.string(),
+      productName: z.string(),
+      qtyOutstanding: z.number(),
+      expectedDelayDays: z.number(),
+    }),
+  ),
+});
+export type AiFulfillmentProposal = z.infer<typeof AiFulfillmentProposalSchema>;
+
+// ── Agent 4: AI Billing Assistant ──
+export const AiBillingExplanationSchema = z.object({
+  scheduleId: z.string(),
+  quotationId: z.string(),
+  executiveSummary: z.string(),
+  upfrontChargesBreakdown: z.string(),
+  recurringSchedulesBreakdown: z.string(),
+  taxAndMarginAudit: z.string(),
+  prorationPolicyVerified: z.boolean(),
+  nextPaymentMilestone: z.string().optional(),
+});
+export type AiBillingExplanation = z.infer<typeof AiBillingExplanationSchema>;
+
+export const AiDraftCreditNoteRequestSchema = z.object({
+  quotationId: z.string(),
+  scheduleId: z.string(),
+  sourceInvoiceId: z.string().optional(),
+  suggestedAmountMinor: z.number().int().positive(),
+  reason: z.string().min(1),
+});
+export type AiDraftCreditNoteRequest = z.infer<
+  typeof AiDraftCreditNoteRequestSchema
+>;
+
+export const AiDraftCreditNoteResponseSchema = z.object({
+  approvalRequestId: z.string(),
+  amountMinor: z.number(),
+  reason: z.string(),
+  sourceInvoiceId: z.string().optional(),
+  stagedInHitlQueue: z.boolean(),
+  financeReviewerNote: z.string(),
+});
+export type AiDraftCreditNoteResponse = z.infer<
+  typeof AiDraftCreditNoteResponseSchema
+>;

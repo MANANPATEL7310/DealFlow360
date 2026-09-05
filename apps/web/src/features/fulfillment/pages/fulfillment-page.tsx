@@ -19,6 +19,7 @@ import { BackorderList } from "@/features/fulfillment/components/backorder-list"
 import { FulfillmentStats } from "@/features/fulfillment/components/fulfillment-stats";
 import { OverrideEditor } from "@/features/fulfillment/components/override-editor";
 import { SplitsTable } from "@/features/fulfillment/components/splits-table";
+import { AiFulfillmentPlannerCard } from "@/features/fulfillment/components/ai-fulfillment-planner-card";
 import {
   useAcceptPlan,
   useConsolidateBackorder,
@@ -47,7 +48,9 @@ export function FulfillmentPage() {
 
   if (isLoading) {
     return (
-      <RoleGuard allowedRoles={["sales_rep", "sales_manager", "finance", "admin"]}>
+      <RoleGuard
+        allowedRoles={["sales_rep", "sales_manager", "finance", "admin"]}
+      >
         <div className="space-y-6 pb-12">
           <Skeleton className="h-10 w-48" />
           <Skeleton className="h-28 w-full" />
@@ -65,7 +68,9 @@ export function FulfillmentPage() {
 
   if (!plan) {
     return (
-      <RoleGuard allowedRoles={["sales_rep", "sales_manager", "finance", "admin"]}>
+      <RoleGuard
+        allowedRoles={["sales_rep", "sales_manager", "finance", "admin"]}
+      >
         <div className="flex min-h-80 flex-col items-center justify-center space-y-3 text-center">
           <FileSpreadsheet className="size-10 text-muted-foreground/50" />
           <h2 className="text-lg font-bold text-foreground">
@@ -76,7 +81,8 @@ export function FulfillmentPage() {
           </p>
           <Link to={appRoutes.quotationBuilder(quotationId)}>
             <Button size="sm" variant="outline">
-              <ArrowLeft className="mr-1.5 size-4" /> Return to Quotation Builder
+              <ArrowLeft className="mr-1.5 size-4" /> Return to Quotation
+              Builder
             </Button>
           </Link>
         </div>
@@ -87,7 +93,9 @@ export function FulfillmentPage() {
   const isAccepted = plan.status === "ACCEPTED";
 
   return (
-    <RoleGuard allowedRoles={["sales_rep", "sales_manager", "finance", "admin"]}>
+    <RoleGuard
+      allowedRoles={["sales_rep", "sales_manager", "finance", "admin"]}
+    >
       <div className="space-y-6 pb-12">
         {/* Navigation & Breadcrumb */}
         <div className="flex items-center justify-between">
@@ -181,6 +189,16 @@ export function FulfillmentPage() {
 
         {/* Headline KPI Ribbon */}
         <FulfillmentStats isLoading={isLoading} plan={plan} />
+
+        {/* AI Multi-Warehouse Planner (Agent 3) */}
+        <AiFulfillmentPlannerCard
+          quotationId={quotationId}
+          isPlanAccepted={isAccepted}
+          onApplyPlan={async (splits) => {
+            await overrideMutation.mutateAsync(splits);
+          }}
+          isApplying={overrideMutation.isPending}
+        />
 
         {/* Manual Override Editor or Shipment Group Splits */}
         {isEditing && !isAccepted ? (

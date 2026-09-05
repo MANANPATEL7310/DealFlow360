@@ -11,6 +11,10 @@ import type {
   AiUpsellResponse,
   AiDealHealthTriageResponse,
   AiDraftNudgeResponse,
+  AiFulfillmentProposal,
+  AiBillingExplanation,
+  AiDraftCreditNoteRequest,
+  AiDraftCreditNoteResponse,
 } from "@template/shared";
 
 export async function fetchAiStatus(): Promise<AiStatus> {
@@ -103,6 +107,36 @@ export async function fetchAiDraftNudge(
   const { data } = await apiClient.post<AiDraftNudgeResponse>(
     apiRoutes.ai.draftNudge.path,
     { alertId, tone },
+  );
+  return data;
+}
+
+export async function fetchAiFulfillmentProposal(
+  quotationId: string,
+): Promise<AiFulfillmentProposal> {
+  const { data } = await apiClient.post<AiFulfillmentProposal>(
+    apiRoutes.ai.fulfillmentOptimize.path,
+    { quotationId },
+  );
+  return data;
+}
+
+export async function fetchAiBillingExplanation(
+  quotationId: string,
+): Promise<AiBillingExplanation> {
+  const { data } = await apiClient.post<AiBillingExplanation>(
+    apiRoutes.ai.billingExplain.path,
+    { quotationId },
+  );
+  return data;
+}
+
+export async function requestAiCreditNoteDraft(
+  payload: AiDraftCreditNoteRequest,
+): Promise<AiDraftCreditNoteResponse> {
+  const { data } = await apiClient.post<AiDraftCreditNoteResponse>(
+    apiRoutes.ai.draftCreditNote.path,
+    payload,
   );
   return data;
 }
