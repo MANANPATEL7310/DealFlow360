@@ -15,6 +15,8 @@ import type {
   AiBillingExplanation,
   AiDraftCreditNoteRequest,
   AiDraftCreditNoteResponse,
+  AiNaturalLanguageQueryResponse,
+  ReportFilters,
 } from "@template/shared";
 
 export async function fetchAiStatus(): Promise<AiStatus> {
@@ -137,6 +139,17 @@ export async function requestAiCreditNoteDraft(
   const { data } = await apiClient.post<AiDraftCreditNoteResponse>(
     apiRoutes.ai.draftCreditNote.path,
     payload,
+  );
+  return data;
+}
+
+export async function fetchAiNaturalLanguageReportQuery(
+  prompt: string,
+  currentFilters?: ReportFilters,
+): Promise<AiNaturalLanguageQueryResponse> {
+  const { data } = await apiClient.post<AiNaturalLanguageQueryResponse>(
+    apiRoutes.ai.nlQuery.path,
+    { prompt, currentFilters },
   );
   return data;
 }

@@ -682,6 +682,13 @@ export const apiRoutes = {
       description:
         "Agent 4 AI draft credit note generator with Finance HITL routing.",
     },
+    nlQuery: {
+      path: "/ai/nl-query",
+      method: "POST",
+      auth: true,
+      description:
+        "Agent 7 conversational sales analytics and natural language reporting query.",
+    },
   },
 } as const;
 

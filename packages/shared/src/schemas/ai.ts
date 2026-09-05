@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { reportFiltersSchema } from "./reports.js";
 
 export const ApprovalRequestStatusEnum = z.enum([
   "PENDING",
@@ -272,4 +273,32 @@ export const AiDraftCreditNoteResponseSchema = z.object({
 });
 export type AiDraftCreditNoteResponse = z.infer<
   typeof AiDraftCreditNoteResponseSchema
+>;
+
+// ── Agent 7: AI Sales Insights & NL Reporting ──
+export const AiNaturalLanguageQueryRequestSchema = z.object({
+  prompt: z.string().min(1),
+  currentFilters: reportFiltersSchema.optional(),
+});
+export type AiNaturalLanguageQueryRequest = z.infer<
+  typeof AiNaturalLanguageQueryRequestSchema
+>;
+
+export const AiNaturalLanguageQueryResponseSchema = z.object({
+  queryIntent: z.string(),
+  executiveNarrative: z.string(),
+  appliedFilters: reportFiltersSchema,
+  metricsSummary: z.object({
+    totalRevenueMinor: z.number(),
+    marginPct: z.number(),
+    discountErosionMinor: z.number(),
+    winRatePct: z.number(),
+  }),
+  keyTakeaways: z.array(z.string()),
+  recommendedActions: z.array(z.string()),
+  confidenceScore: z.number().min(0).max(1),
+  suggestedQuestions: z.array(z.string()),
+});
+export type AiNaturalLanguageQueryResponse = z.infer<
+  typeof AiNaturalLanguageQueryResponseSchema
 >;

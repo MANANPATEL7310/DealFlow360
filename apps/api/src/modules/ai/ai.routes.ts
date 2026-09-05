@@ -14,10 +14,12 @@ import {
   getAiFulfillmentProposal,
   getAiBillingExplanation,
   draftAiCreditNote,
+  evaluateAiReportQuery,
 } from "./ai.service.js";
 import {
   HitlApprovalDecisionSchema,
   AiDraftCreditNoteRequestSchema,
+  AiNaturalLanguageQueryRequestSchema,
 } from "@template/shared";
 
 export const aiRouter = createRouter();
@@ -164,6 +166,23 @@ aiRouter.post("/draft-credit-note", async (req, res, next) => {
     const userId = req.user?.sub ?? "user";
     const draft = await draftAiCreditNote(parsed, userId);
     res.json(draft);
+  } catch (err) {
+    next(err);
+  }
+});
+
+aiRouter.post("/nl-query", async (req, res, next) => {
+  try {
+    const parsed = AiNaturalLanguageQueryRequestSchema.parse(req.body);
+    const userRole = req.user?.role ?? "sales_manager";
+    const userId = req.user?.sub ?? "usr-01";
+    const result = await evaluateAiReportQuery(
+      parsed.prompt,
+      parsed.currentFilters,
+      userRole,
+      userId,
+    );
+    res.json(result);
   } catch (err) {
     next(err);
   }
