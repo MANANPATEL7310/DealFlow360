@@ -17,4 +17,5 @@ export const appRoutes = {
   dealHealth: "/app/deal-health",
   reports: "/app/reports",
   settings: "/app/settings",
+  portal: "/portal",
 } as const;

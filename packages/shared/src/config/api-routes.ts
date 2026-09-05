@@ -87,6 +87,9 @@ export const apiRoutes = {
     removeLine:  { path: "/quotations/:id/lines/:lineId",  method: "DELETE", auth: true,  description: "Remove a quotation line item." },
     confirm:     { path: "/quotations/:id/confirm",        method: "POST",   auth: true,  description: "Confirm quotation through risk engine." },
     risk:        { path: "/quotations/:id/risk",           method: "GET",    auth: true,  description: "Evaluate live blended risk score and breakdown." },
+    send:        { path: "/quotations/:id/send",           method: "POST",   auth: true,  description: "Mint portal token and transition quote to SENT." },
+    negotiations: { path: "/quotations/:id/negotiations",  method: "GET",    auth: true,  description: "List negotiation requests for a quotation." },
+    answerNegotiation: { path: "/quotations/:id/negotiations/:negId/answer", method: "POST", auth: true, description: "Sales rep answers or accepts a negotiation request." },
   },
 
   // ─── Approvals & Reviews ───────────────────────────────────────────────────
@@ -135,6 +138,14 @@ export const apiRoutes = {
   },
   invoices: {
     pay:      { path: "/invoices/:id/pay",              method: "POST", auth: true, description: "Record payment against an invoice." },
+  },
+
+  // ─── Customer Portal (External Scoped Access) ──────────────────────────────
+  portal: {
+    quotation:    { path: "/portal/quotation",     method: "GET",  auth: false, description: "Get scoped quotation view (sanitized, costs stripped)." },
+    open:         { path: "/portal/open",          method: "POST", auth: false, description: "Acknowledge quotation opened by customer (SENT -> UNDER_NEGOTIATION)." },
+    negotiations: { path: "/portal/negotiations",  method: "POST", auth: false, description: "Customer submits counter-offer or discussion request." },
+    confirm:      { path: "/portal/confirm",       method: "POST", auth: false, description: "Customer confirms proposal through auto-governance gate." },
   },
 } as const;
 

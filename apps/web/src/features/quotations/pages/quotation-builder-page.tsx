@@ -1,16 +1,19 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router";
 import {
   type AddLineInput,
+  type AnswerNegotiationInput,
   appRoutes,
   computeTotals,
   type CustomerTier,
+  type NegotiationRequest,
 } from "@template/shared";
 import {
   ArrowLeft,
   Calendar,
   Clock,
   FileSpreadsheet,
+  Globe,
   Package,
   Plus,
   Receipt,
@@ -21,6 +24,8 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
+import { portalApi } from "@/features/portal/api/portal-api";
+import { RepNegotiationModal } from "@/features/portal/components/rep-negotiation-modal";
 import { LineEditorTable } from "@/features/quotations/components/line-editor-table";
 import { MarginIndicatorGauge } from "@/features/quotations/components/margin-indicator-gauge";
 import { OrderDiscountBar } from "@/features/quotations/components/order-discount-bar";
@@ -38,6 +43,8 @@ import {
 export function QuotationBuilderPage() {
   const { id } = useParams<{ id: string }>();
   const [isPickerOpen, setIsPickerOpen] = useState(false);
+  const [isPortalModalOpen, setIsPortalModalOpen] = useState(false);
+  const [negotiations, setNegotiations] = useState<NegotiationRequest[]>([]);
 
   const { data: quote, isLoading } = useQuotation(id);
   const { data: risk } = useQuotationRisk(id);
@@ -46,6 +53,25 @@ export function QuotationBuilderPage() {
   const updateLine = useUpdateLine(id ?? "");
   const deleteLine = useDeleteLine(id ?? "");
   const confirmQuote = useConfirmQuotation(id ?? "");
+
+  useEffect(() => {
+    if (id) {
+      portalApi.getInternalNegotiations(id).then(setNegotiations).catch(() => {});
+    }
+  }, [id]);
+
+  const handleAnswerNegotiation = async (
+    negId: string,
+    input: AnswerNegotiationInput
+  ) => {
+    if (!id) return;
+    const updated = await portalApi.answerNegotiation(id, negId, input);
+    setNegotiations((prev) => prev.map((n) => (n.id === negId ? updated : n)));
+  };
+
+  const handleApplyLineDiscount = (lineId: string, discountPct: number) => {
+    updateLine.mutate({ lineId, input: { discountPct } });
+  };
 
   if (isLoading) {
     return (
@@ -172,6 +198,21 @@ export function QuotationBuilderPage() {
               </Button>
             </Link>
 
+            <Button
+              size="sm"
+              variant="outline"
+              onClick={() => setIsPortalModalOpen(true)}
+              className="h-9 gap-1.5 rounded-lg text-xs"
+            >
+              <Globe className="size-3.5 text-primary" />
+              <span>Customer Portal</span>
+              {negotiations.length > 0 && (
+                <span className="rounded-full bg-primary/10 px-1.5 py-0.5 font-mono text-[10px] font-semibold text-primary">
+                  {negotiations.length}
+                </span>
+              )}
+            </Button>
+
             {isDraft && (
               <Button
                 size="sm"
@@ -245,6 +286,16 @@ export function QuotationBuilderPage() {
         isOpen={isPickerOpen}
         onAddLine={(input: AddLineInput) => addLine.mutate(input)}
         onClose={() => setIsPickerOpen(false)}
+      />
+
+      {/* Customer Portal Magic Link & Negotiation Modal */}
+      <RepNegotiationModal
+        isOpen={isPortalModalOpen}
+        onClose={() => setIsPortalModalOpen(false)}
+        quotation={quote}
+        negotiations={negotiations}
+        onAnswerNegotiation={handleAnswerNegotiation}
+        onApplyLineDiscount={handleApplyLineDiscount}
       />
     </div>
   );

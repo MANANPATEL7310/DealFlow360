@@ -1,0 +1,17 @@
+# DealFlow360 — Architecture Documentation Index
+
+| Feature | Doc | Key Files | Depends On |
+|---|---|---|---|
+| Landing Page & Centralized Theme Engine | [landing-page-and-theme-engine.md](features/landing-page-and-theme-engine.md) | `apps/web/src/style.css`, `apps/web/src/features/marketing/components/hero-section.tsx`, `apps/web/src/features/marketing/pages/home-page.tsx` | None |
+| Executive Core Dashboard & Shell | [executive-core-dashboard.md](features/executive-core-dashboard.md) | `apps/web/src/features/dashboard/pages/dashboard-page.tsx`, `apps/web/src/features/dashboard/components/*`, `apps/web/src/components/layout/app-sidebar.tsx` | Landing Page & Centralized Theme Engine |
+| Foundation & Multi-Role Auth (M0) | [foundation-and-multi-role-auth.md](features/foundation-and-multi-role-auth.md) | `packages/shared/src/schemas/auth.ts`, `apps/web/src/stores/auth-store.ts`, `apps/web/src/features/auth/*`, `apps/web/src/components/shared/app-sidebar.tsx` | Executive Core Dashboard & Shell |
+| Product & Price Lists (M1) | [product-and-price-lists.md](features/product-and-price-lists.md) | `packages/shared/src/schemas/product.ts`, `apps/web/src/features/products/*`, `apps/web/app/routes/products.tsx` | Foundation & Multi-Role Auth (M0) |
+| Customer Management (M1) | [customer-management.md](features/customer-management.md) | `packages/shared/src/schemas/customer.ts`, `apps/web/src/features/customers/*`, `apps/web/app/routes/customers.tsx` | Product & Price Lists (M1) |
+| Discount Governance (M1) | [discount-governance.md](features/discount-governance.md) | `packages/shared/src/schemas/governance.ts`, `apps/web/src/features/governance/*`, `apps/web/app/routes/governance.tsx` | Customer Management (M1) & Product Lists (M1) |
+| Quotation Builder & Risk Engine (M2) | [quotation-builder-and-risk-engine.md](features/quotation-builder-and-risk-engine.md) | `packages/shared/src/schemas/quotation.ts`, `packages/shared/src/lib/quotation-math.ts`, `apps/web/src/features/quotations/*`, `apps/web/app/routes/quotation*` | Discount Governance (M1) |
+| Approval Routing & Review Workbench (M2) | [approval-routing-and-workbench.md](features/approval-routing-and-workbench.md) | `apps/web/src/features/approvals/*`, `apps/web/app/routes/approval*`, `packages/shared/src/schemas/quotation.ts` | Quotation Builder & Risk Engine (M2) |
+| Live Upsell & Cross-Sell (M3) | [live-upsell-and-cross-sell.md](features/live-upsell-and-cross-sell.md) | `packages/shared/src/schemas/upsell.ts`, `packages/shared/src/lib/upsell-engine.ts`, `apps/web/src/features/upsell/*` | Quotation Builder & Risk Engine (M2) |
+| Warehouse Fulfillment & Stock Allocation (M3) | [warehouse-fulfillment.md](features/warehouse-fulfillment.md) | `packages/shared/src/schemas/fulfillment.ts`, `packages/shared/src/lib/fulfillment-optimizer.ts`, `apps/web/src/features/fulfillment/*` | Quotation Builder & Risk Engine (M2) |
+| Hybrid Billing & Subscription Proration (M4) | [hybrid-billing.md](features/hybrid-billing.md) | `packages/shared/src/schemas/billing.ts`, `packages/shared/src/lib/proration.ts`, `apps/web/src/features/billing/*`, `apps/web/app/routes/billing*` | Quotation Builder & Risk Engine (M2) |
+| Customer Portal & External Negotiation (M9) | [customer-portal-and-external-negotiation.md](features/customer-portal-and-external-negotiation.md) | `packages/shared/src/schemas/portal.ts`, `apps/api/src/modules/portal/*`, `apps/web/src/features/portal/*`, `apps/web/app/routes/portal.tsx` | Quotation Builder & Risk Engine (M2) |
+
