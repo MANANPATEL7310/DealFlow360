@@ -56,6 +56,8 @@ export const apiRoutes = {
 
   // ─── ADD NEW ROUTES BELOW THIS LINE ────────────────────────────────────────
   // Follow the same pattern: add here first, then implement on backend, then consume on frontend.
+
+  // === M1: Products (Dev 2) ===
   products: {
     list: {
       path: "/products",
@@ -67,7 +69,7 @@ export const apiRoutes = {
       path: "/products",
       method: "POST",
       auth: true,
-      description: "Create a product.",
+      description: "Create a product. (admin only)",
     },
     getById: {
       path: "/products/:id",
@@ -79,17 +81,103 @@ export const apiRoutes = {
       path: "/products/:id",
       method: "PATCH",
       auth: true,
-      description: "Update a product.",
+      description: "Update a product. (admin only)",
     },
     remove: {
       path: "/products/:id",
       method: "DELETE",
       auth: true,
-      description: "Delete a product.",
+      description: "Delete a product. (admin only)",
     },
   },
 
-  // ─── Governance (M3) ──────────────────────────────────────────────────────
+  // === M1: Price Lists (Dev 2) ===
+  priceLists: {
+    list: {
+      path: "/price-lists",
+      method: "GET",
+      auth: true,
+      description: "List all price lists.",
+    },
+    create: {
+      path: "/price-lists",
+      method: "POST",
+      auth: true,
+      description: "Create a price list. (admin only)",
+    },
+    getById: {
+      path: "/price-lists/:id",
+      method: "GET",
+      auth: true,
+      description: "Get price list by ID.",
+    },
+    update: {
+      path: "/price-lists/:id",
+      method: "PATCH",
+      auth: true,
+      description: "Update a price list. (admin only)",
+    },
+    remove: {
+      path: "/price-lists/:id",
+      method: "DELETE",
+      auth: true,
+      description: "Delete a price list. (admin only)",
+    },
+    addItem: {
+      path: "/price-lists/:id/items",
+      method: "POST",
+      auth: true,
+      description: "Add an item to a price list. (admin only)",
+    },
+  },
+
+  // === M2: Customers (Dev 2) ===
+  customers: {
+    list: {
+      path: "/customers",
+      method: "GET",
+      auth: true,
+      description: "List all customers.",
+    },
+    create: {
+      path: "/customers",
+      method: "POST",
+      auth: true,
+      description: "Create a customer.",
+    },
+    getById: {
+      path: "/customers/:id",
+      method: "GET",
+      auth: true,
+      description: "Get customer by ID.",
+    },
+    update: {
+      path: "/customers/:id",
+      method: "PATCH",
+      auth: true,
+      description: "Update a customer.",
+    },
+    remove: {
+      path: "/customers/:id",
+      method: "DELETE",
+      auth: true,
+      description: "Delete a customer.",
+    },
+    contacts: {
+      path: "/customers/:id/contacts",
+      method: "GET",
+      auth: true,
+      description: "List contacts for a customer.",
+    },
+    addContact: {
+      path: "/customers/:id/contacts",
+      method: "POST",
+      auth: true,
+      description: "Add a contact to a customer.",
+    },
+  },
+
+  // ─── Governance (M3 — Dev 1) ──────────────────────────────────────────────
   governance: {
     discountTiers: {
       list: {
@@ -147,7 +235,7 @@ export const apiRoutes = {
     },
   },
 
-  // ─── Quotations (M5) ──────────────────────────────────────────────────────
+  // ─── Quotations (M5 — Dev 1) ──────────────────────────────────────────────
   quotations: {
     list: {
       path: "/quotations",
@@ -317,6 +405,49 @@ export const apiRoutes = {
       method: "POST",
       auth: true,
       description: "Nudge or escalate a deal health alert.",
+    },
+  },
+
+  // === M6: Upsell & Cross-sell (Dev 2) ===
+  upsell: {
+    list: {
+      path: "/quotations/:id/upsell",
+      method: "GET",
+      auth: true,
+      description: "Get ranked upsell suggestions for a quotation.",
+    },
+    add: {
+      path: "/quotations/:id/upsell/:suggestedId",
+      method: "POST",
+      auth: true,
+      description: "Accept a suggestion and add it to the quotation.",
+    },
+  },
+
+  // === M8: Billing (Dev 2) ===
+  billing: {
+    getSchedule: {
+      path: "/quotations/:id/billing",
+      method: "GET",
+      auth: true,
+      description: "Get billing schedule for a quotation.",
+    },
+    subscriptionChange: {
+      path: "/quotations/:id/billing/subscription-change",
+      method: "POST",
+      auth: true,
+      description:
+        "Mid-cycle subscription upgrade/downgrade/cancel. (finance/admin only)",
+    },
+  },
+
+  // === M8: Invoices (Dev 2) ===
+  invoices: {
+    recordPayment: {
+      path: "/invoices/:invoiceId/payments",
+      method: "POST",
+      auth: true,
+      description: "Record a payment against an invoice. (finance/admin only)",
     },
   },
 
