@@ -7,6 +7,7 @@ import { governanceRouter } from "../modules/governance/governance.routes.js";
 import { healthRouter } from "../modules/health/health.routes.js";
 import { quotationRouter } from "../modules/quotation/quotation.routes.js";
 import { portalRouter } from "../modules/portal/portal.routes.js";
+import { reportsRouter } from "../modules/reports/reports.routes.js";
 
 export const apiRouter = Router();
 
@@ -18,3 +19,4 @@ apiRouter.use("/governance", governanceRouter);
 apiRouter.use("/quotations", quotationRouter);
 apiRouter.use("/quotations", fulfillmentRouter);
 apiRouter.use("/portal", portalRouter);
+apiRouter.use("/reports", reportsRouter);

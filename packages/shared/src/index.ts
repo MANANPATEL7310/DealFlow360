@@ -8,4 +8,5 @@ export * from "./schemas/fulfillment";
 export * from "./schemas/governance";
 export * from "./schemas/quotation";
 export * from "./schemas/portal";
+export * from "./schemas/reports";
 export * from "./types";
