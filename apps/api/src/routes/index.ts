@@ -34,6 +34,7 @@ import { discountApprovalRouter } from "../modules/ai/discount-approval/routes.j
 import { negotiationRouter } from "../modules/ai/negotiation/routes.js";
 import { aiRecommendationsRouter } from "../modules/ai/recommendations/routes.js";
 import { aiBillingRouter } from "../modules/ai/billing/routes.js";
+import { paymentGatewayRouter } from "../modules/payment-gateway/payment-gateway.routes.js";
 
 export const apiRouter = Router();
 
@@ -60,6 +61,8 @@ apiRouter.use("/quotations", billingRouter);
 apiRouter.use("/invoices", invoiceRouter);
 apiRouter.use("/portal", portalRouter);
 apiRouter.use("/reports", reportsRouter);
+// === Payment Gateway ===
+apiRouter.use("/payments", paymentGatewayRouter);
 
 // === Agentic AI Endpoints ===
 apiRouter.use("/ai", aiRouter);
