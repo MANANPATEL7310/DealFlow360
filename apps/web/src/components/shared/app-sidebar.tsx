@@ -30,10 +30,13 @@ export function AppSidebar() {
   };
 
   return (
-    <aside className="surface-card flex h-fit flex-col gap-6 p-5">
-      <LogoMark />
+    <aside className="bg-card/50 sticky top-0 z-40 flex h-screen w-64 shrink-0 flex-col justify-between border-r border-border p-4 backdrop-blur-xl">
+      <div className="flex flex-col gap-6 overflow-y-auto">
+        <div className="border-b border-border/70 pb-3">
+          <LogoMark />
+        </div>
 
-      <nav className="flex flex-col gap-5">
+        <nav className="flex flex-col gap-5">
         {navigationSections.map((section) => {
           const visibleItems = section.items.filter((item) => {
             if (!item.roles || item.roles.length === 0) return true;
@@ -71,9 +74,10 @@ export function AppSidebar() {
           );
         })}
       </nav>
+      </div>
 
       {/* Role Persona Switcher Footer */}
-      <div className="border-t border-border/80 pt-4">
+      <div className="mt-auto border-t border-border/80 pt-3">
         <div className="bg-card/80 rounded-xl border border-border p-3 shadow-xs">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2.5 overflow-hidden">

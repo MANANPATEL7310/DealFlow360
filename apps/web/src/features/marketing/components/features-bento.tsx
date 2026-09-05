@@ -7,7 +7,6 @@ import {
   CheckCircle2,
   TrendingUp,
 } from "lucide-react";
-import { BorderBeam } from "@/components/ui/border-beam";
 import { SpotlightCard } from "@/components/ui/spotlight-card";
 
 export function FeaturesBento() {
@@ -30,8 +29,7 @@ export function FeaturesBento() {
         {/* Bento Grid */}
         <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
           {/* Card 1: Blended Risk Engine (Double width on large screens) */}
-          <SpotlightCard className="p-7 shadow-lg transition-all lg:col-span-2">
-            <BorderBeam size={280} duration={16} delay={4} />
+          <SpotlightCard className="border border-border/70 p-7 shadow-lg transition-all hover:border-primary/30 lg:col-span-2">
             <div className="mb-4 flex items-center justify-between">
               <div className="flex size-11 items-center justify-center rounded-xl bg-primary/10 text-primary">
                 <ShieldAlert className="size-6" />

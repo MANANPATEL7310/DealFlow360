@@ -12,7 +12,6 @@ import {
 } from "lucide-react";
 import { appRoutes } from "@template/shared";
 import { AnimatedCounter } from "@/components/ui/animated-counter";
-import { BorderBeam } from "@/components/ui/border-beam";
 import { Button } from "@/components/ui/button";
 import { SpotlightCard } from "@/components/ui/spotlight-card";
 
@@ -143,8 +142,7 @@ export function HeroSection() {
 
           {/* Hero Right: Interactive Live Margin & Risk Simulator */}
           <div id="simulator" className="lg:col-span-5">
-            <SpotlightCard className="relative p-6 shadow-2xl backdrop-blur-2xl transition-all">
-              <BorderBeam size={250} duration={12} delay={0} />
+            <SpotlightCard className="relative border border-border/70 p-6 shadow-2xl backdrop-blur-2xl transition-all hover:border-primary/30">
               {/* Simulator Header */}
               <div className="flex items-center justify-between border-b border-border pb-4">
                 <div className="flex items-center gap-2.5">

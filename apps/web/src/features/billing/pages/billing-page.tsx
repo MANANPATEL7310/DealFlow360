@@ -123,23 +123,23 @@ function QuotationBillingWorkspace({ quotationId }: { quotationId: string }) {
         <div className="flex items-center justify-between">
           <Link
             to={appRoutes.quotationBuilder(quotationId)}
-            className="inline-flex items-center gap-2 text-xs font-medium text-slate-400 transition-colors hover:text-white"
+            className="inline-flex items-center gap-2 text-xs font-medium text-muted-foreground transition-colors hover:text-foreground"
           >
             <ArrowLeft className="size-4" />
             Back to Quotation {quote?.quotationNumber ?? quotationId}
           </Link>
-          <div className="flex items-center gap-2 text-xs text-slate-400">
-            <ShieldCheck className="size-4 text-emerald-400" />
+          <div className="flex items-center gap-2 text-xs text-muted-foreground">
+            <ShieldCheck className="size-4 text-emerald-500" />
             <span>Audited Billing Engine (M4)</span>
           </div>
         </div>
 
         {/* Quotation Header Banner */}
-        <div className="rounded-2xl border border-white/10 bg-slate-900/60 p-6 backdrop-blur-md">
+        <div className="surface-card p-6">
           <div className="flex flex-col justify-between gap-4 md:flex-row md:items-center">
             <div>
               <div className="flex flex-wrap items-center gap-3">
-                <h1 className="text-2xl font-bold tracking-tight text-white">
+                <h1 className="text-2xl font-bold tracking-tight text-foreground">
                   Hybrid Billing Workspace
                 </h1>
                 <Badge
@@ -149,34 +149,34 @@ function QuotationBillingWorkspace({ quotationId }: { quotationId: string }) {
                   Order: {quote?.status ?? "CONFIRMED"}
                 </Badge>
               </div>
-              <div className="mt-2 flex flex-wrap items-center gap-4 text-xs text-slate-400">
+              <div className="mt-2 flex flex-wrap items-center gap-4 text-xs text-muted-foreground">
                 <div className="flex items-center gap-1.5">
-                  <FileSpreadsheet className="size-4 text-slate-400" />
-                  <span className="font-mono text-slate-200">
+                  <FileSpreadsheet className="size-4 text-muted-foreground" />
+                  <span className="font-mono text-foreground">
                     {quote?.quotationNumber ?? quotationId}
                   </span>
                 </div>
                 <div className="flex items-center gap-1.5">
-                  <Building2 className="size-4 text-slate-400" />
-                  <span className="text-slate-200">
+                  <Building2 className="size-4 text-muted-foreground" />
+                  <span className="text-foreground">
                     {quote?.customer?.name ?? "Customer Account"}
                   </span>
                 </div>
                 <div className="flex items-center gap-1.5">
-                  <Receipt className="size-4 text-slate-400" />
-                  <span className="font-mono text-slate-400">Schedule: {schedule.id}</span>
+                  <Receipt className="size-4 text-muted-foreground" />
+                  <span className="font-mono text-muted-foreground">Schedule: {schedule.id}</span>
                 </div>
               </div>
             </div>
 
             <div className="flex items-center gap-2">
               <Link to={appRoutes.quotationFulfillment(quotationId)}>
-                <Button variant="outline" size="sm" className="border-white/10 text-xs">
+                <Button variant="outline" size="sm" className="text-xs">
                   View Fulfillment
                 </Button>
               </Link>
               <Link to={appRoutes.billing}>
-                <Button variant="outline" size="sm" className="border-white/10 text-xs">
+                <Button variant="outline" size="sm" className="text-xs">
                   All Schedules
                 </Button>
               </Link>
@@ -190,15 +190,15 @@ function QuotationBillingWorkspace({ quotationId }: { quotationId: string }) {
         {/* Section 1: Upfront One-Time Charges */}
         <div className="space-y-3">
           <div className="flex items-center gap-2">
-            <Receipt className="size-4 text-sky-400" />
-            <h2 className="text-base font-semibold tracking-tight text-white">
+            <Receipt className="size-4 text-sky-500" />
+            <h2 className="text-base font-semibold tracking-tight text-foreground">
               1. Upfront One-Time Invoicing
             </h2>
           </div>
           {oneTime ? (
             <OneTimeInvoice invoice={oneTime} quotationId={quotationId} />
           ) : (
-            <div className="rounded-2xl border border-white/5 bg-slate-900/40 p-5 text-xs text-slate-400">
+            <div className="surface-card p-5 text-xs text-muted-foreground">
               No one-time hardware or professional services charges on this order.
             </div>
           )}
@@ -208,18 +208,18 @@ function QuotationBillingWorkspace({ quotationId }: { quotationId: string }) {
         <div className="space-y-3">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <Repeat className="size-4 text-purple-400" />
-              <h2 className="text-base font-semibold tracking-tight text-white">
+              <Repeat className="size-4 text-purple-500" />
+              <h2 className="text-base font-semibold tracking-tight text-foreground">
                 2. Recurring Subscription Schedules
               </h2>
             </div>
-            <span className="text-xs text-slate-400">
+            <span className="text-xs text-muted-foreground">
               {recurring.size} Active Recurring Line{recurring.size === 1 ? "" : "s"}
             </span>
           </div>
 
           {recurring.size === 0 ? (
-            <div className="rounded-2xl border border-white/5 bg-slate-900/40 p-5 text-xs text-slate-400">
+            <div className="surface-card p-5 text-xs text-muted-foreground">
               No recurring SaaS subscription line items configured for this order.
             </div>
           ) : (
@@ -240,8 +240,8 @@ function QuotationBillingWorkspace({ quotationId }: { quotationId: string }) {
         {/* Section 3: Credit Notes Ledger */}
         <div className="space-y-3">
           <div className="flex items-center gap-2">
-            <CreditCard className="size-4 text-emerald-400" />
-            <h2 className="text-base font-semibold tracking-tight text-white">
+            <CreditCard className="size-4 text-emerald-500" />
+            <h2 className="text-base font-semibold tracking-tight text-foreground">
               3. Prorated Credit Notes Ledger
             </h2>
           </div>
@@ -278,20 +278,20 @@ function BillingOperationsOverview() {
         {/* Header */}
         <div className="flex flex-col justify-between gap-4 md:flex-row md:items-center">
           <div>
-            <div className="mb-1 flex items-center gap-2 text-xs text-slate-400">
-              <Receipt className="size-4 text-emerald-400" />
+            <div className="mb-1 flex items-center gap-2 text-xs text-muted-foreground">
+              <Receipt className="size-4 text-emerald-500" />
               <span>Operations & Finance</span>
             </div>
-            <h1 className="text-2xl font-bold tracking-tight text-white">
+            <h1 className="text-2xl font-bold tracking-tight text-foreground">
               Hybrid Billing Operations
             </h1>
-            <p className="mt-1 text-xs text-slate-400">
+            <p className="mt-1 text-xs text-muted-foreground">
               Enterprise split billing management across one-time hardware charges and multi-tier recurring subscription series.
             </p>
           </div>
           <div className="flex items-center gap-2">
             <Link to={appRoutes.quotations}>
-              <Button variant="outline" size="sm" className="gap-1.5 border-white/10 text-xs">
+              <Button variant="outline" size="sm" className="gap-1.5 text-xs">
                 <FileSpreadsheet className="size-4" />
                 View Quotations
               </Button>
@@ -303,17 +303,17 @@ function BillingOperationsOverview() {
         <BillingStats schedule={mockScheduleSummary} isLoading={isLoading} />
 
         {/* Schedules Directory Table */}
-        <div className="space-y-4 rounded-2xl border border-white/10 bg-slate-900/60 p-5 backdrop-blur-md">
-          <div className="flex items-center justify-between border-b border-white/10 pb-4">
+        <div className="surface-card space-y-4 p-5">
+          <div className="flex items-center justify-between border-b border-border pb-4">
             <div>
-              <h2 className="text-base font-semibold text-white">
+              <h2 className="text-base font-semibold text-foreground">
                 Active Order Billing Schedules
               </h2>
-              <p className="text-xs text-slate-400">
+              <p className="text-xs text-muted-foreground">
                 Direct access to hybrid invoice timelines and payment reconciliation
               </p>
             </div>
-            <span className="text-xs text-slate-400">
+            <span className="text-xs text-muted-foreground">
               {schedules.length} Active Schedule{schedules.length === 1 ? "" : "s"}
             </span>
           </div>
@@ -325,14 +325,14 @@ function BillingOperationsOverview() {
               <Skeleton className="h-12 w-full" />
             </div>
           ) : schedules.length === 0 ? (
-            <div className="p-8 text-center text-xs text-slate-400">
+            <div className="p-8 text-center text-xs text-muted-foreground">
               No active billing schedules found.
             </div>
           ) : (
             <div className="overflow-x-auto">
               <table className="w-full text-left text-xs">
                 <thead>
-                  <tr className="border-b border-white/5 font-medium text-slate-400">
+                  <tr className="border-b border-border font-medium text-muted-foreground">
                     <th className="pb-3 pl-2">Order / Customer</th>
                     <th className="pb-3">Invoices</th>
                     <th className="pb-3">Billed</th>
@@ -342,7 +342,7 @@ function BillingOperationsOverview() {
                     <th className="pr-2 pb-3 text-right">Workspace</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-white/5">
+                <tbody className="divide-y divide-border">
                   {schedules.map((sch) => {
                     const quote = quotations.find((q) => q.id === sch.quotationId);
                     const nonVoid = sch.invoices.filter((i) => i.status !== "VOID");
@@ -355,28 +355,28 @@ function BillingOperationsOverview() {
                     return (
                       <tr
                         key={sch.id}
-                        className="text-slate-200 transition-colors hover:bg-white/[0.02]"
+                        className="hover:bg-muted/40 text-foreground transition-colors"
                       >
                         <td className="py-3 pl-2">
-                          <div className="font-mono font-medium text-white">
+                          <div className="font-mono font-medium text-foreground">
                             {quote?.quotationNumber ?? sch.quotationId}
                           </div>
-                          <div className="text-xs text-slate-400">
+                          <div className="text-xs text-muted-foreground">
                             {quote?.customer?.name ?? "Enterprise Account"}
                           </div>
                         </td>
                         <td className="py-3">
-                          <span className="font-mono text-slate-300">
+                          <span className="font-mono text-muted-foreground">
                             {nonVoid.length} periods
                           </span>
                         </td>
                         <td className="py-3 font-mono font-medium">
                           ${(billed / 100).toLocaleString("en-US", { minimumFractionDigits: 2 })}
                         </td>
-                        <td className="py-3 font-mono font-medium text-emerald-400">
+                        <td className="py-3 font-mono font-medium text-emerald-500">
                           ${(collected / 100).toLocaleString("en-US", { minimumFractionDigits: 2 })}
                         </td>
-                        <td className="py-3 font-mono font-medium text-amber-400">
+                        <td className="py-3 font-mono font-medium text-amber-500">
                           ${(due / 100).toLocaleString("en-US", { minimumFractionDigits: 2 })}
                         </td>
                         <td className="py-3">
@@ -385,14 +385,14 @@ function BillingOperationsOverview() {
                               {sch.creditNotes.length} Note{sch.creditNotes.length > 1 ? "s" : ""}
                             </Badge>
                           ) : (
-                            <span className="text-slate-500">—</span>
+                            <span className="text-muted-foreground">—</span>
                           )}
                         </td>
                         <td className="py-3 pr-2 text-right">
                           <Link to={appRoutes.quotationBilling(sch.quotationId)}>
                             <Button
                               size="sm"
-                              className="h-7 gap-1 bg-purple-600 text-xs text-white hover:bg-purple-500"
+                              className="h-7 gap-1 text-xs"
                             >
                               <span>Open Workspace</span>
                               <ArrowRight className="size-3" />

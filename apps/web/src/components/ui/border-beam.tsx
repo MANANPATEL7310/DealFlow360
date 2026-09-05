@@ -1,7 +1,4 @@
-import type { CSSProperties } from "react";
-import { cn } from "@/lib/cn";
-
-interface BorderBeamProps {
+export interface BorderBeamProps {
   className?: string;
   size?: number;
   duration?: number;
@@ -12,32 +9,8 @@ interface BorderBeamProps {
   delay?: number;
 }
 
-export function BorderBeam({
-  className,
-  size = 220,
-  duration = 14,
-  anchor = 90,
-  borderWidth = 1.5,
-  colorFrom = "var(--primary)",
-  colorTo = "var(--secondary)",
-  delay = 0,
-}: BorderBeamProps) {
-  return (
-    <div
-      style={
-        {
-          "--size": size,
-          "--duration": duration,
-          "--anchor": anchor,
-          "--border-width": borderWidth,
-          "--color-from": colorFrom,
-          "--color-to": colorTo,
-          "--delay": `-${delay}s`,
-        } as CSSProperties
-      }
-      className={cn("border-beam-container border-beam-runner", className)}
-    />
-  );
+export function BorderBeam(_props?: BorderBeamProps) {
+  return null;
 }
 
 export default BorderBeam;
