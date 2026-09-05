@@ -258,6 +258,64 @@ export async function listAlerts(filters: AlertFilters) {
   );
 }
 
+export async function getOpenAlerts() {
+  return listAlerts({ status: "open" });
+}
+
+export async function getOpenAlertIds() {
+  const alerts = await db.dealHealthAlert.findMany({
+    where: { status: "open" },
+    select: { id: true },
+  });
+
+  return alerts.map((alert) => alert.id);
+}
+
+export async function getQuotationTimeline(quotationId: string) {
+  const quotation = await db.quotation.findUnique({
+    where: { id: quotationId },
+    select: {
+      id: true,
+      status: true,
+      lastActivityAt: true,
+      createdAt: true,
+      updatedAt: true,
+      statusEvents: {
+        orderBy: { createdAt: "asc" },
+        select: {
+          fromStatus: true,
+          toStatus: true,
+          reason: true,
+          createdAt: true,
+        },
+      },
+    },
+  });
+  if (!quotation) {
+    throw notFound("QUOTATION_NOT_FOUND");
+  }
+
+  return quotation;
+}
+
+export async function getRepStats(repId: string) {
+  const [openAlertCount, quoteCount, paidQuoteCount] = await Promise.all([
+    db.dealHealthAlert.count({
+      where: { status: "open", quotation: { salesRepId: repId } },
+    }),
+    db.quotation.count({ where: { salesRepId: repId } }),
+    db.quotation.count({ where: { salesRepId: repId, status: "PAID" } }),
+  ]);
+
+  return {
+    repId,
+    openAlertCount,
+    quoteCount,
+    paidQuoteCount,
+    paidRate: quoteCount > 0 ? paidQuoteCount / quoteCount : 0,
+  };
+}
+
 export async function acknowledgeAlert(id: string) {
   const alert = await db.dealHealthAlert.findUnique({
     where: { id },

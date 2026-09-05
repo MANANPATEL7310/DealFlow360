@@ -42,6 +42,15 @@ async function main() {
     "health.stalledDays": 7,
     "health.anomalyK": 2,
     "ai.enabled": false,
+    "ai.fulfillment.enabled": true,
+    "ai.deal-health.enabled": true,
+    "ai.insights.enabled": true,
+    "ai.modelRates": {
+      "openrouter/free": { in: 0, out: 0 },
+      "anthropic/claude-sonnet-4.5": { in: 3, out: 15 },
+      "openai/text-embedding-3-small": { in: 0.02, out: 0 },
+    },
+    "fulfillment.overrideCostBand": 1000,
   };
   for (const [key, value] of Object.entries(settings)) {
     await db.systemSetting.upsert({
@@ -51,6 +60,59 @@ async function main() {
     });
   }
   console.log("✓ SystemSettings seeded");
+
+  // ── Phase 2: Dev 3 AI prompt versions ─────────────────────────────────────
+  const prompts = [
+    {
+      agent: "fulfillment",
+      system: `You are the AI Fulfillment Planner for DealFlow360. Propose the best warehouse split for a confirmed order, minimizing shipment count and cost while respecting real stock.
+
+Use tools for facts. compute_split is the deterministic M7 baseline and source of truth. simulate_split decides whether alternatives are feasible. Never allocate stock that does not exist. If you propose an override, it must go through propose_override; over-band changes require manager approval.
+
+Return only JSON matching the required schema: proposedSplits, backorders, rationale, estShipmentCost, estShipmentCount.`,
+    },
+    {
+      agent: "deal-health",
+      system: `You are the AI Deal Health Monitor for DealFlow360. M10 has already detected at-risk deals. Your job is to triage existing alerts, explain why each matters, and draft outreach for the owning rep to review.
+
+Use only alert IDs returned by get_open_alerts. Do not create, resolve, or suppress alerts. draft_nudge never sends; it only creates a human approval request. Keep summaries concise and tied to tool output.
+
+Return only JSON matching the required schema: prioritized alertId, priority, whySummary, draftMessage, and suggestedAction.`,
+    },
+    {
+      agent: "insights",
+      system: `You are the AI Sales Insights assistant for DealFlow360. Translate natural-language questions into whitelisted M11 report filters and run the report. You never write SQL and never invent numbers.
+
+Use only the allowed filters exposed by run_sales_report. tableData must reflect the M11 report output. If the question cannot be expressed with the whitelist, say that in the narrative.
+
+Return only JSON matching the required schema: interpretedFilters, tableData, narrative, and optional chartSpec.`,
+    },
+  ];
+  for (const prompt of prompts) {
+    const existing = await db.promptVersion.findFirst({
+      where: { agent: prompt.agent, version: 1 },
+    });
+    await db.promptVersion.updateMany({
+      where: { agent: prompt.agent, active: true },
+      data: { active: false },
+    });
+    if (existing) {
+      await db.promptVersion.update({
+        where: { id: existing.id },
+        data: { system: prompt.system, active: true },
+      });
+    } else {
+      await db.promptVersion.create({
+        data: {
+          agent: prompt.agent,
+          version: 1,
+          system: prompt.system,
+          active: true,
+        },
+      });
+    }
+  }
+  console.log("✓ Dev 3 AI prompts seeded");
 
   // ── M2: Customers ────────────────────────────────────────────────────────────
   async function upsertCustomer(data: {

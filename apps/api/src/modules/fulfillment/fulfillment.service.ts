@@ -172,6 +172,14 @@ async function assertStockAvailable(
   }
 }
 
+export type FulfillmentSimulation = {
+  splits: AllocationSplit[];
+  backorders: { productId: string; qty: number }[];
+  estShipmentCost: number;
+  estShipmentCount: number;
+  feasible: boolean;
+};
+
 async function decrementStock(
   tx: Tx,
   splits: Pick<AllocationSplit, "warehouseId" | "productId" | "qty">[],
@@ -272,6 +280,122 @@ export async function generateFulfillmentPlan(quotationId: string) {
       },
     });
   });
+}
+
+export async function getStockLevels(quotationId: string) {
+  const quotation = await loadQuotationWithLines(quotationId);
+  if (!quotation) {
+    throw notFound("QUOTATION_NOT_FOUND");
+  }
+
+  const lines = physicalLines(quotation);
+  const productIds = lines.map((line) => line.productId);
+  const warehouses = await loadWarehouses(productIds);
+
+  return warehouses.map((warehouse) => ({
+    warehouseId: warehouse.id,
+    shippingCostWeight: warehouse.shippingCostWeight,
+    stock: warehouse.stock,
+  }));
+}
+
+export async function computeSplit(quotationId: string) {
+  const quotation = await loadQuotationWithLines(quotationId);
+  if (!quotation) {
+    throw notFound("QUOTATION_NOT_FOUND");
+  }
+
+  const lines = physicalLines(quotation);
+  const warehouses = await loadWarehouses(lines.map((line) => line.productId));
+  const result = optimizeSplits(lines, warehouses);
+
+  return {
+    splits: result.splits,
+    backorders: result.backorders.map((backorder) => ({
+      productId: backorder.productId,
+      qty: backorder.qtyOutstanding,
+    })),
+    estShipmentCost: result.estimatedCostMinor,
+    estShipmentCount: result.estimatedShipmentCount,
+    feasible: result.backorders.length === 0,
+  } satisfies FulfillmentSimulation;
+}
+
+export async function simulateSplit(
+  quotationId: string,
+  splits: OverrideFulfillmentInput["splits"],
+) {
+  const quotation = await loadQuotationWithLines(quotationId);
+  if (!quotation) {
+    throw notFound("QUOTATION_NOT_FOUND");
+  }
+  const lines = physicalLines(quotation);
+
+  try {
+    assertCoversDemand(splits, lines);
+  } catch {
+    return {
+      splits: [],
+      backorders: lines.map((line) => ({
+        productId: line.productId,
+        qty: line.qty,
+      })),
+      estShipmentCost: 0,
+      estShipmentCount: 0,
+      feasible: false,
+    } satisfies FulfillmentSimulation;
+  }
+
+  return db.$transaction(async (tx) => {
+    const stockRows = await tx.stockLevel.findMany({
+      where: {
+        OR: splits.map((split) => ({
+          warehouseId: split.warehouseId,
+          productId: split.productId,
+        })),
+      },
+    });
+    const stockByKey = new Map(
+      stockRows.map((row) => [`${row.warehouseId}:${row.productId}`, row]),
+    );
+    const feasible = splits.every((split) => {
+      const row = stockByKey.get(`${split.warehouseId}:${split.productId}`);
+      return Boolean(row && row.quantity >= split.qty);
+    });
+
+    if (!feasible) {
+      return {
+        splits: [],
+        backorders: lines.map((line) => ({
+          productId: line.productId,
+          qty: line.qty,
+        })),
+        estShipmentCost: 0,
+        estShipmentCount: 0,
+        feasible: false,
+      } satisfies FulfillmentSimulation;
+    }
+
+    const priced = await priceManualSplits(tx, splits);
+    return {
+      splits: priced,
+      backorders: [],
+      estShipmentCost: priced.reduce(
+        (sum, split) => sum + split.shipmentCostMinor,
+        0,
+      ),
+      estShipmentCount: new Set(priced.map((split) => split.warehouseId)).size,
+      feasible: true,
+    } satisfies FulfillmentSimulation;
+  });
+}
+
+export async function applyOverride(
+  quotationId: string,
+  splits: OverrideFulfillmentInput["splits"],
+  actor: { actorId: string },
+) {
+  return overridePlan(quotationId, actor.actorId, { splits });
 }
 
 export async function acceptPlan(quotationId: string, actorId: string) {

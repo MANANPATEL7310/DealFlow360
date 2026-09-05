@@ -194,3 +194,15 @@ export async function buildReportDataset(
     funnel,
   };
 }
+
+export async function runReport(filters: ReportFilters, viewer: ReportViewer) {
+  return buildReportDataset(filters, viewer);
+}
+
+export async function listReps() {
+  return db.user.findMany({
+    where: { role: { in: ["sales_rep", "sales_manager"] } },
+    select: { id: true, name: true, email: true, role: true },
+    orderBy: { name: "asc" },
+  });
+}

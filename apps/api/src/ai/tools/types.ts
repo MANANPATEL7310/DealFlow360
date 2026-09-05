@@ -1,5 +1,6 @@
 export type AgentContext = {
   actorId: string;
+  actorRole?: string;
   agent: string;
   runId: string;
   quotationId?: string;

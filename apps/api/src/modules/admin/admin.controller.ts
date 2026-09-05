@@ -1,7 +1,12 @@
 import type { Request, Response } from "express";
 import { sendOk } from "../../lib/response.js";
 import { auditLogQuerySchema } from "./admin.schema.js";
-import { listAuditLogs, listSettings, updateSetting } from "./admin.service.js";
+import {
+  getAiUsageSummary,
+  listAuditLogs,
+  listSettings,
+  updateSetting,
+} from "./admin.service.js";
 
 export async function listSettingsController(_req: Request, res: Response) {
   return sendOk(res, await listSettings());
@@ -29,4 +34,8 @@ export async function listAuditLogsController(req: Request, res: Response) {
   const filters = auditLogQuerySchema.parse(req.query);
 
   return sendOk(res, await listAuditLogs(filters));
+}
+
+export async function aiUsageSummaryController(_req: Request, res: Response) {
+  return sendOk(res, await getAiUsageSummary());
 }

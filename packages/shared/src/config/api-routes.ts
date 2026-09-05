@@ -493,6 +493,12 @@ export const apiRoutes = {
       auth: true,
       description: "List filtered audit log entries.",
     },
+    aiUsage: {
+      path: "/admin/ai-usage",
+      method: "GET",
+      auth: true,
+      description: "Summarize AI spend, latency, failures, and HITL pauses.",
+    },
   },
 
   // ─── Agentic AI (Phase 2) ────────────────────────────────────────────────
