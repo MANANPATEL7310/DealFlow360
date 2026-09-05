@@ -1,6 +1,8 @@
 import {
   type AddLineInput,
   apiRoutes,
+  type ApprovalDecision,
+  type ApprovalDecisionInput,
   computeTotals,
   type CreateQuotationInput,
   evaluateQuotationRisk,
@@ -379,6 +381,106 @@ export const quotationsApi = {
         message: risk.isAutoApproved
           ? "Quotation auto-approved within governance policy!"
           : `Quotation escalated to ${risk.requiredLevels.join(" and ")}.`,
+      };
+    }
+  },
+
+  async decideApproval(
+    quotationId: string,
+    input: ApprovalDecisionInput,
+    actor: { id: string; role: string; name?: string },
+  ): Promise<{
+    quotation: Quotation;
+    message: string;
+    decision: ApprovalDecision;
+  }> {
+    try {
+      const { data } = await apiClient.post(
+        apiRoutes.approvals.decision.path.replace(":id", quotationId),
+        input,
+      );
+      return data.data;
+    } catch {
+      const quoteIndex = localQuotations.findIndex((q) => q.id === quotationId);
+      const quote = localQuotations[quoteIndex];
+      if (quoteIndex < 0 || !quote) {
+        throw new Error("Quotation not found");
+      }
+
+      const pendingStepIndex = quote.approvals.findIndex(
+        (s) => s.decision === "PENDING",
+      );
+      const pendingStep = quote.approvals[pendingStepIndex];
+      if (pendingStepIndex < 0 || !pendingStep) {
+        throw new Error("No pending approval steps found for this quotation.");
+      }
+
+      // Update current step
+      const updatedSteps = [...quote.approvals];
+      updatedSteps[pendingStepIndex] = {
+        ...pendingStep,
+        decision: input.decision,
+        reason: input.reason,
+        approverId: actor.id,
+        decidedAt: new Date().toISOString(),
+      };
+
+      let targetStatus = quote.status;
+      let transitionReason = "";
+
+      if (input.decision === "REJECTED") {
+        targetStatus = "REJECTED";
+        transitionReason = `Rejected by ${pendingStep.level}: ${input.reason}`;
+      } else if (input.decision === "RETURNED") {
+        targetStatus = "DRAFT";
+        transitionReason = `Returned to sales rep by ${pendingStep.level}: ${input.reason}`;
+      } else if (input.decision === "APPROVED") {
+        // Check if subsequent pending steps exist
+        const hasSubsequentSteps = updatedSteps.some(
+          (s) => s.sequence > pendingStep.sequence && s.decision === "PENDING",
+        );
+
+        if (hasSubsequentSteps) {
+          targetStatus = "PENDING_APPROVAL";
+          transitionReason = `Tier ${pendingStep.sequence} approved by ${pendingStep.level}. Escalated to next review authority.`;
+        } else {
+          targetStatus = "APPROVED";
+          transitionReason = `Final policy approval granted by ${pendingStep.level}: ${input.reason}. Ready for customer issuance.`;
+        }
+      }
+
+      const newEvent: QuotationStatusEvent = {
+        id: `qte-${Date.now()}`,
+        quotationId,
+        fromStatus: quote.status,
+        toStatus: targetStatus,
+        actorId: actor.id,
+        reason: transitionReason,
+        createdAt: new Date().toISOString(),
+      };
+
+      const updatedQuote: Quotation = {
+        ...quote,
+        status: targetStatus,
+        approvals: updatedSteps,
+        statusEvents: [...quote.statusEvents, newEvent],
+        lastActivityAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+      };
+
+      localQuotations[quoteIndex] = updatedQuote;
+
+      return {
+        quotation: updatedQuote,
+        decision: input.decision,
+        message:
+          input.decision === "APPROVED"
+            ? targetStatus === "APPROVED"
+              ? "Quotation fully approved! Ready to send to customer."
+              : "Approval recorded. Escalated to next review level."
+            : input.decision === "RETURNED"
+              ? "Quotation returned to sales rep draft for revisions."
+              : "Quotation rejected.",
       };
     }
   },
