@@ -1,16 +1,17 @@
 import type { MetaFunction } from "react-router";
-import { ApprovalsPage } from "@/features/approvals/pages/approvals-page";
+import { ApprovalsInboxPage } from "@/features/approvals/pages/approvals-inbox-page";
 
 export const meta: MetaFunction = () => {
   return [
-    { title: "AI Approvals | DealFlow360" },
+    { title: "Deal Approvals & AI HITL Inbox · DealFlow360" },
     {
       name: "description",
-      content: "Human-in-the-loop governance queue for AI proposals.",
+      content:
+        "Manage pending quotation approvals, sequential multi-tier decision chains, and AI HITL proposed actions.",
     },
   ];
 };
 
 export default function ApprovalsRoute() {
-  return <ApprovalsPage />;
+  return <ApprovalsInboxPage />;
 }

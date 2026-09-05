@@ -1,8 +1,7 @@
 export const appMeta = {
-  name: "Project Template",
-  description:
-    "A reusable React + Express monorepo template for fast product delivery.",
-  supportEmail: "hello@example.com",
+  name: "DealFlow360",
+  description: "Intelligent Autonomous Quotation & Sales Operations Engine.",
+  supportEmail: "support@dealflow360.internal",
 } as const;
 
 export const storageKeys = {
