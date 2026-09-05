@@ -1,6 +1,7 @@
 export * from "./config/app";
 export * from "./config/api-routes";
 export * from "./config/routes";
+export * from "./schemas/admin";
 export * from "./schemas/auth";
 export * from "./schemas/dashboard";
 export * from "./schemas/deal-health";
@@ -11,4 +12,5 @@ export * from "./schemas/governance";
 export * from "./schemas/quotation";
 export * from "./schemas/billing";
 export * from "./schemas/portal";
+export * from "./schemas/reports";
 export * from "./types";
