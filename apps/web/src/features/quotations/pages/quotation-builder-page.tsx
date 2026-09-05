@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Link, useParams } from "react-router";
 import {
   type AddLineInput,
+  appRoutes,
   computeTotals,
   type CustomerTier,
 } from "@template/shared";
@@ -13,6 +14,7 @@ import {
   Package,
   Plus,
   ShieldCheck,
+  Truck,
   User,
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
@@ -157,13 +159,20 @@ export function QuotationBuilderPage() {
           </div>
 
           <div className="flex items-center gap-2">
+            <Link to={appRoutes.quotationFulfillment(quote.id)}>
+              <Button size="sm" variant="outline" className="h-9 gap-1.5 rounded-lg text-xs">
+                <Truck className="size-3.5" /> Fulfillment
+              </Button>
+            </Link>
+
             {isDraft && (
               <Button
                 size="sm"
                 variant="primary"
                 onClick={() => setIsPickerOpen(true)}
+                className="h-9 gap-1.5 rounded-lg text-xs"
               >
-                <Plus className="mr-1.5 size-4" /> Add Product Line
+                <Plus className="size-4" /> Add Product Line
               </Button>
             )}
           </div>
