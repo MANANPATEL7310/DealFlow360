@@ -26,6 +26,7 @@ import { ApprovalStepsStepper } from "@/features/approvals/components/approval-s
 import { AuditTimeline } from "@/features/approvals/components/audit-timeline";
 import { DecisionModal } from "@/features/approvals/components/decision-modal";
 import { RiskBreakdownCard } from "@/features/approvals/components/risk-breakdown-card";
+import { AiDiscountReviewCard } from "@/features/approvals/components/ai-discount-review-card";
 import {
   useApprovalDetails,
   useSubmitApprovalDecision,
@@ -153,14 +154,18 @@ export function ApprovalDetailPage() {
             {/* Financial Highlights */}
             <div className="flex flex-wrap items-center gap-6 border-t border-border pt-4 lg:border-t-0 lg:pt-0">
               <div className="text-left lg:text-right">
-                <span className="text-xs text-muted-foreground">Grand Total</span>
+                <span className="text-xs text-muted-foreground">
+                  Grand Total
+                </span>
                 <p className="text-xl font-black text-foreground">
                   ${totalDollars}
                 </p>
               </div>
 
               <div className="text-left lg:text-right">
-                <span className="text-xs text-muted-foreground">Gross Margin</span>
+                <span className="text-xs text-muted-foreground">
+                  Gross Margin
+                </span>
                 <p
                   className={`text-xl font-black ${
                     quotation.marginPct >= 30
@@ -175,7 +180,9 @@ export function ApprovalDetailPage() {
               </div>
 
               <div className="text-left lg:text-right">
-                <span className="text-xs text-muted-foreground">Blended Risk</span>
+                <span className="text-xs text-muted-foreground">
+                  Blended Risk
+                </span>
                 <p
                   className={`text-xl font-black ${
                     (quotation.blendedRiskScore ?? 0) >= 70
@@ -241,7 +248,8 @@ export function ApprovalDetailPage() {
                   </h3>
                 </div>
                 <span className="text-xs text-muted-foreground">
-                  {quotation.lines.length} Item{quotation.lines.length === 1 ? "" : "s"}
+                  {quotation.lines.length} Item
+                  {quotation.lines.length === 1 ? "" : "s"}
                 </span>
               </div>
 
@@ -249,11 +257,21 @@ export function ApprovalDetailPage() {
                 <Table>
                   <TableHeader>
                     <TableRow className="border-border bg-surface-muted/50">
-                      <TableHead className="text-xs font-semibold">Product</TableHead>
-                      <TableHead className="text-center text-xs font-semibold">Qty</TableHead>
-                      <TableHead className="text-right text-xs font-semibold">List Price</TableHead>
-                      <TableHead className="text-center text-xs font-semibold">Discount</TableHead>
-                      <TableHead className="text-right text-xs font-semibold">Total</TableHead>
+                      <TableHead className="text-xs font-semibold">
+                        Product
+                      </TableHead>
+                      <TableHead className="text-center text-xs font-semibold">
+                        Qty
+                      </TableHead>
+                      <TableHead className="text-right text-xs font-semibold">
+                        List Price
+                      </TableHead>
+                      <TableHead className="text-center text-xs font-semibold">
+                        Discount
+                      </TableHead>
+                      <TableHead className="text-right text-xs font-semibold">
+                        Total
+                      </TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
@@ -303,6 +321,9 @@ export function ApprovalDetailPage() {
                 </Table>
               </div>
             </Card>
+
+            {/* Agent 1 AI Discount Approval Review Card */}
+            <AiDiscountReviewCard quotation={quotation} risk={risk ?? null} />
 
             {/* Risk Breakdown Card */}
             <RiskBreakdownCard quotation={quotation} risk={risk ?? null} />

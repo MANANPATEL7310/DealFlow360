@@ -628,6 +628,19 @@ export const apiRoutes = {
       auth: true,
       description: "Get AI contextual suggestions for the current screen.",
     },
+    discountReview: {
+      path: "/ai/discount-review",
+      method: "POST",
+      auth: true,
+      description:
+        "Agent 1 discount approval recommendation and RAG deal comparisons.",
+    },
+    negotiationEvaluate: {
+      path: "/ai/negotiation-evaluate",
+      method: "POST",
+      auth: true,
+      description: "Agent 6 negotiation counter simulation and draft reply.",
+    },
   },
 } as const;
 

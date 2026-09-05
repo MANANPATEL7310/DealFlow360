@@ -88,3 +88,46 @@ export const ContextualSuggestionSchema = z.object({
   confidence: z.number().min(0).max(1).optional(),
 });
 export type ContextualSuggestion = z.infer<typeof ContextualSuggestionSchema>;
+
+// ── Agent 1: AI Discount Approval Assistant ──
+export const SimilarApprovedDealSchema = z.object({
+  id: z.string(),
+  quotationNumber: z.string(),
+  customerName: z.string(),
+  customerTier: z.string(),
+  discountPct: z.number(),
+  marginPct: z.number(),
+  turnaroundHours: z.number(),
+  status: z.string(),
+});
+export type SimilarApprovedDeal = z.infer<typeof SimilarApprovedDealSchema>;
+
+export const DiscountReviewSchema = z.object({
+  recommendation: z.enum(["APPROVE", "ADJUST", "REJECT"]),
+  confidence: z.number().min(0).max(1),
+  rationale: z.string(),
+  suggestedAdjustments: z
+    .array(
+      z.object({
+        lineId: z.string().optional(),
+        productName: z.string().optional(),
+        currentDiscountPct: z.number(),
+        suggestedDiscountPct: z.number(),
+        reason: z.string(),
+      }),
+    )
+    .optional(),
+  similarDeals: z.array(SimilarApprovedDealSchema).default([]),
+});
+export type DiscountReview = z.infer<typeof DiscountReviewSchema>;
+
+// ── Agent 6: AI Customer Negotiation Assistant ──
+export const NegotiationEvaluationSchema = z.object({
+  wouldAutoApprove: z.boolean(),
+  requiredLevelsIfAccepted: z.array(z.string()),
+  recommendedCounterPct: z.number().optional(),
+  marginImpactPct: z.number(),
+  draftMessage: z.string(),
+  rationale: z.string(),
+});
+export type NegotiationEvaluation = z.infer<typeof NegotiationEvaluationSchema>;

@@ -6,6 +6,8 @@ import {
   decideApprovalRequest,
   listAgentRuns,
   getContextualSuggestions,
+  getDiscountApprovalReview,
+  evaluateNegotiationCounter,
 } from "./ai.service.js";
 import { HitlApprovalDecisionSchema } from "@template/shared";
 
@@ -59,6 +61,35 @@ aiRouter.post("/contextual", async (req, res, next) => {
     const path = typeof req.body?.path === "string" ? req.body.path : "";
     const suggestions = await getContextualSuggestions(path);
     res.json(suggestions);
+  } catch (err) {
+    next(err);
+  }
+});
+
+aiRouter.post("/discount-review", async (req, res, next) => {
+  try {
+    const quotationId =
+      typeof req.body?.quotationId === "string" ? req.body.quotationId : "";
+    const review = await getDiscountApprovalReview(quotationId);
+    res.json(review);
+  } catch (err) {
+    next(err);
+  }
+});
+
+aiRouter.post("/negotiation-evaluate", async (req, res, next) => {
+  try {
+    const quotationId =
+      typeof req.body?.quotationId === "string" ? req.body.quotationId : "";
+    const counterDiscountPct = Number(req.body?.counterDiscountPct) || 0;
+    const lineId =
+      typeof req.body?.lineId === "string" ? req.body.lineId : undefined;
+    const evaluation = await evaluateNegotiationCounter(
+      quotationId,
+      counterDiscountPct,
+      lineId,
+    );
+    res.json(evaluation);
   } catch (err) {
     next(err);
   }

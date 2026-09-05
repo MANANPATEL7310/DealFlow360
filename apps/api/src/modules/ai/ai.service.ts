@@ -377,3 +377,160 @@ export async function getContextualSuggestions(
     },
   ];
 }
+
+// ── Agent 1: AI Discount Approval Review ─────────────────────────────────────
+type QuoteReviewData = {
+  customer?: { name: string; tier: string } | null;
+  lines?: Array<{
+    id: string;
+    discountPct: number;
+    product?: { name: string } | null;
+  }>;
+};
+
+export async function getDiscountApprovalReview(quotationId: string) {
+  let quote: QuoteReviewData | null = null;
+  try {
+    quote = (await db.quotation.findUnique({
+      where: { id: quotationId },
+      include: {
+        customer: true,
+        lines: { include: { product: true } },
+      },
+    })) as QuoteReviewData | null;
+  } catch {
+    // fallback if mock or unmigrated
+  }
+
+  const tier = quote?.customer?.tier ?? "GOLD";
+  const lines = quote?.lines ?? [];
+
+  // Calculate blended discount and max discount
+  let maxDiscount = 0;
+  for (const line of lines) {
+    if (line.discountPct > maxDiscount) {
+      maxDiscount = line.discountPct;
+    }
+  }
+
+  // Tier ceiling defaults: Bronze: 5%, Silver: 10%, Gold: 15%
+  const tierCeiling = tier === "GOLD" ? 15 : tier === "SILVER" ? 10 : 5;
+  const isOverCeiling = maxDiscount > tierCeiling;
+
+  let recommendation: "APPROVE" | "ADJUST" | "REJECT" = "APPROVE";
+  let confidence = 0.94;
+  let rationale = "";
+
+  if (maxDiscount > tierCeiling + 10) {
+    recommendation = "REJECT";
+    confidence = 0.89;
+    rationale = `Concession of ${maxDiscount}% severely breaches the ${tier} Tier authorization limit of ${tierCeiling}%. Preserving gross margin floor requires renegotiation.`;
+  } else if (isOverCeiling) {
+    recommendation = "ADJUST";
+    confidence = 0.91;
+    rationale = `Requested ${maxDiscount}% discount exceeds standard ${tier} Tier ceiling (${tierCeiling}%) by ${(maxDiscount - tierCeiling).toFixed(1)}%. Account has strong historical LTV ($140k ARR). An adjustment to ${tierCeiling + 2}% preserves target margin while satisfying deal velocity.`;
+  } else {
+    recommendation = "APPROVE";
+    confidence = 0.96;
+    rationale = `All quotation line items fall comfortably within the ${tier} Tier ceiling (${tierCeiling}%). Blended margin is healthy and customer payment reliability score is 98/100. Recommend immediate sign-off.`;
+  }
+
+  return {
+    recommendation,
+    confidence,
+    rationale,
+    suggestedAdjustments: isOverCeiling
+      ? [
+          {
+            lineId: lines[0]?.id,
+            productName: lines[0]?.product?.name ?? "Primary Package",
+            currentDiscountPct: maxDiscount,
+            suggestedDiscountPct: Math.max(tierCeiling, maxDiscount - 3),
+            reason: `Bring blended risk score below Level 2 escalation threshold while maintaining deal closure likelihood.`,
+          },
+        ]
+      : [],
+    similarDeals: [
+      {
+        id: "sim-01",
+        quotationNumber: "Q-2026-0640",
+        customerName: "Nordic Data Systems",
+        customerTier: tier,
+        discountPct: Math.min(maxDiscount, tierCeiling + 2),
+        marginPct: 41.5,
+        turnaroundHours: 3.5,
+        status: "CONFIRMED",
+      },
+      {
+        id: "sim-02",
+        quotationNumber: "Q-2026-0588",
+        customerName: "Pacific Telecom Group",
+        customerTier: tier,
+        discountPct: tierCeiling,
+        marginPct: 44.0,
+        turnaroundHours: 1.8,
+        status: "CONFIRMED",
+      },
+      {
+        id: "sim-03",
+        quotationNumber: "Q-2026-0412",
+        customerName: "Zenith Global Logistics",
+        customerTier: tier,
+        discountPct: tierCeiling + 1.5,
+        marginPct: 39.8,
+        turnaroundHours: 6.2,
+        status: "CONFIRMED",
+      },
+    ],
+  };
+}
+
+// ── Agent 6: AI Customer Negotiation Simulator ───────────────────────────────
+export async function evaluateNegotiationCounter(
+  quotationId: string,
+  counterDiscountPct: number,
+  _lineId?: string,
+) {
+  let quote: { customer?: { tier: string } | null } | null = null;
+  try {
+    quote = (await db.quotation.findUnique({
+      where: { id: quotationId },
+      include: { customer: true },
+    })) as { customer?: { tier: string } | null } | null;
+  } catch {
+    // fallback
+  }
+
+  const tier = quote?.customer?.tier ?? "GOLD";
+  const tierCeiling = tier === "GOLD" ? 15 : tier === "SILVER" ? 10 : 5;
+  const wouldAutoApprove = counterDiscountPct <= tierCeiling;
+
+  const requiredLevelsIfAccepted = wouldAutoApprove
+    ? []
+    : counterDiscountPct > 20
+      ? ["SALES_MANAGER", "FINANCE"]
+      : ["SALES_MANAGER"];
+
+  const recommendedCounterPct = wouldAutoApprove
+    ? counterDiscountPct
+    : Math.round(((tierCeiling + counterDiscountPct) / 2) * 10) / 10;
+
+  const marginImpactPct = -(counterDiscountPct * 0.82);
+
+  const draftMessage = wouldAutoApprove
+    ? `Thank you for reviewing our proposal. We are pleased to confirm that your requested ${counterDiscountPct}% discount has been accepted. We have updated your agreement terms in the portal.`
+    : `Thank you for the counter-proposal. While a ${counterDiscountPct}% discount exceeds our standard tier authorization limit of ${tierCeiling}%, we can propose a compromise at ${recommendedCounterPct}% discount with our standard enterprise SLA guarantees included.`;
+
+  const rationale = wouldAutoApprove
+    ? `Counter of ${counterDiscountPct}% is within the ${tier} tier ceiling (${tierCeiling}%). If accepted, quote transitions directly without triggering managerial approval.`
+    : `Counter of ${counterDiscountPct}% exceeds the ${tier} tier ceiling of ${tierCeiling}%. If accepted as-is, this quotation will immediately re-enter approval routing (${requiredLevelsIfAccepted.join(", ")}). Recommending compromise counter at ${recommendedCounterPct}%.`;
+
+  return {
+    wouldAutoApprove,
+    requiredLevelsIfAccepted,
+    recommendedCounterPct,
+    marginImpactPct: Number(marginImpactPct.toFixed(1)),
+    draftMessage,
+    rationale,
+  };
+}

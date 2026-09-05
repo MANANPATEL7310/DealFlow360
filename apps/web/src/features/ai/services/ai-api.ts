@@ -6,6 +6,8 @@ import type {
   HitlApprovalDecision,
   AgentRun,
   ContextualSuggestion,
+  DiscountReview,
+  NegotiationEvaluation,
 } from "@template/shared";
 
 export async function fetchAiStatus(): Promise<AiStatus> {
@@ -47,6 +49,28 @@ export async function fetchContextualSuggestions(
   const { data } = await apiClient.post<ContextualSuggestion[]>(
     apiRoutes.ai.contextual.path,
     { path },
+  );
+  return data;
+}
+
+export async function fetchDiscountReview(
+  quotationId: string,
+): Promise<DiscountReview> {
+  const { data } = await apiClient.post<DiscountReview>(
+    apiRoutes.ai.discountReview.path,
+    { quotationId },
+  );
+  return data;
+}
+
+export async function fetchNegotiationEvaluation(
+  quotationId: string,
+  counterDiscountPct: number,
+  lineId?: string,
+): Promise<NegotiationEvaluation> {
+  const { data } = await apiClient.post<NegotiationEvaluation>(
+    apiRoutes.ai.negotiationEvaluate.path,
+    { quotationId, counterDiscountPct, lineId },
   );
   return data;
 }
