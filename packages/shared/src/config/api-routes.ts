@@ -783,6 +783,24 @@ export const apiRoutes = {
         "Update global AI configuration, monthly budget cap, and agent kill-switches.",
     },
   },
+
+  // ─── Payment Gateway (Stripe & Simulation) ──────────────────────────────────
+  payments: {
+    createCheckoutSession: {
+      path: "/payments/checkout-session/:invoiceId",
+      method: "POST",
+      auth: true,
+      description:
+        "Create a live Stripe checkout session or simulation session for an invoice.",
+    },
+    simulateCheckout: {
+      path: "/payments/simulate-checkout",
+      method: "POST",
+      auth: true,
+      description:
+        "Simulate automated settlement of an invoice via payment gateway.",
+    },
+  },
 } as const;
 
 // ─── Derived Types (auto-generated, do not edit manually) ─────────────────────

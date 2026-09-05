@@ -24,10 +24,17 @@ export async function writeAudit(entry: {
   reason?: string;
   diff?: unknown;
 }): Promise<void> {
-  await db.auditLog.create({
-    data: {
-      ...entry,
-      diff: entry.diff as never, // stored as JSON in DB
-    },
-  });
+  try {
+    await db.auditLog.create({
+      data: {
+        ...entry,
+        diff: entry.diff as never, // stored as JSON in DB
+      },
+    });
+  } catch (err) {
+    console.warn(
+      "[audit] writeAudit DB skipped or unavailable:",
+      err instanceof Error ? err.message : err,
+    );
+  }
 }

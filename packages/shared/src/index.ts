@@ -15,6 +15,7 @@ export * from "./schemas/billing";
 export * from "./schemas/portal";
 export * from "./schemas/reports";
 export * from "./schemas/ai";
+export * from "./schemas/payments";
 export * from "./lib/quotation-math";
 export * from "./lib/upsell-engine";
 export * from "./lib/fulfillment-optimizer";
