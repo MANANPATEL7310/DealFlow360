@@ -3,5 +3,13 @@ export const appRoutes = {
   login: "/auth/login",
   app: "/app",
   dashboard: "/app",
+  quotations: "/app/quotations",
+  products: "/app/products",
+  customers: "/app/customers",
+  approvals: "/app/approvals",
+  fulfillment: "/app/fulfillment",
+  billing: "/app/billing",
+  dealHealth: "/app/deal-health",
+  reports: "/app/reports",
   settings: "/app/settings",
 } as const;
