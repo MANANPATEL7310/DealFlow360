@@ -4,6 +4,11 @@ import { httpStatus } from "../../constants/http.js";
 import { sendCreated, sendError, sendOk } from "../../lib/response.js";
 import { decideApproval } from "./approval.service.js";
 import {
+  answerNegotiation,
+  listNegotiations,
+  sendToCustomer,
+} from "./send.service.js";
+import {
   addLine,
   confirmQuotation,
   createQuotation,
@@ -120,6 +125,46 @@ export async function decisionController(req: Request, res: Response) {
       req.body,
     );
     return sendOk(res, result, "Approval decision recorded.");
+  } catch (e) {
+    return handleError(res, e);
+  }
+}
+
+export async function sendToCustomerController(req: Request, res: Response) {
+  try {
+    const result = await sendToCustomer(
+      req.params.id as string,
+      req.user!.sub,
+      req.body.contactId,
+    );
+    return sendOk(res, result, "Quotation sent to customer.");
+  } catch (e) {
+    return handleError(res, e);
+  }
+}
+
+export async function listNegotiationsController(req: Request, res: Response) {
+  try {
+    const negotiations = await listNegotiations(req.params.id as string);
+    return sendOk(res, negotiations);
+  } catch (e) {
+    return handleError(res, e);
+  }
+}
+
+export async function answerNegotiationController(req: Request, res: Response) {
+  try {
+    const result = await answerNegotiation(
+      req.params.id as string,
+      req.params.negId as string,
+      req.user!.sub,
+      req.body.status,
+    );
+    return sendOk(
+      res,
+      result,
+      `Negotiation request marked as ${req.body.status}.`,
+    );
   } catch (e) {
     return handleError(res, e);
   }

@@ -13,8 +13,19 @@ import type {
   UpdateLineInput,
 } from "./quotation.schema.js";
 
-export function loadQuotationWithLines(id: string) {
-  return db.quotation.findUnique({
+export type DbClient =
+  | typeof db
+  | Parameters<Parameters<typeof db.$transaction>[0]>[0];
+
+export function loadQuotationWithLines(
+  id: string,
+  options?: {
+    prisma?: DbClient;
+    includeNegotiations?: boolean;
+  },
+) {
+  const client = options?.prisma ?? db;
+  return client.quotation.findUnique({
     where: { id },
     include: {
       customer: true,
@@ -31,6 +42,13 @@ export function loadQuotationWithLines(id: string) {
       statusEvents: {
         orderBy: { createdAt: "asc" },
       },
+      ...(options?.includeNegotiations
+        ? {
+            negotiations: {
+              orderBy: { createdAt: "asc" },
+            },
+          }
+        : {}),
     },
   });
 }
@@ -55,7 +73,7 @@ function assertEditable(status: string) {
   }
 }
 
-const toRiskLine = (l: {
+export const toRiskLine = (l: {
   product: { category: string };
   discountPct: number;
   qty: number;
@@ -276,8 +294,11 @@ export async function deleteLine(
 }
 
 /** Single authority for all money on the quotation */
-export async function recomputeTotals(quotationId: string) {
-  const q = await loadQuotationWithLines(quotationId);
+export async function recomputeTotals(
+  quotationId: string,
+  client: DbClient = db,
+) {
+  const q = await loadQuotationWithLines(quotationId, { prisma: client });
   if (!q) {
     throw Object.assign(new Error("QUOTATION_NOT_FOUND"), { http: 404 });
   }
@@ -308,7 +329,7 @@ export async function recomputeTotals(quotationId: string) {
     }),
   );
 
-  await db.quotation.update({
+  await client.quotation.update({
     where: { id: quotationId },
     data: {
       subtotalMinor: subtotal,

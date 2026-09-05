@@ -197,6 +197,57 @@ export const apiRoutes = {
       auth: true,
       description: "Submit approval decision (approve, reject, return).",
     },
+    send: {
+      path: "/quotations/:id/send",
+      method: "POST",
+      auth: true,
+      description:
+        "Send approved quotation to customer and mint portal access token.",
+    },
+    negotiations: {
+      path: "/quotations/:id/negotiations",
+      method: "GET",
+      auth: true,
+      description: "List negotiation requests raised for this quotation.",
+    },
+    answerNegotiation: {
+      path: "/quotations/:id/negotiations/:negId/answer",
+      method: "POST",
+      auth: true,
+      description: "Answer or accept a customer negotiation request.",
+    },
+  },
+
+  // ─── Customer Portal (M9) ───────────────────────────────────────────────────
+  portal: {
+    quotation: {
+      path: "/portal/quotation",
+      method: "GET",
+      auth: false,
+      description:
+        "Customer view of the quotation (safe projection, cost & margin stripped).",
+    },
+    open: {
+      path: "/portal/open",
+      method: "POST",
+      auth: false,
+      description:
+        "Mark quotation as UNDER_NEGOTIATION when opened by customer.",
+    },
+    negotiations: {
+      path: "/portal/negotiations",
+      method: "POST",
+      auth: false,
+      description:
+        "Customer submits a comment or counter-discount negotiation request.",
+    },
+    confirm: {
+      path: "/portal/confirm",
+      method: "POST",
+      auth: false,
+      description:
+        "Customer confirms quote — folds accepted counters and re-evaluates risk governance gate.",
+    },
   },
 } as const;
 
