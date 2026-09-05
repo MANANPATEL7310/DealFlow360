@@ -4,12 +4,14 @@ import { AppSidebar } from "@/components/shared/app-sidebar";
 
 export function AppLayout() {
   return (
-    <main className="app-shell sidebar-layout">
+    <div className="flex min-h-screen w-full bg-background text-foreground antialiased">
       <AppSidebar />
-      <div className="space-y-6">
+      <div className="flex min-w-0 flex-1 flex-col">
         <AppHeader />
-        <Outlet />
+        <main className="mx-auto w-full max-w-7xl flex-1 space-y-6 p-6 md:p-8">
+          <Outlet />
+        </main>
       </div>
-    </main>
+    </div>
   );
 }

@@ -156,8 +156,8 @@ export async function listAuditLogs(
     };
   }
 
-  const page = filters.page;
-  const pageSize = filters.pageSize;
+  const page = filters.page ?? 1;
+  const pageSize = filters.pageSize ?? 50;
   const [items, total] = await Promise.all([
     client.auditLog.findMany({
       where,

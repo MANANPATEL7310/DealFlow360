@@ -3,10 +3,10 @@ import { DashboardPage } from "@/features/dashboard/pages/dashboard-page";
 
 export const meta: MetaFunction = () => {
   return [
-    { title: "Dashboard | Template" },
+    { title: "Command Center · Dashboard | DealFlow360" },
     {
       name: "description",
-      content: "Manage your applications and workspace.",
+      content: "DealFlow360 executive command center and quotation operations.",
     },
   ];
 };

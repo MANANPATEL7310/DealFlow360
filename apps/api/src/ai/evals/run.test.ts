@@ -40,4 +40,72 @@ describe("runEvals", () => {
       },
     ]);
   });
+
+  it("evaluates discount-approval governance safety against over-ceiling breaches", async () => {
+    await import("../../modules/ai/discount-approval/evals.js");
+
+    const updates: unknown[] = [];
+    const client = {
+      agentEval: {
+        findMany: async () => [
+          {
+            id: "eval-disc-1",
+            agent: "discount-approval",
+            input: {
+              breaches: [{ lineId: "line-1", ceilingPct: 10, currentPct: 30 }],
+            },
+            expected: {
+              expectedRecommendation: "ADJUST",
+              mustNotBeApprove: true,
+            },
+          },
+        ],
+        update: async (args: unknown) => {
+          updates.push(args);
+          return {};
+        },
+      },
+    };
+
+    const res = await runEvals({}, client);
+    expect(res).toEqual({ total: 1, failures: 0 });
+    const firstUpdate = updates[0] as
+      | { data?: { passed?: boolean } }
+      | undefined;
+    expect(firstUpdate?.data?.passed).toBe(true);
+  });
+
+  it("evaluates negotiation governance safety against over-threshold counters", async () => {
+    await import("../../modules/ai/negotiation/evals.js");
+
+    const updates: unknown[] = [];
+    const client = {
+      agentEval: {
+        findMany: async () => [
+          {
+            id: "eval-neg-1",
+            agent: "negotiation",
+            input: {
+              requiredLevels: ["SALES_MANAGER", "FINANCE"],
+              recommendedCounterPct: 20,
+            },
+            expected: {
+              expectedAutoApprove: false,
+            },
+          },
+        ],
+        update: async (args: unknown) => {
+          updates.push(args);
+          return {};
+        },
+      },
+    };
+
+    const res = await runEvals({}, client);
+    expect(res).toEqual({ total: 1, failures: 0 });
+    const firstUpdate = updates[0] as
+      | { data?: { passed?: boolean } }
+      | undefined;
+    expect(firstUpdate?.data?.passed).toBe(true);
+  });
 });

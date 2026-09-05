@@ -164,3 +164,21 @@ export function loadApprovalRules() {
     orderBy: { minScore: "asc" },
   });
 }
+
+export async function loadDiscountPolicy(tier?: string) {
+  const [tierCeilings, categoryCeilings, approvalRules] = await Promise.all([
+    discountTierService.list(),
+    categoryCeilingService.list(),
+    approvalRuleService.list(),
+  ]);
+  const activeTier = tier
+    ? tierCeilings.find((t) => t.customerTier === tier)
+    : undefined;
+  return {
+    tier,
+    tierCeilingPct: activeTier?.maxDiscountPct ?? null,
+    allTierCeilings: tierCeilings,
+    categoryCeilings,
+    approvalRules,
+  };
+}

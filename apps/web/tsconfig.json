@@ -5,7 +5,8 @@
     "types": ["vite/client"],
     "paths": {
       "@/*": ["src/*"],
-      "~/*": ["app/*"]
+      "~/*": ["app/*"],
+      "@template/shared": ["../../packages/shared/src/index.ts"]
     },
     "rootDirs": [".", "./.react-router/types"]
   },

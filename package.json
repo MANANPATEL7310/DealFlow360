@@ -20,7 +20,8 @@
     "db:studio": "pnpm --filter @template/api exec prisma studio",
     "db:migrate": "pnpm --filter @template/api exec prisma migrate dev",
     "db:generate": "pnpm --filter @template/api exec prisma generate",
-    "db:seed": "pnpm --filter @template/api exec prisma db seed"
+    "db:seed": "pnpm --filter @template/api exec prisma db seed",
+    "db:seed:dummy": "pnpm --filter @template/api exec tsx prisma/seed-dummy-data.ts"
   },
   "devDependencies": {
     "@eslint/js": "^9.39.1",

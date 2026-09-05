@@ -25,6 +25,9 @@ import { reportsRouter } from "../modules/reports/reports.routes.js";
 import { aiFulfillmentRouter } from "../modules/ai/fulfillment/routes.js";
 import { aiDealHealthRouter } from "../modules/ai/deal-health/routes.js";
 import { aiInsightsRouter } from "../modules/ai/insights/routes.js";
+import { aiApprovalsRouter } from "../modules/ai/approvals/approvals.routes.js";
+import { discountApprovalRouter } from "../modules/ai/discount-approval/routes.js";
+import { negotiationRouter } from "../modules/ai/negotiation/routes.js";
 
 export const apiRouter = Router();
 
@@ -50,6 +53,10 @@ apiRouter.use("/quotations", billingRouter);
 apiRouter.use("/invoices", invoiceRouter);
 apiRouter.use("/portal", portalRouter);
 apiRouter.use("/reports", reportsRouter);
+// === Phase 2: Agentic AI ===
+apiRouter.use("/ai", aiApprovalsRouter);
+apiRouter.use("/ai", discountApprovalRouter);
+apiRouter.use("/ai", negotiationRouter);
 apiRouter.use("/ai", aiFulfillmentRouter);
 apiRouter.use("/ai", aiDealHealthRouter);
 apiRouter.use("/ai", aiInsightsRouter);

@@ -12,7 +12,8 @@
     "test": "vitest run --test-timeout=30000",
     "ai:eval": "tsx src/ai/evals/run.ts",
     "clean": "rm -rf dist node_modules .turbo",
-    "db:seed": "prisma db seed"
+    "db:seed": "prisma db seed",
+    "db:seed:dummy": "tsx prisma/seed-dummy-data.ts"
   },
   "prisma": {
     "seed": "tsx prisma/seed.ts"
