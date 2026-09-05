@@ -24,11 +24,23 @@ export const apiRoutes = {
 
   // ─── Auth ──────────────────────────────────────────────────────────────────
   auth: {
+    register: {
+      path: "/auth/register",
+      method: "POST",
+      auth: false,
+      description: "Register a new user. Returns access token.",
+    },
     login: {
       path: "/auth/login",
       method: "POST",
       auth: false,
       description: "Authenticate with email & password. Returns access token.",
+    },
+    me: {
+      path: "/auth/me",
+      method: "GET",
+      auth: true,
+      description: "Returns the currently authenticated user.",
     },
   },
 
@@ -45,11 +57,36 @@ export const apiRoutes = {
   // ─── ADD NEW ROUTES BELOW THIS LINE ────────────────────────────────────────
   // Follow the same pattern: add here first, then implement on backend, then consume on frontend.
   products: {
-    list:    { path: "/products",     method: "GET",    auth: true,  description: "List all products." },
-    create:  { path: "/products",     method: "POST",   auth: true,  description: "Create a product." },
-    getById: { path: "/products/:id", method: "GET",    auth: true,  description: "Get product by ID." },
-    update:  { path: "/products/:id", method: "PATCH",  auth: true,  description: "Update a product." },
-    remove:  { path: "/products/:id", method: "DELETE", auth: true,  description: "Delete a product." },
+    list: {
+      path: "/products",
+      method: "GET",
+      auth: true,
+      description: "List all products.",
+    },
+    create: {
+      path: "/products",
+      method: "POST",
+      auth: true,
+      description: "Create a product.",
+    },
+    getById: {
+      path: "/products/:id",
+      method: "GET",
+      auth: true,
+      description: "Get product by ID.",
+    },
+    update: {
+      path: "/products/:id",
+      method: "PATCH",
+      auth: true,
+      description: "Update a product.",
+    },
+    remove: {
+      path: "/products/:id",
+      method: "DELETE",
+      auth: true,
+      description: "Delete a product.",
+    },
   },
 } as const;
 
