@@ -1,20 +1,545 @@
-generator client {
-  provider = "prisma-client-js"
-}
-
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
+generator client {
+  provider = "prisma-client-js"
+}
+
+// ==========================================
+// ENUMS
+// ==========================================
+
+enum ProductCategory {
+  HARDWARE
+  SERVICES
+  SUBSCRIPTIONS
+}
+
+enum CustomerTier {
+  BRONZE
+  SILVER
+  GOLD
+}
+
+enum QuotationStatus {
+  DRAFT
+  PENDING_APPROVAL
+  APPROVED
+  SENT
+  UNDER_NEGOTIATION
+  CONFIRMED
+  FULFILLMENT
+  BILLING
+  PAID
+  REJECTED
+}
+
+enum LineType {
+  ONE_TIME
+  RECURRING
+}
+
+enum ApproverLevel {
+  SALES_MANAGER
+  FINANCE
+}
+
+enum ApprovalDecision {
+  PENDING
+  APPROVED
+  REJECTED
+  RETURNED
+}
+
+enum BillingInterval {
+  MONTHLY
+  QUARTERLY
+  YEARLY
+}
+
+enum InvoiceKind {
+  ONE_TIME
+  RECURRING
+}
+
+enum InvoiceStatus {
+  DRAFT
+  ISSUED
+  PAID
+  VOID
+}
+
+enum NegotiationStatus {
+  OPEN
+  ANSWERED
+  ACCEPTED
+}
+
+enum AlertType {
+  STALLED
+  DISCOUNT_ANOMALY
+  DELIVERY_SLIPPAGE
+}
+
+// ==========================================
+// MODULE 00: FOUNDATION & AUTH
+// ==========================================
+
 model User {
+  id         String      @id @default(cuid())
+  email      String      @unique
+  name       String
+  password   String
+  role       String      @default("sales_rep") // sales_rep | sales_manager | finance | admin
+  quotations Quotation[] @relation("QuotationOwner")
+  createdAt  DateTime    @default(now())
+  updatedAt  DateTime    @updatedAt
+}
+
+model SystemSetting {
   id        String   @id @default(cuid())
-  email     String   @unique
-  name      String
-  password  String
-  role      String   @default("member")
+  key       String   @unique // "risk.perLineTolerancePct", "health.stalledDays", etc.
+  value     String // JSON-encoded string
+  scope     String   @default("global")
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
 
-// ── Add your models below this line ──
+model AuditLog {
+  id        String   @id @default(cuid())
+  actorId   String? // internal user id, or null for portal/customer/system
+  actorKind String   @default("user") // "user" | "customer" | "system"
+  action    String // dotted: "module.verb" (e.g., "quotation.confirm")
+  entity    String // "Quotation", "ApprovalStep", etc.
+  entityId  String
+  reason    String?
+  diff      Json? // { before, after }
+  createdAt DateTime @default(now())
+
+  @@index([entity, entityId])
+  @@index([actorId])
+  @@index([action])
+  @@index([createdAt])
+}
+
+// ==========================================
+// MODULE 01: PRODUCTS & PRICE LISTS
+// ==========================================
+
+model Product {
+  id                String             @id @default(cuid())
+  name              String
+  category          ProductCategory
+  unit              String             @default("unit") // "unit", "licence", "hour", etc.
+  basePrice         Int // minor units (cents)
+  unitCost          Int // minor units (cents) — for margin calculation
+  taxRatePct        Float              @default(0)
+  description       String?
+  isPromoted        Boolean            @default(false)
+  variants          ProductVariant[]
+  priceListItems    PriceListItem[]
+  quotationLines    QuotationLine[]
+  stockLevels       StockLevel[]
+  fulfillmentSplits FulfillmentSplit[]
+  backorders        Backorder[]
+  createdAt         DateTime           @default(now())
+  updatedAt         DateTime           @updatedAt
+}
+
+model ProductVariant {
+  id             String          @id @default(cuid())
+  productId      String
+  product        Product         @relation(fields: [productId], references: [id], onDelete: Cascade)
+  attribute      String // "Size", "Pack", etc.
+  value          String // "Large", "10-pack", etc.
+  extraPrice     Int             @default(0) // minor units (cents)
+  quotationLines QuotationLine[]
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
+
+  @@index([productId])
+}
+
+model PriceList {
+  id           String          @id @default(cuid())
+  name         String
+  currency     String          @default("USD")
+  customerTier CustomerTier? // null = default fallback price list
+  items        PriceListItem[]
+  createdAt    DateTime        @default(now())
+  updatedAt    DateTime        @updatedAt
+}
+
+model PriceListItem {
+  id          String    @id @default(cuid())
+  priceListId String
+  priceList   PriceList @relation(fields: [priceListId], references: [id], onDelete: Cascade)
+  productId   String
+  product     Product   @relation(fields: [productId], references: [id], onDelete: Cascade)
+  price       Int // minor units (cents)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  @@unique([priceListId, productId])
+  @@index([productId])
+}
+
+// ==========================================
+// MODULE 02: CUSTOMER MANAGEMENT
+// ==========================================
+
+model Customer {
+  id         String            @id @default(cuid())
+  name       String
+  tier       CustomerTier      @default(BRONZE)
+  currency   String            @default("USD")
+  contacts   CustomerContact[]
+  quotations Quotation[]
+  createdAt  DateTime          @default(now())
+  updatedAt  DateTime          @updatedAt
+}
+
+model CustomerContact {
+  id                  String               @id @default(cuid())
+  customerId          String
+  customer            Customer             @relation(fields: [customerId], references: [id], onDelete: Cascade)
+  email               String
+  name                String
+  passwordHash        String?
+  negotiationRequests NegotiationRequest[]
+  createdAt           DateTime             @default(now())
+  updatedAt           DateTime             @updatedAt
+
+  @@index([customerId])
+  @@index([email])
+}
+
+// ==========================================
+// MODULE 03: DISCOUNT GOVERNANCE CONFIG
+// ==========================================
+
+model DiscountTier {
+  id             String       @id @default(cuid())
+  customerTier   CustomerTier @unique
+  maxDiscountPct Float
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+}
+
+model CategoryCeiling {
+  id             String          @id @default(cuid())
+  category       ProductCategory @unique
+  maxDiscountPct Float
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
+}
+
+model ApprovalChainRule {
+  id             String   @id @default(cuid())
+  name           String // "small overage", "high risk"
+  minScore       Float // inclusive lower bound
+  maxScore       Float? // null = open-ended upper bound
+  requiredLevels String[] // ["SALES_MANAGER"] | ["SALES_MANAGER", "FINANCE"]
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+}
+
+// ==========================================
+// MODULE 05: QUOTATION BUILDER & LIFECYCLE
+// ==========================================
+
+model Quotation {
+  id                 String                 @id @default(cuid())
+  customerId         String
+  customer           Customer               @relation(fields: [customerId], references: [id])
+  salesRepId         String // Rep who owns the deal
+  owner              User                   @relation("QuotationOwner", fields: [salesRepId], references: [id])
+  status             QuotationStatus        @default(DRAFT)
+  blendedRiskScore   Float                  @default(0)
+  subtotalMinor      Int                    @default(0)
+  discountTotalMinor Int                    @default(0)
+  taxTotalMinor      Int                    @default(0)
+  grandTotalMinor    Int                    @default(0)
+  marginPct          Float                  @default(0)
+  lastActivityAt     DateTime               @default(now()) // drives stalled deal detection
+  lines              QuotationLine[]
+  statusEvents       QuotationStatusEvent[]
+  approvals          ApprovalStep[]
+  fulfillmentPlan    FulfillmentPlan?
+  billingSchedule    BillingSchedule?
+  negotiations       NegotiationRequest[]
+  alerts             DealHealthAlert[]
+  createdAt          DateTime               @default(now())
+  updatedAt          DateTime               @updatedAt
+
+  @@index([customerId])
+  @@index([salesRepId])
+  @@index([status])
+}
+
+model QuotationLine {
+  id                 String            @id @default(cuid())
+  quotationId        String
+  quotation          Quotation         @relation(fields: [quotationId], references: [id], onDelete: Cascade)
+  productId          String
+  product            Product           @relation(fields: [productId], references: [id])
+  variantId          String?
+  variant            ProductVariant?   @relation(fields: [variantId], references: [id])
+  qty                Int               @default(1)
+  unitPriceMinor     Int // resolved unit price (cents)
+  unitCostMinor      Int // snapshot of catalog unit cost (cents)
+  discountPct        Float             @default(0)
+  lineType           LineType          @default(ONE_TIME)
+  subscriptionPlanId String?
+  subscriptionPlan   SubscriptionPlan? @relation(fields: [subscriptionPlanId], references: [id])
+  createdAt          DateTime          @default(now())
+  updatedAt          DateTime          @updatedAt
+
+  @@index([quotationId])
+  @@index([productId])
+  @@index([variantId])
+}
+
+model QuotationStatusEvent {
+  id          String          @id @default(cuid())
+  quotationId String
+  quotation   Quotation       @relation(fields: [quotationId], references: [id], onDelete: Cascade)
+  fromStatus  QuotationStatus
+  toStatus    QuotationStatus
+  actorId     String?
+  reason      String?
+  createdAt   DateTime        @default(now())
+
+  @@index([quotationId])
+}
+
+model ApprovalStep {
+  id          String           @id @default(cuid())
+  quotationId String
+  quotation   Quotation        @relation(fields: [quotationId], references: [id], onDelete: Cascade)
+  level       ApproverLevel
+  sequence    Int // 1 = SALES_MANAGER, 2 = FINANCE
+  decision    ApprovalDecision @default(PENDING)
+  approverId  String?
+  reason      String?
+  decidedAt   DateTime?
+  createdAt   DateTime         @default(now())
+
+  @@index([quotationId])
+}
+
+// ==========================================
+// MODULE 06: UPSELL & CROSS-SELL
+// ==========================================
+
+model UpsellRule {
+  id              String   @id @default(cuid())
+  productId       String
+  suggestedId     String
+  coPurchaseScore Float    @default(0)
+  minMarginPct    Float    @default(0)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@index([productId])
+}
+
+model UpsellSuggestion {
+  id             String   @id @default(cuid())
+  quotationId    String
+  suggestedId    String
+  marginDeltaPct Float
+  promoted       Boolean  @default(false)
+  accepted       Boolean  @default(false)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  @@index([quotationId])
+}
+
+// ==========================================
+// MODULE 07: WAREHOUSE & FULFILLMENT
+// ==========================================
+
+model Warehouse {
+  id                 String             @id @default(cuid())
+  name               String
+  location           String?
+  shippingCostWeight Float              @default(1)
+  stock              StockLevel[]
+  fulfillmentSplits  FulfillmentSplit[]
+  createdAt          DateTime           @default(now())
+  updatedAt          DateTime           @updatedAt
+}
+
+model StockLevel {
+  id                 String    @id @default(cuid())
+  warehouseId        String
+  warehouse          Warehouse @relation(fields: [warehouseId], references: [id], onDelete: Cascade)
+  productId          String
+  product            Product   @relation(fields: [productId], references: [id], onDelete: Cascade)
+  quantity           Int       @default(0)
+  replenishThreshold Int       @default(0)
+  createdAt          DateTime  @default(now())
+  updatedAt          DateTime  @updatedAt
+
+  @@unique([warehouseId, productId])
+  @@index([productId])
+}
+
+model FulfillmentPlan {
+  id          String             @id @default(cuid())
+  quotationId String             @unique
+  quotation   Quotation          @relation(fields: [quotationId], references: [id], onDelete: Cascade)
+  status      String             @default("SUGGESTED") // SUGGESTED | ACCEPTED | OVERRIDDEN
+  splits      FulfillmentSplit[]
+  backorders  Backorder[]
+  createdAt   DateTime           @default(now())
+  updatedAt   DateTime           @updatedAt
+}
+
+model FulfillmentSplit {
+  id                String          @id @default(cuid())
+  planId            String
+  plan              FulfillmentPlan @relation(fields: [planId], references: [id], onDelete: Cascade)
+  warehouseId       String
+  warehouse         Warehouse       @relation(fields: [warehouseId], references: [id])
+  productId         String
+  product           Product         @relation(fields: [productId], references: [id])
+  qty               Int
+  shipmentCostMinor Int
+  promisedAt        DateTime?
+  shippedAt         DateTime?
+  createdAt         DateTime        @default(now())
+  updatedAt         DateTime        @updatedAt
+
+  @@index([planId])
+  @@index([warehouseId])
+  @@index([productId])
+}
+
+model Backorder {
+  id             String          @id @default(cuid())
+  planId         String
+  plan           FulfillmentPlan @relation(fields: [planId], references: [id], onDelete: Cascade)
+  productId      String
+  product        Product         @relation(fields: [productId], references: [id])
+  qtyOutstanding Int
+  consolidatedAt DateTime?
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
+
+  @@index([planId])
+  @@index([productId])
+}
+
+// ==========================================
+// MODULE 08: HYBRID BILLING & INVOICING
+// ==========================================
+
+model SubscriptionPlan {
+  id               String          @id @default(cuid())
+  name             String
+  interval         BillingInterval
+  prorationEnabled Boolean         @default(true)
+  cancellationRule String          @default("prorated_credit")
+  lines            QuotationLine[]
+  createdAt        DateTime        @default(now())
+  updatedAt        DateTime        @updatedAt
+}
+
+model BillingSchedule {
+  id          String       @id @default(cuid())
+  quotationId String       @unique
+  quotation   Quotation    @relation(fields: [quotationId], references: [id], onDelete: Cascade)
+  invoices    Invoice[]
+  creditNotes CreditNote[]
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+}
+
+model Invoice {
+  id          String          @id @default(cuid())
+  scheduleId  String
+  schedule    BillingSchedule @relation(fields: [scheduleId], references: [id], onDelete: Cascade)
+  kind        InvoiceKind
+  lineId      String? // null for one-time aggregate invoice; specific QuotationLine id for recurring
+  periodStart DateTime?
+  periodEnd   DateTime?
+  amountMinor Int
+  status      InvoiceStatus   @default(DRAFT)
+  payments    Payment[]
+  createdAt   DateTime        @default(now())
+  updatedAt   DateTime        @updatedAt
+
+  @@index([scheduleId])
+  @@index([scheduleId, lineId, status])
+}
+
+model CreditNote {
+  id              String          @id @default(cuid())
+  scheduleId      String
+  schedule        BillingSchedule @relation(fields: [scheduleId], references: [id], onDelete: Cascade)
+  reason          String
+  amountMinor     Int
+  sourceInvoiceId String?
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
+
+  @@index([scheduleId])
+}
+
+model Payment {
+  id          String   @id @default(cuid())
+  invoiceId   String
+  invoice     Invoice  @relation(fields: [invoiceId], references: [id], onDelete: Cascade)
+  amountMinor Int
+  status      String   @default("recorded") // recorded | failed | refunded
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([invoiceId])
+}
+
+// ==========================================
+// MODULE 09: CUSTOMER PORTAL NEGOTIATION
+// ==========================================
+
+model NegotiationRequest {
+  id                 String            @id @default(cuid())
+  quotationId        String
+  quotation          Quotation         @relation(fields: [quotationId], references: [id], onDelete: Cascade)
+  contactId          String
+  contact            CustomerContact   @relation(fields: [contactId], references: [id], onDelete: Cascade)
+  lineId             String? // null = order-level ask
+  comment            String?
+  counterDiscountPct Float?
+  status             NegotiationStatus @default(OPEN)
+  createdAt          DateTime          @default(now())
+  updatedAt          DateTime          @updatedAt
+
+  @@index([quotationId, status])
+  @@index([contactId])
+}
+
+// ==========================================
+// MODULE 10: DEAL HEALTH DASHBOARD
+// ==========================================
+
+model DealHealthAlert {
+  id          String    @id @default(cuid())
+  quotationId String
+  quotation   Quotation @relation(fields: [quotationId], references: [id], onDelete: Cascade)
+  type        AlertType
+  severity    String    @default("medium") // low | medium | high
+  detail      String
+  status      String    @default("open") // open | acknowledged | resolved
+  resolvedAt  DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  @@index([quotationId, type, status])
+  @@index([status, severity])
+}
