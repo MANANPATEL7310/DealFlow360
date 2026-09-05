@@ -1,23 +1,39 @@
-import { LogOut } from "lucide-react";
+import { LogOut, Menu } from "lucide-react";
 import { appMeta } from "@template/shared";
 import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "@/components/shared/theme-toggle";
 import { useAuthStore } from "@/stores/auth-store";
 import { AiCopilotTrigger } from "@/features/ai";
 
-export function AppHeader() {
+interface AppHeaderProps {
+  onOpenNavigation: () => void;
+}
+
+export function AppHeader({ onOpenNavigation }: AppHeaderProps) {
   const user = useAuthStore((state) => state.user);
   const clearSession = useAuthStore((state) => state.clearSession);
 
   return (
-    <header className="sticky top-0 z-30 flex h-16 w-full items-center justify-between border-b border-border bg-background/80 px-6 backdrop-blur-md md:px-8">
-      <div className="flex items-center gap-3">
-        <div className="flex items-center gap-2">
-          <span className="text-xs font-bold tracking-wider text-primary uppercase">
+    <header className="sticky top-0 z-30 flex h-16 w-full items-center justify-between gap-2 border-b border-border bg-background/80 px-4 backdrop-blur-md sm:px-6 md:px-8">
+      <div className="flex min-w-0 items-center gap-2 sm:gap-3">
+        <Button
+          aria-label="Open navigation"
+          className="size-9 shrink-0 p-0 lg:hidden"
+          onClick={onOpenNavigation}
+          size="sm"
+          type="button"
+          variant="ghost"
+        >
+          <Menu className="size-5" />
+        </Button>
+        <div className="flex min-w-0 items-center gap-2">
+          <span className="truncate text-xs font-bold tracking-wider text-primary uppercase">
             {appMeta.name}
           </span>
-          <span className="font-mono text-xs text-muted-foreground/40">/</span>
-          <span className="text-xs font-medium text-muted-foreground">
+          <span className="hidden font-mono text-xs text-muted-foreground/40 sm:inline">
+            /
+          </span>
+          <span className="hidden text-xs font-medium text-muted-foreground sm:inline">
             Operations Workspace
           </span>
         </div>
@@ -27,7 +43,7 @@ export function AppHeader() {
         </span>
       </div>
 
-      <div className="flex items-center gap-3">
+      <div className="flex shrink-0 items-center gap-1.5 sm:gap-3">
         {user && (
           <div className="bg-muted/40 hidden items-center gap-2 rounded-lg border border-border/80 px-3 py-1 text-xs sm:flex">
             <span className="size-2 rounded-full bg-primary" />
@@ -44,7 +60,7 @@ export function AppHeader() {
           size="sm"
           onClick={clearSession}
           type="button"
-          className="gap-2 text-xs"
+          className="gap-2 px-2.5 text-xs sm:px-3"
         >
           <LogOut className="size-3.5" />
           <span className="hidden sm:inline">Sign out</span>

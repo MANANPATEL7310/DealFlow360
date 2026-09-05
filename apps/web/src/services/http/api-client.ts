@@ -5,7 +5,8 @@ import { useAuthStore } from "@/stores/auth-store";
 
 export const apiClient = axios.create({
   baseURL: env.VITE_API_URL,
-  timeout: 15000,
+  // Fail quickly enough to surface a retry/fallback instead of leaving the UI frozen.
+  timeout: 10_000,
   headers: {
     "Content-Type": "application/json",
   },

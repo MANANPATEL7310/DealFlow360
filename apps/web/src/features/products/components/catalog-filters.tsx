@@ -32,7 +32,7 @@ export function CatalogFilters({
   return (
     <div className="bg-card/60 flex flex-col gap-4 rounded-xl border border-border p-4 sm:flex-row sm:items-center sm:justify-between">
       {/* Search Input */}
-      <div className="relative min-w-64 flex-1">
+      <div className="relative min-w-0 w-full flex-1 sm:min-w-64">
         <Search className="absolute top-1/2 left-3 size-4 -translate-y-1/2 text-muted-foreground" />
         <Input
           className="pr-8 pl-9"
@@ -53,31 +53,33 @@ export function CatalogFilters({
       </div>
 
       {/* Category Pills & Promoted Switch */}
-      <div className="flex flex-wrap items-center gap-2">
-        <div className="bg-muted/60 flex items-center rounded-lg border border-border p-1">
-          {CATEGORY_TABS.map((tab) => {
-            const isSelected = selectedCategory === tab.value;
-            return (
-              <button
-                key={tab.value}
-                className={cn(
-                  "rounded-md px-3 py-1.5 text-xs font-semibold transition-all",
-                  isSelected
-                    ? "bg-background text-foreground shadow-xs"
-                    : "text-muted-foreground hover:text-foreground",
-                )}
-                type="button"
-                onClick={() => onCategoryChange(tab.value)}
-              >
-                {tab.label}
-              </button>
-            );
-          })}
+      <div className="flex w-full flex-col gap-2 sm:w-auto sm:flex-row sm:items-center">
+        <div className="-mx-1 flex max-w-full overflow-x-auto px-1">
+          <div className="bg-muted/60 flex min-w-max items-center rounded-lg border border-border p-1">
+            {CATEGORY_TABS.map((tab) => {
+              const isSelected = selectedCategory === tab.value;
+              return (
+                <button
+                  key={tab.value}
+                  className={cn(
+                    "whitespace-nowrap rounded-md px-3 py-1.5 text-xs font-semibold transition-all",
+                    isSelected
+                      ? "bg-background text-foreground shadow-xs"
+                      : "text-muted-foreground hover:text-foreground",
+                  )}
+                  type="button"
+                  onClick={() => onCategoryChange(tab.value)}
+                >
+                  {tab.label}
+                </button>
+              );
+            })}
+          </div>
         </div>
 
         <button
           className={cn(
-            "flex items-center gap-1.5 rounded-lg border px-3 py-1.5 text-xs font-semibold transition-all",
+            "flex w-fit items-center gap-1.5 rounded-lg border px-3 py-1.5 text-xs font-semibold transition-all",
             promotedOnly
               ? "border-amber-500/30 bg-amber-500/10 text-amber-500 shadow-xs"
               : "bg-card border-border text-muted-foreground hover:text-foreground",

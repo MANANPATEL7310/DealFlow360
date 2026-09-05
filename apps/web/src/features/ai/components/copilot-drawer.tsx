@@ -40,6 +40,7 @@ export function CopilotDrawer() {
     queryKey: ["ai", "status"],
     queryFn: fetchAiStatus,
     staleTime: 1000 * 30,
+    enabled: isOpen,
   });
 
   // Fetch HITL approval requests
@@ -51,6 +52,7 @@ export function CopilotDrawer() {
     queryKey: ["ai", "approvals"],
     queryFn: () => fetchApprovalRequests(),
     staleTime: 1000 * 15,
+    enabled: isOpen,
   });
 
   // Fetch Agent execution traces
@@ -110,38 +112,45 @@ export function CopilotDrawer() {
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex justify-end">
+    <div
+      className="fixed inset-0 z-50 flex justify-end"
+      role="dialog"
+      aria-modal="true"
+      aria-label="DealFlow AI Copilot"
+    >
       {/* Backdrop */}
-      <div
+      <button
+        aria-label="Close AI Copilot"
         className="fixed inset-0 bg-background/60 backdrop-blur-xs transition-opacity"
         onClick={() => setIsOpen(false)}
+        type="button"
       />
 
       {/* Slide-out Panel */}
-      <div className="relative flex h-full w-full max-w-xl flex-col border-l border-border/80 bg-background/95 shadow-2xl backdrop-blur-xl animate-in slide-in-from-right duration-200">
+      <div className="relative flex h-dvh w-full max-w-xl flex-col border-l border-border/80 bg-background/95 shadow-2xl backdrop-blur-xl animate-in slide-in-from-right duration-200">
         {/* Drawer Header */}
-        <div className="flex items-center justify-between border-b border-border/80 px-6 py-4">
-          <div className="flex items-center gap-3">
+        <div className="flex items-center justify-between gap-3 border-b border-border/80 px-4 py-4 sm:px-6">
+          <div className="flex min-w-0 items-center gap-3">
             <div className="flex size-9 items-center justify-center rounded-xl bg-gradient-to-br from-primary/30 to-secondary/30 text-primary shadow-sm border border-primary/20">
               <Sparkles className="size-5" />
             </div>
-            <div>
+            <div className="min-w-0">
               <div className="flex items-center gap-2">
-                <h3 className="text-sm font-bold text-foreground">
+                <h3 className="truncate text-sm font-bold text-foreground">
                   DealFlow Copilot
                 </h3>
-                <span className="inline-flex items-center gap-1 rounded-full border border-primary/30 bg-primary/10 px-2 py-0.5 text-xs font-semibold text-primary">
+                <span className="hidden items-center gap-1 rounded-full border border-primary/30 bg-primary/10 px-2 py-0.5 text-xs font-semibold text-primary sm:inline-flex">
                   <Cpu className="size-2.5" />
                   Claude 4.5
                 </span>
               </div>
-              <p className="text-xs text-muted-foreground">
+              <p className="truncate text-xs text-muted-foreground">
                 Autonomous agent supervision & HITL governance
               </p>
             </div>
           </div>
 
-          <div className="flex items-center gap-2">
+          <div className="flex shrink-0 items-center gap-1 sm:gap-2">
             <Button
               variant="ghost"
               size="sm"
@@ -151,6 +160,7 @@ export function CopilotDrawer() {
               }}
               className="size-8 p-0 text-muted-foreground hover:text-foreground"
               title="Refresh AI state"
+              type="button"
             >
               <RefreshCw className="size-3.5" />
             </Button>
@@ -159,6 +169,7 @@ export function CopilotDrawer() {
               size="sm"
               onClick={() => setIsOpen(false)}
               className="size-8 p-0 text-muted-foreground hover:text-foreground"
+              type="button"
             >
               <X className="size-4" />
             </Button>
@@ -166,7 +177,7 @@ export function CopilotDrawer() {
         </div>
 
         {/* Budget & Model Telemetry Bar */}
-        <div className="flex items-center justify-between border-b border-border/50 bg-muted/30 px-6 py-2 text-xs">
+        <div className="flex flex-col gap-1.5 border-b border-border/50 bg-muted/30 px-4 py-2 text-xs sm:flex-row sm:items-center sm:justify-between sm:px-6">
           <div className="flex items-center gap-2 text-muted-foreground">
             <Coins className="size-3.5 text-amber-500" />
             <span>Monthly Spend:</span>
@@ -185,11 +196,11 @@ export function CopilotDrawer() {
         </div>
 
         {/* Tab Navigation */}
-        <div className="flex border-b border-border/80 px-6 pt-2">
+        <div className="flex overflow-x-auto border-b border-border/80 px-4 pt-2 sm:px-6">
           <button
             type="button"
             onClick={() => setActiveTab("inbox")}
-            className={`flex items-center gap-2 border-b-2 px-3 py-2 text-xs font-semibold transition-colors ${
+            className={`flex shrink-0 items-center gap-2 whitespace-nowrap border-b-2 px-3 py-2 text-xs font-semibold transition-colors ${
               activeTab === "inbox"
                 ? "border-primary text-primary"
                 : "border-transparent text-muted-foreground hover:text-foreground"
@@ -207,7 +218,7 @@ export function CopilotDrawer() {
           <button
             type="button"
             onClick={() => setActiveTab("suggestions")}
-            className={`flex items-center gap-2 border-b-2 px-3 py-2 text-xs font-semibold transition-colors ${
+            className={`flex shrink-0 items-center gap-2 whitespace-nowrap border-b-2 px-3 py-2 text-xs font-semibold transition-colors ${
               activeTab === "suggestions"
                 ? "border-primary text-primary"
                 : "border-transparent text-muted-foreground hover:text-foreground"
@@ -220,7 +231,7 @@ export function CopilotDrawer() {
           <button
             type="button"
             onClick={() => setActiveTab("runs")}
-            className={`flex items-center gap-2 border-b-2 px-3 py-2 text-xs font-semibold transition-colors ${
+            className={`flex shrink-0 items-center gap-2 whitespace-nowrap border-b-2 px-3 py-2 text-xs font-semibold transition-colors ${
               activeTab === "runs"
                 ? "border-primary text-primary"
                 : "border-transparent text-muted-foreground hover:text-foreground"
@@ -232,7 +243,7 @@ export function CopilotDrawer() {
         </div>
 
         {/* Drawer Body Area */}
-        <div className="flex-1 overflow-y-auto p-6 space-y-4">
+        <div className="flex-1 space-y-4 overflow-y-auto p-4 sm:p-6">
           {/* Degraded mode banner if applicable */}
           <DegradedModeBanner status={aiStatus} />
 

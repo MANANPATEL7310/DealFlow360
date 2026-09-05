@@ -28,7 +28,7 @@ export function CustomerFilters({
   return (
     <div className="bg-card/60 flex flex-col gap-4 rounded-xl border border-border p-4 sm:flex-row sm:items-center sm:justify-between">
       {/* Search Input */}
-      <div className="relative min-w-64 flex-1">
+      <div className="relative min-w-0 w-full flex-1 sm:min-w-64">
         <Search className="absolute top-1/2 left-3 size-4 -translate-y-1/2 text-muted-foreground" />
         <Input
           className="pr-8 pl-9"
@@ -49,25 +49,27 @@ export function CustomerFilters({
       </div>
 
       {/* Tier Filter Tabs */}
-      <div className="bg-muted/60 flex items-center rounded-lg border border-border p-1">
-        {TIER_TABS.map((tab) => {
-          const isSelected = selectedTier === tab.value;
-          return (
-            <button
-              key={tab.value}
-              className={cn(
-                "rounded-md px-3 py-1.5 text-xs font-semibold transition-all",
-                isSelected
-                  ? "bg-background text-foreground shadow-xs"
-                  : "text-muted-foreground hover:text-foreground",
-              )}
-              type="button"
-              onClick={() => onTierChange(tab.value)}
-            >
-              {tab.label}
-            </button>
-          );
-        })}
+      <div className="-mx-1 flex max-w-full overflow-x-auto px-1">
+        <div className="bg-muted/60 flex min-w-max items-center rounded-lg border border-border p-1">
+          {TIER_TABS.map((tab) => {
+            const isSelected = selectedTier === tab.value;
+            return (
+              <button
+                key={tab.value}
+                className={cn(
+                  "whitespace-nowrap rounded-md px-3 py-1.5 text-xs font-semibold transition-all",
+                  isSelected
+                    ? "bg-background text-foreground shadow-xs"
+                    : "text-muted-foreground hover:text-foreground",
+                )}
+                type="button"
+                onClick={() => onTierChange(tab.value)}
+              >
+                {tab.label}
+              </button>
+            );
+          })}
+        </div>
       </div>
     </div>
   );

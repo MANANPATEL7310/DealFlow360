@@ -9,14 +9,19 @@
   --foreground: #090d16;
   --surface: #ffffff;
   --surface-muted: #f1f5f9;
+  --card: #ffffff;
+  --card-foreground: #090d16;
+  --muted: #f1f5f9;
   --muted-foreground: #64748b;
   --border: #e2e8f0;
+  --input: #e2e8f0;
   --ring: #3b82f6;
 
   /* Cobalt Primary */
   --primary-light: #60a5fa;
   --primary: #2563eb;
   --primary-dark: #1d4ed8;
+  --primary-foreground: #ffffff;
 
   /* Mint Emerald Secondary (Margin & Healthy Growth) */
   --secondary-light: #34d399;
@@ -35,6 +40,7 @@
   --danger-light: #fca5a5;
   --danger: #ef4444;
   --danger-dark: #b91c1c;
+  --destructive: #ef4444;
 
   --neutral-light: #e2e8f0;
   --neutral: #64748b;
@@ -49,13 +55,18 @@
   --foreground: #f8fafc;
   --surface: #0f172a;
   --surface-muted: #162032;
+  --card: #0f172a;
+  --card-foreground: #f8fafc;
+  --muted: #162032;
   --muted-foreground: #94a3b8;
   --border: #1e293b;
+  --input: #1e293b;
   --ring: #3b82f6;
 
   --primary-light: #60a5fa;
   --primary: #3b82f6;
   --primary-dark: #1d4ed8;
+  --primary-foreground: #ffffff;
 
   --secondary-light: #34d399;
   --secondary: #10b981;
@@ -72,6 +83,7 @@
   --danger-light: #f87171;
   --danger: #ef4444;
   --danger-dark: #dc2626;
+  --destructive: #ef4444;
 
   --neutral-light: #334155;
   --neutral: #94a3b8;
@@ -84,13 +96,18 @@
   --color-foreground: var(--foreground);
   --color-surface: var(--surface);
   --color-surface-muted: var(--surface-muted);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-muted: var(--muted);
   --color-muted-foreground: var(--muted-foreground);
   --color-border: var(--border);
+  --color-input: var(--input);
   --color-ring: var(--ring);
 
   --color-primary-light: var(--primary-light);
   --color-primary: var(--primary);
   --color-primary-dark: var(--primary-dark);
+  --color-primary-foreground: var(--primary-foreground);
 
   --color-secondary-light: var(--secondary-light);
   --color-secondary: var(--secondary);
@@ -107,6 +124,7 @@
   --color-danger-light: var(--danger-light);
   --color-danger: var(--danger);
   --color-danger-dark: var(--danger-dark);
+  --color-destructive: var(--destructive);
 
   --color-neutral-light: var(--neutral-light);
   --color-neutral: var(--neutral);
@@ -205,6 +223,25 @@
   a {
     @apply transition-colors;
   }
+
+  button,
+  a,
+  input,
+  select,
+  textarea {
+    @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      scroll-behavior: auto !important;
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
 }
 
 @layer components {
@@ -233,7 +270,7 @@
   }
 
   .app-shell {
-    @apply mx-auto min-h-screen w-full max-w-7xl px-4 py-6 md:px-6;
+    @apply mx-auto min-h-screen w-full max-w-7xl px-4 py-6 sm:px-6;
   }
 
   .page-title {
@@ -246,6 +283,10 @@
 
   .input-shell {
     @apply flex h-11 w-full rounded-lg border border-border bg-surface-muted/50 px-3.5 text-sm text-foreground placeholder:text-muted-foreground focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all;
+  }
+
+  .viewport-dialog {
+    max-height: calc(100dvh - 2rem);
   }
 
   .sidebar-layout {
