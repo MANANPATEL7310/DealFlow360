@@ -56,11 +56,11 @@ function CustomerFormContent({
   const getTierDescription = (t: CustomerTier) => {
     switch (t) {
       case "GOLD":
-        return "Tier 1 ceiling up to 25% • Automated risk pass-through up to $500k";
+        return "Strategic enterprise accounts • Highest discount ceiling tier";
       case "SILVER":
-        return "Tier 1 ceiling up to 15% • Automated risk pass-through up to $250k";
+        return "Mid-market commercial accounts • Standard discount ceiling tier";
       case "BRONZE":
-        return "Standard ceiling up to 8% • Requires manager approval for overrides";
+        return "Growth & SMB accounts • Base discount ceiling tier";
     }
   };
 

@@ -5,13 +5,7 @@ import type {
   DiscountSimulationResult,
   ProductCategory,
 } from "@template/shared";
-import {
-  Calculator,
-  CheckCircle2,
-  HelpCircle,
-  Play,
-  Zap,
-} from "lucide-react";
+import { Calculator, CheckCircle2, HelpCircle, Play, Zap } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -23,16 +17,7 @@ export function DiscountSimulatorBench() {
   const [category, setCategory] = useState<ProductCategory>("HARDWARE");
   const [discountPct, setDiscountPct] = useState<string>("18.0");
 
-  const [result, setResult] = useState<DiscountSimulationResult | null>({
-    tierCapPct: 10,
-    categoryCapPct: 15,
-    applicableCapPct: 10,
-    excessDiscountPct: 8,
-    blendedRiskScore: 9.6,
-    isAutoApproved: false,
-    requiredApprovers: ["SALES_MANAGER", "FINANCE"],
-    matchedRuleName: "High Risk Multi-Tier Band",
-  });
+  const [result, setResult] = useState<DiscountSimulationResult | null>(null);
 
   const simulateMutation = useDiscountSimulation();
 
@@ -167,7 +152,9 @@ export function DiscountSimulatorBench() {
               onClick={handleSimulate}
             >
               <Play className="mr-1.5 size-3.5 fill-current" />
-              {simulateMutation.isPending ? "Evaluating..." : "Run Risk Simulation"}
+              {simulateMutation.isPending
+                ? "Evaluating..."
+                : "Run Risk Simulation"}
             </Button>
           </div>
         </div>
