@@ -9,6 +9,7 @@ import {
   Package,
   Receipt,
   Settings,
+  ShieldCheck,
   Truck,
   Users,
 } from "lucide-react";
@@ -63,6 +64,12 @@ export const navigationSections: NavigationSection[] = [
   {
     title: "Governance & Ops",
     items: [
+      {
+        title: "Discount Governance",
+        href: appRoutes.governance,
+        icon: ShieldCheck,
+        roles: ["admin"],
+      },
       {
         title: "Approvals Inbox",
         href: appRoutes.approvals,

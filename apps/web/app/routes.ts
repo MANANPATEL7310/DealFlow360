@@ -14,6 +14,7 @@ export default [
     route("app", "routes/dashboard.tsx"),
     route("app/products", "routes/products.tsx"),
     route("app/customers", "routes/customers.tsx"),
+    route("app/governance", "routes/governance.tsx"),
     route("app/settings", "routes/settings.tsx"),
   ]),
 ] satisfies RouteConfig;
