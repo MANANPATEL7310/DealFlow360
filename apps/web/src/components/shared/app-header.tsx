@@ -3,6 +3,7 @@ import { appMeta } from "@template/shared";
 import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "@/components/shared/theme-toggle";
 import { useAuthStore } from "@/stores/auth-store";
+import { AiCopilotTrigger } from "@/features/ai";
 
 export function AppHeader() {
   const user = useAuthStore((state) => state.user);
@@ -36,6 +37,7 @@ export function AppHeader() {
             </span>
           </div>
         )}
+        <AiCopilotTrigger />
         <ThemeToggle />
         <Button
           variant="outline"

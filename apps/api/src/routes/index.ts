@@ -25,6 +25,7 @@ import {
   invoiceRouter,
 } from "../modules/billing/billing.routes.js";
 import { reportsRouter } from "../modules/reports/reports.routes.js";
+import { aiRouter } from "../modules/ai/ai.routes.js";
 
 export const apiRouter = Router();
 
@@ -51,3 +52,4 @@ apiRouter.use("/quotations", billingRouter);
 apiRouter.use("/invoices", invoiceRouter);
 apiRouter.use("/portal", portalRouter);
 apiRouter.use("/reports", reportsRouter);
+apiRouter.use("/ai", aiRouter);

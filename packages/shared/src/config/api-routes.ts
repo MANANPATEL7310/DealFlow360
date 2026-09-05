@@ -594,6 +594,41 @@ export const apiRoutes = {
       description: "List filtered audit log entries.",
     },
   },
+
+  // ─── Agentic AI & Human-in-the-Loop (HITL) ──────────────────────────────────
+  ai: {
+    status: {
+      path: "/ai/status",
+      method: "GET",
+      auth: true,
+      description:
+        "Get global AI status, monthly budget cap, and availability.",
+    },
+    approvals: {
+      path: "/ai/approvals",
+      method: "GET",
+      auth: true,
+      description: "List pending human-in-the-loop approval requests.",
+    },
+    decideApproval: {
+      path: "/ai/approvals/:id/decision",
+      method: "POST",
+      auth: true,
+      description: "Approve or reject a human-in-the-loop request.",
+    },
+    runs: {
+      path: "/ai/runs",
+      method: "GET",
+      auth: true,
+      description: "List recent agent execution runs and step traces.",
+    },
+    contextual: {
+      path: "/ai/contextual",
+      method: "POST",
+      auth: true,
+      description: "Get AI contextual suggestions for the current screen.",
+    },
+  },
 } as const;
 
 // ─── Derived Types (auto-generated, do not edit manually) ─────────────────────

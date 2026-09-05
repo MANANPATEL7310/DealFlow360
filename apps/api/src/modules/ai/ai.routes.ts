@@ -1,0 +1,65 @@
+import { createRouter } from "../../lib/create-router.js";
+import { requireAuth } from "../../middleware/require-auth.js";
+import {
+  getAiStatus,
+  listApprovalRequests,
+  decideApprovalRequest,
+  listAgentRuns,
+  getContextualSuggestions,
+} from "./ai.service.js";
+import { HitlApprovalDecisionSchema } from "@template/shared";
+
+export const aiRouter = createRouter();
+
+aiRouter.use(requireAuth);
+
+aiRouter.get("/status", async (_req, res, next) => {
+  try {
+    const status = await getAiStatus();
+    res.json(status);
+  } catch (err) {
+    next(err);
+  }
+});
+
+aiRouter.get("/approvals", async (req, res, next) => {
+  try {
+    const status =
+      typeof req.query.status === "string" ? req.query.status : undefined;
+    const items = await listApprovalRequests(status);
+    res.json(items);
+  } catch (err) {
+    next(err);
+  }
+});
+
+aiRouter.post("/approvals/:id/decision", async (req, res, next) => {
+  try {
+    const parsed = HitlApprovalDecisionSchema.parse(req.body);
+    const userId = req.user?.sub ?? "user";
+    const result = await decideApprovalRequest(req.params.id, parsed, userId);
+    res.json(result);
+  } catch (err) {
+    next(err);
+  }
+});
+
+aiRouter.get("/runs", async (req, res, next) => {
+  try {
+    const limit = req.query.limit ? Number(req.query.limit) : 20;
+    const runs = await listAgentRuns(limit);
+    res.json(runs);
+  } catch (err) {
+    next(err);
+  }
+});
+
+aiRouter.post("/contextual", async (req, res, next) => {
+  try {
+    const path = typeof req.body?.path === "string" ? req.body.path : "";
+    const suggestions = await getContextualSuggestions(path);
+    res.json(suggestions);
+  } catch (err) {
+    next(err);
+  }
+});
