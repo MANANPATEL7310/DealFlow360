@@ -341,3 +341,125 @@ export async function moveToBilling(quotationId: string, actorId: string) {
   });
   await transition(q, "BILLING", actorId, "Entering billing");
 }
+
+/**
+ * Loads the billing schedule for a quotation including invoices and credit notes.
+ */
+export async function getBillingSchedule(quotationId: string) {
+  return db.billingSchedule.findUnique({
+    where: { quotationId },
+    include: {
+      invoices: { orderBy: [{ periodStart: "asc" }, { createdAt: "asc" }] },
+      creditNotes: { orderBy: { createdAt: "asc" } },
+    },
+  });
+}
+
+/**
+ * Reconciles payments recorded vs invoices due for a quotation.
+ */
+export async function reconcilePayments(quotationId: string) {
+  const schedule = await getBillingSchedule(quotationId);
+  if (!schedule) {
+    return { error: "SCHEDULE_NOT_FOUND", quotationId };
+  }
+
+  const invoices = await db.invoice.findMany({
+    where: { scheduleId: schedule.id },
+    include: { payments: true },
+  });
+
+  const totalBilledMinor = invoices.reduce(
+    (sum, inv) => sum + inv.amountMinor,
+    0,
+  );
+  const totalPaidMinor = invoices.reduce(
+    (sum, inv) =>
+      sum +
+      inv.payments
+        .filter((p) => p.status === "recorded")
+        .reduce((pSum, p) => pSum + p.amountMinor, 0),
+    0,
+  );
+
+  const openInvoices = invoices.filter((inv) => inv.status === "ISSUED");
+  const paidInvoices = invoices.filter((inv) => inv.status === "PAID");
+  const draftInvoices = invoices.filter((inv) => inv.status === "DRAFT");
+
+  return {
+    scheduleId: schedule.id,
+    quotationId,
+    totalBilledMinor,
+    totalPaidMinor,
+    outstandingMinor: Math.max(0, totalBilledMinor - totalPaidMinor),
+    openInvoicesCount: openInvoices.length,
+    paidInvoicesCount: paidInvoices.length,
+    draftInvoicesCount: draftInvoices.length,
+    mismatches: openInvoices.map((inv) => ({
+      invoiceId: inv.id,
+      kind: inv.kind,
+      amountMinor: inv.amountMinor,
+      status: inv.status,
+    })),
+  };
+}
+
+/**
+ * Simulates proration for mid-cycle changes.
+ */
+export async function simulateProration(opts: {
+  subscriptionId?: string;
+  lineId?: string;
+  changeDate?: string | Date;
+  newPeriodAmountMinor?: number;
+}) {
+  const changeDate = opts.changeDate ? new Date(opts.changeDate) : new Date();
+  const lineId = opts.lineId ?? opts.subscriptionId;
+
+  if (!lineId) {
+    return { prorationBreakdown: [], netMinor: 0 };
+  }
+
+  const line = await db.quotationLine.findUnique({
+    where: { id: lineId },
+    include: { subscriptionPlan: true },
+  });
+
+  if (!line) {
+    return { prorationBreakdown: [], netMinor: 0 };
+  }
+
+  const currentInvoice = await db.invoice.findFirst({
+    where: { lineId, kind: "RECURRING", status: "ISSUED" },
+    orderBy: { periodStart: "asc" },
+  });
+
+  if (
+    !currentInvoice ||
+    !currentInvoice.periodStart ||
+    !currentInvoice.periodEnd
+  ) {
+    return { prorationBreakdown: [], netMinor: 0 };
+  }
+
+  const newAmount = opts.newPeriodAmountMinor ?? 0;
+  const delta = newAmount - currentInvoice.amountMinor;
+  const proratedMagnitude = prorate(
+    Math.abs(delta),
+    changeDate,
+    currentInvoice.periodStart,
+    currentInvoice.periodEnd,
+  );
+
+  return {
+    prorationBreakdown: [
+      {
+        periodStart: changeDate.toISOString(),
+        periodEnd: currentInvoice.periodEnd.toISOString(),
+        amountMinor: delta >= 0 ? proratedMagnitude : -proratedMagnitude,
+      },
+    ],
+    netMinor: delta >= 0 ? proratedMagnitude : -proratedMagnitude,
+    cancellationRule: line.subscriptionPlan?.cancellationRule,
+  };
+}

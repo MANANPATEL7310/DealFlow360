@@ -28,6 +28,8 @@ import { aiInsightsRouter } from "../modules/ai/insights/routes.js";
 import { aiApprovalsRouter } from "../modules/ai/approvals/approvals.routes.js";
 import { discountApprovalRouter } from "../modules/ai/discount-approval/routes.js";
 import { negotiationRouter } from "../modules/ai/negotiation/routes.js";
+import { aiRecommendationsRouter } from "../modules/ai/recommendations/routes.js";
+import { aiBillingRouter } from "../modules/ai/billing/routes.js";
 
 export const apiRouter = Router();
 
@@ -60,3 +62,5 @@ apiRouter.use("/ai", negotiationRouter);
 apiRouter.use("/ai", aiFulfillmentRouter);
 apiRouter.use("/ai", aiDealHealthRouter);
 apiRouter.use("/ai", aiInsightsRouter);
+apiRouter.use("/ai", aiRecommendationsRouter);
+apiRouter.use("/ai", aiBillingRouter);

@@ -11,7 +11,7 @@
 // Once require-role.ts lands, uncomment the requireRole lines below.
 
 import { requireAuth } from "../../middleware/require-auth.js";
-// import { requireRole } from "../../middleware/require-role.js"; // ← Dev 1 M0 pending
+import { requireRole } from "../../middleware/require-role.js";
 import { createRouter } from "../../lib/create-router.js";
 import { validateRequest } from "../../lib/validate-request.js";
 import {
@@ -30,35 +30,31 @@ productRouter.use(requireAuth);
 productRouter.get("/", c.listProductsController);
 productRouter.get("/:id", c.getProductController);
 
-// Writes — requireRole("admin") once Dev 1's middleware is available
+// Writes — requireRole("admin")
 productRouter.post(
   "/",
-  /* requireRole("admin"), */
+  requireRole("admin"),
   validateRequest(createProductSchema),
   c.createProductController,
 );
 productRouter.patch(
   "/:id",
-  /* requireRole("admin"), */
+  requireRole("admin"),
   validateRequest(updateProductSchema),
   c.updateProductController,
 );
-productRouter.delete(
-  "/:id",
-  /* requireRole("admin"), */
-  c.deleteProductController,
-);
+productRouter.delete("/:id", requireRole("admin"), c.deleteProductController);
 
 // ─── Variant sub-resource (/products/:id/variants) ────────────────────────────
 productRouter.get("/:id/variants", c.listVariantsController);
 productRouter.post(
   "/:id/variants",
-  /* requireRole("admin"), */
+  requireRole("admin"),
   validateRequest(createProductVariantSchema),
   c.createVariantController,
 );
 productRouter.delete(
   "/:id/variants/:variantId",
-  /* requireRole("admin"), */
+  requireRole("admin"),
   c.deleteVariantController,
 );
