@@ -4,4 +4,5 @@ export * from "./config/routes";
 export * from "./schemas/auth";
 export * from "./schemas/dashboard";
 export * from "./schemas/governance";
+export * from "./schemas/quotation";
 export * from "./types";

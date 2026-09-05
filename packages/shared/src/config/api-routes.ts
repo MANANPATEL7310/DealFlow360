@@ -146,6 +146,58 @@ export const apiRoutes = {
       },
     },
   },
+
+  // ─── Quotations (M5) ──────────────────────────────────────────────────────
+  quotations: {
+    list: {
+      path: "/quotations",
+      method: "GET",
+      auth: true,
+      description: "List quotations.",
+    },
+    getById: {
+      path: "/quotations/:id",
+      method: "GET",
+      auth: true,
+      description: "Get quotation by ID.",
+    },
+    create: {
+      path: "/quotations",
+      method: "POST",
+      auth: true,
+      description: "Create a new quotation.",
+    },
+    addLine: {
+      path: "/quotations/:id/lines",
+      method: "POST",
+      auth: true,
+      description: "Add a line item to quotation.",
+    },
+    updateLine: {
+      path: "/quotations/:id/lines/:lineId",
+      method: "PATCH",
+      auth: true,
+      description: "Update a line item on quotation.",
+    },
+    removeLine: {
+      path: "/quotations/:id/lines/:lineId",
+      method: "DELETE",
+      auth: true,
+      description: "Delete a line item from quotation.",
+    },
+    confirm: {
+      path: "/quotations/:id/confirm",
+      method: "POST",
+      auth: true,
+      description: "Confirm quotation and trigger risk evaluation.",
+    },
+    approvalDecision: {
+      path: "/quotations/:id/approvals/decision",
+      method: "POST",
+      auth: true,
+      description: "Submit approval decision (approve, reject, return).",
+    },
+  },
 } as const;
 
 // ─── Derived Types (auto-generated, do not edit manually) ─────────────────────
