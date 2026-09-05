@@ -63,6 +63,18 @@ export const apiRoutes = {
     update:  { path: "/products/:id", method: "PATCH",  auth: true,  description: "Update a product." },
     remove:  { path: "/products/:id", method: "DELETE", auth: true,  description: "Delete a product." },
   },
+  
+  // ─── Customers ──────────────────────────────────────────────────────────────
+  customers: {
+    list:       { path: "/customers",              method: "GET",    auth: true, description: "List all customer accounts." },
+    create:     { path: "/customers",              method: "POST",   auth: true, description: "Create a new customer account." },
+    getById:    { path: "/customers/:id",          method: "GET",    auth: true, description: "Get customer account by ID." },
+    update:     { path: "/customers/:id",          method: "PATCH",  auth: true, description: "Update customer account details." },
+    remove:     { path: "/customers/:id",          method: "DELETE", auth: true, description: "Delete a customer account." },
+    contacts:   { path: "/customers/:id/contacts", method: "GET",    auth: true, description: "List contacts for a customer." },
+    addContact: { path: "/customers/:id/contacts", method: "POST",   auth: true, description: "Add contact to a customer." },
+    magicLink:  { path: "/customers/:id/magic-link", method: "POST", auth: true, description: "Generate customer portal magic link." },
+  },
 
   // ─── Quotations ─────────────────────────────────────────────────────────────
   quotations: {
