@@ -16,3 +16,6 @@ graphify/
 .planning/
 planning/
 .claude/
+
+# Local feature architecture tracking (not pushed to GitHub)
+docs/architecture/
