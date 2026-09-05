@@ -51,6 +51,22 @@ export const apiRoutes = {
     update:  { path: "/products/:id", method: "PATCH",  auth: true,  description: "Update a product." },
     remove:  { path: "/products/:id", method: "DELETE", auth: true,  description: "Delete a product." },
   },
+
+  // ─── Quotations ─────────────────────────────────────────────────────────────
+  quotations: {
+    list:        { path: "/quotations",            method: "GET",    auth: true,  description: "List quotations with filtering." },
+    create:      { path: "/quotations",            method: "POST",   auth: true,  description: "Create a new quotation." },
+    getById:     { path: "/quotations/:id",        method: "GET",    auth: true,  description: "Get quotation by ID." },
+    update:      { path: "/quotations/:id",        method: "PATCH",  auth: true,  description: "Update quotation draft." },
+    confirm:     { path: "/quotations/:id/confirm",method: "POST",   auth: true,  description: "Confirm quotation through risk engine." },
+  },
+
+  // ─── Deal Health ───────────────────────────────────────────────────────────
+  dealHealth: {
+    alerts:      { path: "/deal-health/alerts",    method: "GET",    auth: true,  description: "List deal health anomaly alerts." },
+    detect:      { path: "/deal-health/detect",    method: "POST",   auth: true,  description: "Run deal health anomaly scan." },
+    acknowledge: { path: "/deal-health/alerts/:id/acknowledge", method: "POST", auth: true, description: "Acknowledge deal health alert." },
+  },
 } as const;
 
 // ─── Derived Types (auto-generated, do not edit manually) ─────────────────────
