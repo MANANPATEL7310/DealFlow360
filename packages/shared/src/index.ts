@@ -7,5 +7,7 @@ export * from "./schemas/product";
 export * from "./schemas/customer";
 export * from "./schemas/governance";
 export * from "./schemas/quotation";
+export * from "./schemas/upsell";
 export * from "./lib/quotation-math";
+export * from "./lib/upsell-engine";
 export * from "./types";

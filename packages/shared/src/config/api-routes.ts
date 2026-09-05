@@ -110,6 +110,12 @@ export const apiRoutes = {
     detect:      { path: "/deal-health/detect",    method: "POST",   auth: true,  description: "Run deal health anomaly scan." },
     acknowledge: { path: "/deal-health/alerts/:id/acknowledge", method: "POST", auth: true, description: "Acknowledge deal health alert." },
   },
+
+  // ─── Upsell & Recommendations ───────────────────────────────────────────────
+  upsell: {
+    list: { path: "/quotations/:id/upsell", method: "GET", auth: true, description: "Get ranked upsell recommendations with margin-delta." },
+    add:  { path: "/quotations/:id/upsell/:suggestedId", method: "POST", auth: true, description: "Add recommended upsell item to quotation." },
+  },
 } as const;
 
 // ─── Derived Types (auto-generated, do not edit manually) ─────────────────────
