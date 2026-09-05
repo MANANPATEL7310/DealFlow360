@@ -155,7 +155,7 @@ export function SettingsTab() {
                         <span className="text-sm font-semibold text-foreground">
                           {s.label}
                         </span>
-                        <code className="text-[11px] font-mono bg-surface-muted px-2 py-0.5 rounded text-muted-foreground">
+                        <code className="text-xs font-mono bg-surface-muted px-2 py-0.5 rounded text-muted-foreground">
                           {s.key}
                         </code>
                       </div>
@@ -164,7 +164,7 @@ export function SettingsTab() {
                       </p>
                       {s.key.includes("Minor") &&
                         typeof currentValue === "number" && (
-                          <p className="text-[11px] font-mono text-primary">
+                          <p className="text-xs font-mono text-primary">
                             Value representation: $
                             {(currentValue / 100).toLocaleString("en-US", {
                               minimumFractionDigits: 2,

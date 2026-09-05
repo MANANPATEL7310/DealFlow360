@@ -172,7 +172,7 @@ export function AuditLogTab() {
                       </td>
                       <td className="py-3 px-4 whitespace-nowrap">
                         <div className="flex items-center gap-1.5">
-                          <Badge tone={actorTone} className="text-[10px] font-semibold uppercase">
+                          <Badge tone={actorTone} className="text-xs font-semibold uppercase">
                             {log.actorKind}
                           </Badge>
                           <span className="font-medium text-foreground text-xs">
@@ -187,7 +187,7 @@ export function AuditLogTab() {
                       </td>
                       <td className="py-3 px-4 whitespace-nowrap">
                         <span className="font-semibold text-foreground">{log.entity}</span>{" "}
-                        <span className="text-[11px] text-muted-foreground font-mono">
+                        <span className="text-xs text-muted-foreground font-mono">
                           #{log.entityId.slice(0, 10)}
                         </span>
                       </td>
@@ -200,12 +200,12 @@ export function AuditLogTab() {
                             variant="outline"
                             size="sm"
                             onClick={() => setSelectedLog(log)}
-                            className="h-7 px-2 text-[11px] gap-1 border-border font-mono"
+                            className="h-7 px-2 text-xs gap-1 border-border font-mono"
                           >
                             <Code className="size-3 text-primary" /> View Diff
                           </Button>
                         ) : (
-                          <span className="text-muted-foreground/50 text-[11px]">—</span>
+                          <span className="text-muted-foreground/50 text-xs">—</span>
                         )}
                       </td>
                     </tr>
@@ -271,21 +271,21 @@ export function AuditLogTab() {
             <div className="p-5 space-y-4 text-xs">
               <div className="grid grid-cols-2 gap-2 text-muted-foreground">
                 <div>
-                  <span className="block font-medium text-[11px]">Entity:</span>
+                  <span className="block font-medium text-xs">Entity:</span>
                   <span className="text-foreground font-semibold">{selectedLog.entity}</span>
                 </div>
                 <div>
-                  <span className="block font-medium text-[11px]">Entity ID:</span>
+                  <span className="block font-medium text-xs">Entity ID:</span>
                   <span className="text-foreground font-mono">{selectedLog.entityId}</span>
                 </div>
                 <div>
-                  <span className="block font-medium text-[11px]">Actor:</span>
+                  <span className="block font-medium text-xs">Actor:</span>
                   <span className="text-foreground font-medium">
                     {selectedLog.actorName ?? selectedLog.actorId ?? "System"} ({selectedLog.actorKind})
                   </span>
                 </div>
                 <div>
-                  <span className="block font-medium text-[11px]">Timestamp:</span>
+                  <span className="block font-medium text-xs">Timestamp:</span>
                   <span className="text-foreground font-mono">
                     {new Date(selectedLog.createdAt).toISOString()}
                   </span>
@@ -294,7 +294,7 @@ export function AuditLogTab() {
 
               {selectedLog.reason && (
                 <div className="rounded-lg bg-surface-muted/50 p-2.5 border border-border/50">
-                  <span className="block text-[11px] font-semibold text-foreground mb-0.5">
+                  <span className="block text-xs font-semibold text-foreground mb-0.5">
                     Logged Business Reason:
                   </span>
                   <p className="text-muted-foreground">{selectedLog.reason}</p>
@@ -302,10 +302,10 @@ export function AuditLogTab() {
               )}
 
               <div>
-                <span className="block text-[11px] font-semibold text-foreground mb-1.5">
+                <span className="block text-xs font-semibold text-foreground mb-1.5">
                   State Mutation Diff ({'{ before, after }'}):
                 </span>
-                <pre className="rounded-xl bg-slate-950 p-4 font-mono text-[11px] text-emerald-400 overflow-x-auto border border-slate-800 max-h-60">
+                <pre className="rounded-xl bg-slate-950 p-4 font-mono text-xs text-emerald-400 overflow-x-auto border border-slate-800 max-h-60">
                   {JSON.stringify(selectedLog.diff, null, 2)}
                 </pre>
               </div>

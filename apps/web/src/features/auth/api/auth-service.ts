@@ -23,8 +23,10 @@ export async function login(payload: LoginInput): Promise<AuthSession> {
       ) ?? "sales_rep";
 
     const persona = DEMO_PERSONAS[matchedRole];
+    const token = `mock-jwt-token-${matchedRole}-${Date.now()}`;
     return {
-      accessToken: `mock-jwt-token-${matchedRole}-${Date.now()}`,
+      token,
+      accessToken: token,
       user: {
         id: `usr-${matchedRole}-demo`,
         name: persona.name,
@@ -44,13 +46,16 @@ export async function register(payload: RegisterInput): Promise<AuthSession> {
     return authSessionSchema.parse(data.data);
   } catch {
     // Graceful fallback for offline / prototyping
+    const role = payload.role ?? "sales_rep";
+    const token = `mock-jwt-token-${role}-${Date.now()}`;
     return {
-      accessToken: `mock-jwt-token-${payload.role}-${Date.now()}`,
+      token,
+      accessToken: token,
       user: {
-        id: `usr-${payload.role}-${Date.now()}`,
+        id: `usr-${role}-${Date.now()}`,
         name: payload.name,
         email: payload.email,
-        role: payload.role,
+        role,
       },
     };
   }
