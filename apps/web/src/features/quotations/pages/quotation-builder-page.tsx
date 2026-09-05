@@ -22,6 +22,7 @@ import { LineEditorTable } from "@/features/quotations/components/line-editor-ta
 import { MarginIndicatorGauge } from "@/features/quotations/components/margin-indicator-gauge";
 import { OrderDiscountBar } from "@/features/quotations/components/order-discount-bar";
 import { ProductPickerModal } from "@/features/quotations/components/product-picker-modal";
+import { UpsellPanel } from "@/features/upsell/components/upsell-panel";
 import {
   useAddLine,
   useConfirmQuotation,
@@ -205,6 +206,9 @@ export function QuotationBuilderPage() {
               </div>
             )}
           </div>
+
+          {/* Intelligent Upsell & Cross-Sell Panel */}
+          {isDraft && <UpsellPanel quotationId={quote.id} />}
         </div>
 
         {/* Right: Margin Indicator & Risk Radar (4 cols) */}
