@@ -6,6 +6,7 @@ export const appRoutes = {
   quotations: "/app/quotations",
   products: "/app/products",
   customers: "/app/customers",
+  governance: "/app/governance",
   approvals: "/app/approvals",
   fulfillment: "/app/fulfillment",
   billing: "/app/billing",

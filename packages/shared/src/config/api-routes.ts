@@ -85,6 +85,14 @@ export const apiRoutes = {
     confirm:     { path: "/quotations/:id/confirm",method: "POST",   auth: true,  description: "Confirm quotation through risk engine." },
   },
 
+  // ─── Discount Governance ───────────────────────────────────────────────────
+  governance: {
+    discountTiers:    { path: "/governance/discount-tiers",        method: "GET",   auth: true, description: "List or upsert discount tier ceilings." },
+    categoryCeilings: { path: "/governance/category-ceilings",     method: "GET",   auth: true, description: "List or upsert category discount ceilings." },
+    approvalRules:    { path: "/governance/approval-rules",        method: "GET",   auth: true, description: "List or create approval chain rules." },
+    approvalRuleById: { path: "/governance/approval-rules/:id",    method: "PATCH", auth: true, description: "Update or delete approval chain rule by ID." },
+  },
+
   // ─── Deal Health ───────────────────────────────────────────────────────────
   dealHealth: {
     alerts:      { path: "/deal-health/alerts",    method: "GET",    auth: true,  description: "List deal health anomaly alerts." },
