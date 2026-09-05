@@ -1,14 +1,2 @@
-export {
-  reportCategoryContributionSchema,
-  reportDatasetSchema,
-  reportFiltersSchema,
-  reportFunnelStageSchema,
-  reportSummarySchema,
-} from "@template/shared";
-export type {
-  ReportCategoryContribution,
-  ReportDataset,
-  ReportFilters,
-  ReportFunnelStage,
-  ReportSummary,
-} from "@template/shared";
+export { reportFiltersSchema } from "@template/shared";
+export type { ReportFilters } from "@template/shared";

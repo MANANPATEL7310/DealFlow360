@@ -1,20 +1,52 @@
-import {
-  type Quotation,
-  SEED_QUOTATIONS,
-} from "@template/shared";
-import type {
-  ReportCategoryContribution,
-  ReportDataset,
-  ReportFilters,
-} from "./reports.schema.js";
+import type { Prisma, ProductCategory, QuotationStatus } from "@prisma/client";
+import { db } from "../../lib/db.js";
+import type { ReportFilters } from "./reports.schema.js";
 
-export interface Viewer {
+type DbClient = {
+  quotation: {
+    // Prisma's groupBy delegate is generic-heavy; this module only depends on this result shape.
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    groupBy: (args: any) => Promise<
+      {
+        status: QuotationStatus;
+        _count: { _all: number };
+        _sum: { grandTotalMinor: number | null };
+      }[]
+    >;
+  };
+  quotationLine: {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    findMany: (args: any) => Promise<
+      {
+        qty: number;
+        unitPriceMinor: number;
+        unitCostMinor: number;
+        discountPct: number;
+      }[]
+    >;
+  };
+};
+
+export type ReportViewer = {
   sub: string;
   role: string;
-  email?: string;
-}
+};
 
-export const STAGE_ORDER = [
+export type ReportDataset = {
+  filters: ReportFilters & { effectiveRepId?: string };
+  summary: {
+    quoteCount: number;
+    grossMinor: number;
+    netMinor: number;
+    costMinor: number;
+    discountMinor: number;
+    discountPct: number;
+    marginPct: number;
+  };
+  funnel: { status: string; count: number; netMinor: number }[];
+};
+
+const STAGE_ORDER: QuotationStatus[] = [
   "DRAFT",
   "PENDING_APPROVAL",
   "APPROVED",
@@ -25,191 +57,140 @@ export const STAGE_ORDER = [
   "BILLING",
   "PAID",
   "REJECTED",
-] as const;
+];
 
-/**
- * Role-Based Governance:
- * Sales reps only ever see their own deals (ignoring any repId filter passed).
- * Sales managers, finance, and admins may filter by rep or view company-wide metrics.
- */
-function getEffectiveRepId(
+function effectiveRepId(
   filters: ReportFilters,
-  viewer: Viewer,
+  viewer: ReportViewer,
 ): string | undefined {
   if (viewer.role === "sales_rep") {
     return viewer.sub;
   }
+
   return filters.repId;
+}
+
+function lineMoney(line: {
+  qty: number;
+  unitPriceMinor: number;
+  unitCostMinor: number;
+  discountPct: number;
+}) {
+  const grossMinor = line.qty * line.unitPriceMinor;
+  const discountMinor = Math.round(grossMinor * (line.discountPct / 100));
+  const netMinor = grossMinor - discountMinor;
+  const costMinor = line.qty * line.unitCostMinor;
+
+  return { grossMinor, discountMinor, netMinor, costMinor };
+}
+
+function summarizeLines(
+  lines: {
+    qty: number;
+    unitPriceMinor: number;
+    unitCostMinor: number;
+    discountPct: number;
+  }[],
+) {
+  const totals = lines.reduce(
+    (sum, line) => {
+      const money = lineMoney(line);
+      return {
+        grossMinor: sum.grossMinor + money.grossMinor,
+        netMinor: sum.netMinor + money.netMinor,
+        costMinor: sum.costMinor + money.costMinor,
+        discountMinor: sum.discountMinor + money.discountMinor,
+      };
+    },
+    { grossMinor: 0, netMinor: 0, costMinor: 0, discountMinor: 0 },
+  );
+
+  return {
+    ...totals,
+    discountPct:
+      totals.grossMinor > 0
+        ? (totals.discountMinor / totals.grossMinor) * 100
+        : 0,
+    marginPct:
+      totals.netMinor > 0
+        ? ((totals.netMinor - totals.costMinor) / totals.netMinor) * 100
+        : 0,
+  };
+}
+
+function quoteWhere(filters: ReportFilters, repId?: string) {
+  const where: Prisma.QuotationWhereInput = {};
+
+  if (filters.from || filters.to) {
+    where.createdAt = {};
+    if (filters.from) {
+      where.createdAt.gte = filters.from;
+    }
+    if (filters.to) {
+      where.createdAt.lte = filters.to;
+    }
+  }
+  if (repId) {
+    where.salesRepId = repId;
+  }
+  if (filters.status) {
+    where.status = filters.status as QuotationStatus;
+  }
+  if (filters.category) {
+    where.lines = {
+      some: { product: { category: filters.category as ProductCategory } },
+    };
+  }
+
+  return where;
 }
 
 export async function buildReportDataset(
   filters: ReportFilters,
-  viewer: Viewer,
+  viewer: ReportViewer,
+  client: DbClient = db as unknown as DbClient,
 ): Promise<ReportDataset> {
-  const effectiveRepId = getEffectiveRepId(filters, viewer);
+  const repId = effectiveRepId(filters, viewer);
+  const where = quoteWhere(filters, repId);
 
-  // Filter quotation collection (uses seeded/in-memory records, adaptable to database)
-  const quotes = SEED_QUOTATIONS.filter((q: Quotation) => {
-    if (effectiveRepId && q.salesRepId !== effectiveRepId) {
-      if (
-        viewer.email &&
-        !viewer.email.toLowerCase().includes(q.salesRepId.toLowerCase())
-      ) {
-        return false;
-      }
-    }
-
-    if (filters.status && q.status !== filters.status) {
-      return false;
-    }
-
-    const qDate = new Date(q.lastActivityAt || Date.now()).getTime();
-    if (filters.from && qDate < new Date(filters.from).getTime()) {
-      return false;
-    }
-    if (filters.to && qDate > new Date(filters.to).getTime()) {
-      return false;
-    }
-
-    if (filters.category) {
-      const hasCategory = q.lines.some(
-        (l) => l.product && l.product.category === filters.category,
-      );
-      if (!hasCategory) return false;
-    }
-
-    return true;
+  const grouped = await client.quotation.groupBy({
+    by: ["status"],
+    where,
+    _count: { _all: true },
+    _sum: { grandTotalMinor: true },
   });
 
-  // Funnel: quote-level group by lifecycle stage
-  const funnelMap = new Map<string, { count: number; netMinor: number }>();
-  for (const stage of STAGE_ORDER) {
-    funnelMap.set(stage, { count: 0, netMinor: 0 });
-  }
-
-  for (const q of quotes) {
-    const existing = funnelMap.get(q.status) ?? { count: 0, netMinor: 0 };
-    const quoteNet = q.lines.reduce((sum, l) => {
-      if (
-        filters.category &&
-        l.product &&
-        l.product.category !== filters.category
-      ) {
-        return sum;
-      }
-      const lineGross = l.qty * l.unitPriceMinor;
-      const lineNet = Math.round(lineGross * (1 - (l.discountPct ?? 0) / 100));
-      return sum + lineNet;
-    }, 0);
-
-    funnelMap.set(q.status, {
-      count: existing.count + 1,
-      netMinor: existing.netMinor + quoteNet,
-    });
-  }
-
-  const funnel = STAGE_ORDER.map((status) => ({
-    status,
-    count: funnelMap.get(status)?.count ?? 0,
-    netMinor: funnelMap.get(status)?.netMinor ?? 0,
-  }));
-
-  // Aggregated money: line-level computation to prevent cross-category distortion
-  let totalGrossMinor = 0;
-  let totalNetMinor = 0;
-  let totalCostMinor = 0;
-
-  // Category contribution tracker
-  const categoryStats = new Map<
-    string,
-    {
-      lineCount: number;
-      grossMinor: number;
-      netMinor: number;
-      costMinor: number;
-    }
-  >();
-
-  for (const q of quotes) {
-    for (const line of q.lines) {
-      const cat = line.product?.category ?? "SERVICES";
-
-      if (filters.category && cat !== filters.category) {
-        continue;
-      }
-
-      const gross = line.qty * line.unitPriceMinor;
-      const net = Math.round(gross * (1 - (line.discountPct ?? 0) / 100));
-      const cost = line.qty * line.unitCostMinor;
-
-      totalGrossMinor += gross;
-      totalNetMinor += net;
-      totalCostMinor += cost;
-
-      const currCat = categoryStats.get(cat) ?? {
-        lineCount: 0,
-        grossMinor: 0,
-        netMinor: 0,
-        costMinor: 0,
-      };
-      categoryStats.set(cat, {
-        lineCount: currCat.lineCount + 1,
-        grossMinor: currCat.grossMinor + gross,
-        netMinor: currCat.netMinor + net,
-        costMinor: currCat.costMinor + cost,
-      });
-    }
-  }
-
-  const discountMinor = Math.max(0, totalGrossMinor - totalNetMinor);
-  const discountPct =
-    totalGrossMinor > 0
-      ? Number(((discountMinor / totalGrossMinor) * 100).toFixed(2))
-      : 0;
-  const marginPct =
-    totalNetMinor > 0
-      ? Number(
-          (((totalNetMinor - totalCostMinor) / totalNetMinor) * 100).toFixed(2),
-        )
-      : 0;
-
-  const categoryBreakdown: ReportCategoryContribution[] = Array.from(
-    categoryStats.entries(),
-  ).map(([cat, stats]) => {
-    const catMargin =
-      stats.netMinor > 0
-        ? Number(
-            (
-              ((stats.netMinor - stats.costMinor) / stats.netMinor) *
-              100
-            ).toFixed(2),
-          )
-        : 0;
+  const funnel = STAGE_ORDER.map((status) => {
+    const group = grouped.find((item) => item.status === status);
     return {
-      categoryId: cat,
-      categoryName: cat.charAt(0).toUpperCase() + cat.slice(1).toLowerCase(),
-      lineCount: stats.lineCount,
-      grossMinor: stats.grossMinor,
-      netMinor: stats.netMinor,
-      marginPct: catMargin,
+      status,
+      count: group?._count._all ?? 0,
+      netMinor: group?._sum.grandTotalMinor ?? 0,
     };
+  }).filter((stage) => stage.count > 0);
+
+  const lines = await client.quotationLine.findMany({
+    where: {
+      quotation: where,
+      ...(filters.category
+        ? { product: { category: filters.category as ProductCategory } }
+        : {}),
+    },
+    select: {
+      qty: true,
+      unitPriceMinor: true,
+      unitCostMinor: true,
+      discountPct: true,
+    },
   });
+  const summary = summarizeLines(lines);
 
   return {
-    filters: {
-      ...filters,
-      effectiveRepId,
-    },
+    filters: { ...filters, effectiveRepId: repId },
     summary: {
-      quoteCount: quotes.length,
-      grossMinor: totalGrossMinor,
-      netMinor: totalNetMinor,
-      costMinor: totalCostMinor,
-      discountMinor,
-      discountPct,
-      marginPct,
+      quoteCount: grouped.reduce((sum, group) => sum + group._count._all, 0),
+      ...summary,
     },
     funnel,
-    categoryBreakdown,
   };
 }

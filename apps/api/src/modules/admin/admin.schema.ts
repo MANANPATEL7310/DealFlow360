@@ -1,17 +1,2 @@
-export {
-  actorKindSchema,
-  auditLogQuerySchema,
-  auditLogSchema,
-  settingCategorySchema,
-  systemSettingSchema,
-  updateSettingInputSchema,
-} from "@template/shared";
-export type {
-  ActorKind,
-  AuditLog,
-  AuditLogQuery,
-  CanonicalSettingDef,
-  SettingCategory,
-  SystemSetting,
-  UpdateSettingInput,
-} from "@template/shared";
+export { auditLogQuerySchema, updateSettingSchema } from "@template/shared";
+export type { AuditLogQuery, UpdateSettingInput } from "@template/shared";

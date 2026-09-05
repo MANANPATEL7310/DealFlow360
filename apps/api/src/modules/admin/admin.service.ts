@@ -1,116 +1,140 @@
-import { getAuditLogsStore, writeAudit } from "../../lib/audit.js";
-import { getSettingsMap } from "../../lib/settings.js";
-import type { AuditLog, AuditLogQuery, SystemSetting } from "./admin.schema.js";
+import { writeAudit } from "../../lib/audit.js";
+import { db } from "../../lib/db.js";
+import type { AuditLogQuery } from "./admin.schema.js";
 
-export class AdminService {
-  /**
-   * Returns all active runtime system settings.
-   */
-  listSettings(): SystemSetting[] {
-    const map = getSettingsMap();
-    return Array.from(map.values());
-  }
+type SettingRow = {
+  id: string;
+  key: string;
+  value: string;
+  scope: string;
+  createdAt: Date;
+  updatedAt: Date;
+};
 
-  /**
-   * Updates a single system setting and commits an immutable compliance audit record.
-   */
-  async updateSetting(
-    key: string,
-    newValue: unknown,
-    actorId?: string,
-    actorName?: string,
-  ): Promise<SystemSetting> {
-    const map = getSettingsMap();
-    const existing = map.get(key);
+type DbClient = {
+  systemSetting: {
+    findMany: (args: { orderBy: { key: "asc" } }) => Promise<SettingRow[]>;
+    findUnique: (args: {
+      where: { key: string };
+    }) => Promise<SettingRow | null>;
+    update: (args: {
+      where: { key: string };
+      data: { value: string };
+    }) => Promise<SettingRow>;
+  };
+  auditLog: {
+    findMany: (args: {
+      where: Record<string, unknown>;
+      orderBy: { createdAt: "desc" };
+      take: number;
+      skip: number;
+    }) => Promise<unknown[]>;
+    count: (args: { where: Record<string, unknown> }) => Promise<number>;
+  };
+};
 
-    if (!existing) {
-      throw new Error(`Setting with key "${key}" not found.`);
-    }
+export type ParsedSetting = Omit<SettingRow, "value"> & { value: unknown };
 
-    const oldValue = existing.value;
-    const updated: SystemSetting = {
-      ...existing,
-      value: newValue,
-      updatedAt: new Date().toISOString(),
-    };
-
-    map.set(key, updated);
-
-    // Write immutable compliance audit log entry
-    await writeAudit({
-      actorId: actorId ?? "usr-admin-01",
-      actorName: actorName ?? "System Administrator",
-      actorKind: "user",
-      action: "settings.updated",
-      entity: "SystemSetting",
-      entityId: key,
-      reason: `Updated runtime parameter ${existing.label}`,
-      diff: {
-        key,
-        before: oldValue,
-        after: newValue,
-      },
-    });
-
-    return updated;
-  }
-
-  /**
-   * Queries the append-only compliance audit trail with filtering and pagination.
-   */
-  listAuditLogs(query: AuditLogQuery): {
-    items: AuditLog[];
-    total: number;
-    page: number;
-    pageSize: number;
-    totalPages: number;
-  } {
-    let logs = getAuditLogsStore();
-
-    if (query.entity) {
-      const qEntity = query.entity.toLowerCase();
-      logs = logs.filter((l) => l.entity.toLowerCase().includes(qEntity));
-    }
-
-    if (query.entityId) {
-      logs = logs.filter((l) => l.entityId === query.entityId);
-    }
-
-    if (query.actorId) {
-      logs = logs.filter((l) => l.actorId === query.actorId);
-    }
-
-    if (query.action) {
-      const qAction = query.action.toLowerCase();
-      logs = logs.filter((l) => l.action.toLowerCase().includes(qAction));
-    }
-
-    if (query.from) {
-      const fromTime = new Date(query.from).getTime();
-      logs = logs.filter((l) => new Date(l.createdAt).getTime() >= fromTime);
-    }
-
-    if (query.to) {
-      const toTime = new Date(query.to).getTime();
-      logs = logs.filter((l) => new Date(l.createdAt).getTime() <= toTime);
-    }
-
-    const total = logs.length;
-    const page = query.page ?? 1;
-    const pageSize = query.pageSize ?? 20;
-    const totalPages = Math.max(1, Math.ceil(total / pageSize));
-
-    const startIndex = (page - 1) * pageSize;
-    const items = logs.slice(startIndex, startIndex + pageSize);
-
-    return {
-      items,
-      total,
-      page,
-      pageSize,
-      totalPages,
-    };
-  }
+function notFound(code: string) {
+  return Object.assign(new Error(code), { http: 404 });
 }
 
-export const adminService = new AdminService();
+function parseSettingValue(value: string): unknown {
+  return JSON.parse(value);
+}
+
+function serializeSettingValue(value: unknown): string {
+  return JSON.stringify(value);
+}
+
+function toParsedSetting(row: SettingRow): ParsedSetting {
+  return {
+    ...row,
+    value: parseSettingValue(row.value),
+  };
+}
+
+export async function listSettings(
+  client: DbClient = db as unknown as DbClient,
+) {
+  const rows = await client.systemSetting.findMany({
+    orderBy: { key: "asc" },
+  });
+
+  return rows.map(toParsedSetting);
+}
+
+export async function updateSetting(
+  key: string,
+  value: unknown,
+  actorId: string,
+  client: DbClient = db as unknown as DbClient,
+) {
+  const existing = await client.systemSetting.findUnique({ where: { key } });
+  if (!existing) {
+    throw notFound("SETTING_NOT_FOUND");
+  }
+
+  const before = parseSettingValue(existing.value);
+  const updated = await client.systemSetting.update({
+    where: { key },
+    data: { value: serializeSettingValue(value) },
+  });
+
+  await writeAudit({
+    actorId,
+    actorKind: "user",
+    action: "settings.updated",
+    entity: "SystemSetting",
+    entityId: updated.id,
+    reason: `Changed ${key}`,
+    diff: { key, before, after: value },
+  });
+
+  return toParsedSetting(updated);
+}
+
+export async function listAuditLogs(
+  filters: AuditLogQuery,
+  client: DbClient = db as unknown as DbClient,
+) {
+  const where: Record<string, unknown> = {};
+  if (filters.entity) {
+    where.entity = filters.entity;
+  }
+  if (filters.entityId) {
+    where.entityId = filters.entityId;
+  }
+  if (filters.actorId) {
+    where.actorId = filters.actorId;
+  }
+  if (filters.action) {
+    where.action = { startsWith: filters.action };
+  }
+  if (filters.from || filters.to) {
+    where.createdAt = {
+      ...(filters.from ? { gte: filters.from } : {}),
+      ...(filters.to ? { lte: filters.to } : {}),
+    };
+  }
+
+  const page = filters.page;
+  const pageSize = filters.pageSize;
+  const [items, total] = await Promise.all([
+    client.auditLog.findMany({
+      where,
+      orderBy: { createdAt: "desc" },
+      take: pageSize,
+      skip: (page - 1) * pageSize,
+    }),
+    client.auditLog.count({ where }),
+  ]);
+
+  return {
+    items,
+    page,
+    pageSize,
+    total,
+    totalPages: Math.ceil(total / pageSize),
+  };
+}
