@@ -5,6 +5,7 @@ import { dealHealthRouter } from "../modules/deal-health/deal-health.routes.js";
 import { healthRouter } from "../modules/health/health.routes.js";
 import { portalRouter } from "../modules/portal/portal.routes.js";
 import { reportsRouter } from "../modules/reports/reports.routes.js";
+import { adminRouter } from "../modules/admin/admin.routes.js";
 
 export const apiRouter = Router();
 
@@ -14,3 +15,4 @@ apiRouter.use("/dashboard", dashboardRouter);
 apiRouter.use("/portal", portalRouter);
 apiRouter.use("/deal-health", dealHealthRouter);
 apiRouter.use("/reports", reportsRouter);
+apiRouter.use("/admin", adminRouter);

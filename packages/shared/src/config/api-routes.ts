@@ -427,6 +427,28 @@ export const apiRoutes = {
       description: "Stream sales report in PDF format.",
     },
   },
+
+  // ─── Compliance Audit Trail & System Configuration (PS A1, A3) ──────────────
+  admin: {
+    settings: {
+      path: "/admin/settings",
+      method: "GET",
+      auth: true,
+      description: "List all runtime system settings.",
+    },
+    updateSetting: {
+      path: "/admin/settings/:key",
+      method: "PUT",
+      auth: true,
+      description: "Update a runtime system setting value (admin only).",
+    },
+    auditLogs: {
+      path: "/admin/audit-logs",
+      method: "GET",
+      auth: true,
+      description: "Query compliance audit trail logs with filtering.",
+    },
+  },
 } as const;
 
 // ─── Derived Types (auto-generated, do not edit manually) ─────────────────────
