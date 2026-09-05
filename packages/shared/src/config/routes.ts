@@ -13,6 +13,7 @@ export const appRoutes = {
   fulfillment: "/app/fulfillment",
   quotationFulfillment: (id: string) => `/app/quotations/${id}/fulfillment`,
   billing: "/app/billing",
+  quotationBilling: (id: string) => `/app/quotations/${id}/billing`,
   dealHealth: "/app/deal-health",
   reports: "/app/reports",
   settings: "/app/settings",

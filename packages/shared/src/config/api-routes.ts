@@ -127,6 +127,15 @@ export const apiRoutes = {
   warehouses: {
     list:        { path: "/warehouses",                             method: "GET",  auth: true, description: "List all regional warehouses." },
   },
+
+  // ─── Hybrid Billing ────────────────────────────────────────────────────────
+  billing: {
+    schedule: { path: "/quotations/:id/billing",        method: "GET",  auth: true, description: "Get billing schedule for a quotation." },
+    change:   { path: "/quotations/:id/billing/change", method: "POST", auth: true, description: "Modify or cancel a subscription line with proration." },
+  },
+  invoices: {
+    pay:      { path: "/invoices/:id/pay",              method: "POST", auth: true, description: "Record payment against an invoice." },
+  },
 } as const;
 
 // ─── Derived Types (auto-generated, do not edit manually) ─────────────────────

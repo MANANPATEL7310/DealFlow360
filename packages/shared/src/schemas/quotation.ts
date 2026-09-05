@@ -220,6 +220,22 @@ export const SEED_QUOTATIONS: Quotation[] = [
         createdAt: "2026-09-04T11:05:00.000Z",
         updatedAt: "2026-09-04T11:05:00.000Z",
       },
+      {
+        id: "qtl-101-sub",
+        quotationId: "qt-101",
+        productId: p04.id,
+        product: p04,
+        variantId: null,
+        variant: null,
+        qty: 5,
+        unitPriceMinor: 12000, // $120.00 / mo
+        unitCostMinor: 2400, // $24.00 / mo
+        discountPct: 0.0,
+        lineType: "RECURRING",
+        subscriptionPlanId: "sub-plan-01",
+        createdAt: "2026-09-04T11:10:00.000Z",
+        updatedAt: "2026-09-04T11:10:00.000Z",
+      },
     ],
     statusEvents: [
       {
