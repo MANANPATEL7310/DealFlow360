@@ -9,6 +9,7 @@
     "lint": "eslint src --max-warnings=0",
     "start": "node dist/server.js",
     "typecheck": "tsc --noEmit -p tsconfig.json",
+    "test": "vitest run",
     "clean": "rm -rf dist node_modules .turbo",
     "db:seed": "prisma db seed"
   },
@@ -37,6 +38,7 @@
     "@types/jsonwebtoken": "^9.0.10",
     "@types/node": "^24.10.13",
     "prisma": "6.19.3",
-    "tsx": "^4.21.0"
+    "tsx": "^4.21.0",
+    "vitest": "^5.0.0"
   }
 }
