@@ -11,6 +11,7 @@ export const appRoutes = {
   approvals: "/app/approvals",
   approvalDetail: (id: string) => `/app/approvals/${id}`,
   fulfillment: "/app/fulfillment",
+  quotationFulfillment: (id: string) => `/app/quotations/${id}/fulfillment`,
   billing: "/app/billing",
   dealHealth: "/app/deal-health",
   reports: "/app/reports",

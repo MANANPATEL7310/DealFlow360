@@ -116,6 +116,17 @@ export const apiRoutes = {
     list: { path: "/quotations/:id/upsell", method: "GET", auth: true, description: "Get ranked upsell recommendations with margin-delta." },
     add:  { path: "/quotations/:id/upsell/:suggestedId", method: "POST", auth: true, description: "Add recommended upsell item to quotation." },
   },
+
+  // ─── Warehouse Fulfillment ──────────────────────────────────────────────────
+  fulfillment: {
+    get:         { path: "/quotations/:id/fulfillment",             method: "GET",  auth: true, description: "Get quotation fulfillment plan." },
+    accept:      { path: "/quotations/:id/fulfillment/accept",      method: "POST", auth: true, description: "Accept suggestion and commit stock." },
+    override:    { path: "/quotations/:id/fulfillment/override",    method: "POST", auth: true, description: "Save manual split overrides." },
+    consolidate: { path: "/quotations/:id/fulfillment/consolidate", method: "POST", auth: true, description: "Consolidate remaining backorder." },
+  },
+  warehouses: {
+    list:        { path: "/warehouses",                             method: "GET",  auth: true, description: "List all regional warehouses." },
+  },
 } as const;
 
 // ─── Derived Types (auto-generated, do not edit manually) ─────────────────────
