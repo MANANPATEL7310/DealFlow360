@@ -46,3 +46,20 @@ export async function similar(kind: string, queryVector: number[], k = 5) {
     LIMIT ${k}
   `;
 }
+
+export async function backfillProductEmbeddings(): Promise<{
+  embedded: number;
+}> {
+  const products = await db.product.findMany();
+  let count = 0;
+  for (const p of products) {
+    const text = `${p.name} - ${p.category}. ${p.description ?? ""}`.trim();
+    try {
+      await upsertEmbedding("PRODUCT", p.id, text);
+      count++;
+    } catch {
+      // Continue if LLM/embedding service is offline or unconfigured
+    }
+  }
+  return { embedded: count };
+}
