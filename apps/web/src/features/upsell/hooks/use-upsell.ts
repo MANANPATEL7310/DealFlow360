@@ -8,8 +8,7 @@ export const UPSELL_QUERY_KEY = ["upsell"] as const;
 export function useUpsell(quotationId?: string) {
   return useQuery({
     queryKey: [...UPSELL_QUERY_KEY, quotationId],
-    queryFn: () =>
-      quotationId ? upsellApi.getSuggestions(quotationId) : [],
+    queryFn: () => (quotationId ? upsellApi.getSuggestions(quotationId) : []),
     enabled: Boolean(quotationId),
     staleTime: 10000,
   });

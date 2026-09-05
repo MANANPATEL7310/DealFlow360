@@ -27,13 +27,19 @@ export function SubscriptionSchedule({
   periods,
   quotationId,
 }: SubscriptionScheduleProps) {
-  const [selectedInvoiceForPay, setSelectedInvoiceForPay] = useState<Invoice | null>(null);
-  const [changeModalMode, setChangeModalMode] = useState<"modify" | "cancel" | null>(null);
+  const [selectedInvoiceForPay, setSelectedInvoiceForPay] =
+    useState<Invoice | null>(null);
+  const [changeModalMode, setChangeModalMode] = useState<
+    "modify" | "cancel" | null
+  >(null);
 
   // Current active period (status: ISSUED) or earliest upcoming
-  const currentPeriod = periods.find((p) => p.status === "ISSUED") ?? periods[0] ?? null;
+  const currentPeriod =
+    periods.find((p) => p.status === "ISSUED") ?? periods[0] ?? null;
 
-  const getStatusBadgeTone = (status: string): "success" | "warning" | "danger" | "neutral" => {
+  const getStatusBadgeTone = (
+    status: string,
+  ): "success" | "warning" | "danger" | "neutral" => {
     switch (status) {
       case "PAID":
         return "success";
@@ -46,7 +52,8 @@ export function SubscriptionSchedule({
     }
   };
 
-  const isAllVoid = periods.length > 0 && periods.every((p) => p.status === "VOID");
+  const isAllVoid =
+    periods.length > 0 && periods.every((p) => p.status === "VOID");
 
   return (
     <>
@@ -65,13 +72,17 @@ export function SubscriptionSchedule({
                     Subscription Cancelled
                   </Badge>
                 ) : (
-                  <Badge tone="primary" className="border-purple-500/30 text-xs text-purple-300 uppercase">
+                  <Badge
+                    tone="primary"
+                    className="border-purple-500/30 text-xs text-purple-300 uppercase"
+                  >
                     Recurring Active
                   </Badge>
                 )}
               </div>
               <p className="text-xs text-slate-400">
-                Line Reference: <span className="font-mono text-slate-300">{lineId}</span>
+                Line Reference:{" "}
+                <span className="font-mono text-slate-300">{lineId}</span>
                 {currentPeriod?.amountMinor
                   ? ` • Base: $${(currentPeriod.amountMinor / 100).toFixed(2)}/cycle`
                   : ""}
@@ -128,15 +139,22 @@ export function SubscriptionSchedule({
                   <tr
                     key={period.id}
                     className={`transition-colors hover:bg-white/[0.02] ${
-                      isVoid ? "text-slate-500 line-through opacity-50" : "text-slate-200"
+                      isVoid
+                        ? "text-slate-500 line-through opacity-50"
+                        : "text-slate-200"
                     }`}
                   >
                     <td className="py-3 pl-2">
                       <div className="flex items-center gap-1.5 font-mono">
                         <Calendar className="size-3.5 text-slate-400" />
                         <span>
-                          {period.periodStart ? period.periodStart.slice(0, 10) : "N/A"} →{" "}
-                          {period.periodEnd ? period.periodEnd.slice(0, 10) : "N/A"}
+                          {period.periodStart
+                            ? period.periodStart.slice(0, 10)
+                            : "N/A"}{" "}
+                          →{" "}
+                          {period.periodEnd
+                            ? period.periodEnd.slice(0, 10)
+                            : "N/A"}
                         </span>
                       </div>
                     </td>

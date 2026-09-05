@@ -161,8 +161,9 @@ export function evaluateQuotationRisk(
     return passesMin && passesMax;
   });
 
-  const requiredLevels: ApprovalLevel[] =
-    matchedRule?.requiredLevels ?? ["SALES_MANAGER"];
+  const requiredLevels: ApprovalLevel[] = matchedRule?.requiredLevels ?? [
+    "SALES_MANAGER",
+  ];
 
   return {
     blendedRiskScore,

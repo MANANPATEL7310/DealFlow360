@@ -47,7 +47,8 @@ export function BackorderList({
             Zero Outstanding Backorders
           </h4>
           <p className="text-xs text-muted-foreground">
-            All requested line quantities are completely covered by available regional warehouse stock.
+            All requested line quantities are completely covered by available
+            regional warehouse stock.
           </p>
         </div>
       </Card>
@@ -71,7 +72,8 @@ export function BackorderList({
               </Badge>
             </div>
             <p className="text-xs text-muted-foreground">
-              These items exceed current available warehouse stock and require consolidation or replenishment
+              These items exceed current available warehouse stock and require
+              consolidation or replenishment
             </p>
           </div>
         </div>
@@ -81,10 +83,18 @@ export function BackorderList({
         <Table>
           <TableHeader>
             <TableRow className="border-border bg-surface-muted/50">
-              <TableHead className="text-xs font-semibold">Shortage Product</TableHead>
-              <TableHead className="text-center text-xs font-semibold">Outstanding Qty</TableHead>
-              <TableHead className="text-center text-xs font-semibold">Status</TableHead>
-              <TableHead className="text-right text-xs font-semibold">Action</TableHead>
+              <TableHead className="text-xs font-semibold">
+                Shortage Product
+              </TableHead>
+              <TableHead className="text-center text-xs font-semibold">
+                Outstanding Qty
+              </TableHead>
+              <TableHead className="text-center text-xs font-semibold">
+                Status
+              </TableHead>
+              <TableHead className="text-right text-xs font-semibold">
+                Action
+              </TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>

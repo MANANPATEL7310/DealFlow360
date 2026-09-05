@@ -1,10 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router";
-import {
-  ExternalLink,
-  Search,
-  ShieldCheck,
-} from "lucide-react";
+import { ExternalLink, Search, ShieldCheck } from "lucide-react";
 import {
   appRoutes,
   type DealHealthScore,
@@ -27,7 +23,10 @@ interface DealHealthTableProps {
   selectedCategory: HealthCategory | "ALL";
 }
 
-export function DealHealthTable({ scores, selectedCategory }: DealHealthTableProps) {
+export function DealHealthTable({
+  scores,
+  selectedCategory,
+}: DealHealthTableProps) {
   const [search, setSearch] = useState("");
 
   const filtered = scores.filter((item) => {
@@ -83,7 +82,8 @@ export function DealHealthTable({ scores, selectedCategory }: DealHealthTablePro
             Monitored Opportunity Directory
           </h3>
           <p className="text-xs text-muted-foreground">
-            Holistic deal telemetry and composite health scores across all active quotations.
+            Holistic deal telemetry and composite health scores across all
+            active quotations.
           </p>
         </div>
 
@@ -117,19 +117,27 @@ export function DealHealthTable({ scores, selectedCategory }: DealHealthTablePro
           <TableBody>
             {filtered.length === 0 ? (
               <TableRow>
-                <TableCell colSpan={8} className="py-8 text-center text-xs text-muted-foreground">
+                <TableCell
+                  colSpan={8}
+                  className="py-8 text-center text-xs text-muted-foreground"
+                >
                   No quotations found matching your search or category filter.
                 </TableCell>
               </TableRow>
             ) : (
               filtered.map((deal) => {
-                const formattedValue = (deal.netTotalMinor / 100).toLocaleString(
-                  undefined,
-                  { minimumFractionDigits: 2, maximumFractionDigits: 2 },
-                );
+                const formattedValue = (
+                  deal.netTotalMinor / 100
+                ).toLocaleString(undefined, {
+                  minimumFractionDigits: 2,
+                  maximumFractionDigits: 2,
+                });
 
                 return (
-                  <TableRow key={deal.quotationId} className="hover:bg-surface-muted/30 transition-colors">
+                  <TableRow
+                    key={deal.quotationId}
+                    className="hover:bg-surface-muted/30 transition-colors"
+                  >
                     {/* Quotation & Account */}
                     <TableCell className="align-middle py-3.5">
                       <div className="space-y-0.5">

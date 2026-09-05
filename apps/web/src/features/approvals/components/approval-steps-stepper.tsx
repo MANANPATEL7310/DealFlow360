@@ -65,7 +65,8 @@ export function ApprovalStepsStepper({
           const isApproved = step.decision === "APPROVED";
           const isRejected = step.decision === "REJECTED";
           const isReturned = step.decision === "RETURNED";
-          const isPendingWaiting = step.decision === "PENDING" && !isCurrentActive;
+          const isPendingWaiting =
+            step.decision === "PENDING" && !isCurrentActive;
 
           const decidedDateFormatted = step.decidedAt
             ? new Date(step.decidedAt).toLocaleString()

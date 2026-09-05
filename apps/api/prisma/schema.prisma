@@ -83,6 +83,19 @@ enum AlertType {
   DELIVERY_SLIPPAGE
 }
 
+enum AgentRunStatus {
+  RUNNING
+  DONE
+  FAILED
+  PAUSED_FOR_APPROVAL
+}
+
+enum ApprovalRequestStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
 // ==========================================
 // MODULE 00: FOUNDATION & AUTH
 // ==========================================
@@ -543,4 +556,110 @@ model UpsellSuggestion {
 
   @@index([quotationId])
   @@index([quotationId, suggestedId])
+}
+
+// ==========================================
+// PHASE 2: AGENTIC AI OBSERVABILITY & EVALS
+// ==========================================
+
+model AgentRun {
+  id            String         @id @default(cuid())
+  agent         String
+  quotationId   String?
+  status        AgentRunStatus @default(RUNNING)
+  model         String
+  promptVersion Int?
+  inputTokens   Int            @default(0)
+  outputTokens  Int            @default(0)
+  costUsd       Float          @default(0)
+  latencyMs     Int            @default(0)
+  result        Json?
+  error         String?
+  steps         AgentStep[]
+  approvals     ApprovalRequest[]
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+
+  @@index([agent])
+  @@index([status])
+  @@index([createdAt])
+}
+
+model AgentStep {
+  id           String   @id @default(cuid())
+  runId        String
+  run          AgentRun @relation(fields: [runId], references: [id], onDelete: Cascade)
+  index        Int
+  kind         String
+  toolName     String?
+  request      Json
+  response     Json?
+  inputTokens  Int      @default(0)
+  outputTokens Int      @default(0)
+  costUsd      Float    @default(0)
+  latencyMs    Int      @default(0)
+  createdAt    DateTime @default(now())
+
+  @@index([runId])
+  @@index([kind])
+}
+
+model AgentEval {
+  id            String   @id @default(cuid())
+  agent         String
+  promptVersion Int
+  name          String
+  input         Json
+  expected      Json
+  passed        Boolean?
+  score         Float?
+  createdAt     DateTime @default(now())
+
+  @@index([agent])
+  @@index([agent, promptVersion])
+}
+
+model ApprovalRequest {
+  id             String                @id @default(cuid())
+  agent          String
+  runId          String?
+  run            AgentRun?             @relation(fields: [runId], references: [id], onDelete: SetNull)
+  quotationId    String?
+  kind           String
+  summary        String
+  proposedAction Json
+  status         ApprovalRequestStatus @default(PENDING)
+  decidedBy      String?
+  decidedAt      DateTime?
+  createdAt      DateTime              @default(now())
+  updatedAt      DateTime              @updatedAt
+
+  @@index([agent])
+  @@index([kind])
+  @@index([quotationId])
+  @@index([status])
+}
+
+model PromptVersion {
+  id        String   @id @default(cuid())
+  agent     String
+  version   Int
+  system    String
+  active    Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  @@unique([agent, version])
+  @@index([agent, active])
+}
+
+model Embedding {
+  id        String   @id @default(cuid())
+  kind      String
+  refId     String
+  content   String
+  vector    Unsupported("vector")
+  createdAt DateTime @default(now())
+
+  @@index([kind])
+  @@index([kind, refId])
 }

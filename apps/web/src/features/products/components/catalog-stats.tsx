@@ -1,11 +1,5 @@
 import type { Product } from "@template/shared";
-import {
-  Boxes,
-  Cpu,
-  Layers,
-  Percent,
-  RefreshCw,
-} from "lucide-react";
+import { Boxes, Cpu, Layers, Percent, RefreshCw } from "lucide-react";
 import { MetricCard } from "@/components/ui/metric-card";
 
 interface CatalogStatsProps {
@@ -15,7 +9,9 @@ interface CatalogStatsProps {
 
 export function CatalogStats({ products, isLoading }: CatalogStatsProps) {
   const total = products.length;
-  const hardwareCount = products.filter((p) => p.category === "HARDWARE").length;
+  const hardwareCount = products.filter(
+    (p) => p.category === "HARDWARE",
+  ).length;
   const subCount = products.filter(
     (p) => p.category === "SUBSCRIPTIONS",
   ).length;

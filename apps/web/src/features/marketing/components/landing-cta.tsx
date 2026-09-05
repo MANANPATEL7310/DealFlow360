@@ -23,13 +23,17 @@ export function LandingCta() {
             </h2>
 
             <p className="mx-auto max-w-2xl text-base leading-relaxed text-muted-foreground sm:text-lg">
-              Step into the self-governing sales operations platform that harmonizes complex pricing,
-              approval routing, fulfillment splitting, and hybrid invoicing.
+              Step into the self-governing sales operations platform that
+              harmonizes complex pricing, approval routing, fulfillment
+              splitting, and hybrid invoicing.
             </p>
 
             <div className="flex flex-wrap items-center justify-center gap-4 pt-4">
               <Link to={appRoutes.app}>
-                <Button size="lg" className="gap-2.5 px-8 font-bold shadow-xl shadow-primary/25">
+                <Button
+                  size="lg"
+                  className="gap-2.5 px-8 font-bold shadow-xl shadow-primary/25"
+                >
                   Launch DealFlow360 Workspace
                   <ArrowRight className="size-4" />
                 </Button>

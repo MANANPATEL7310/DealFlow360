@@ -1,12 +1,5 @@
 import type { UpsellSuggestionItem } from "@template/shared";
-import {
-  Plus,
-  Sparkles,
-  TrendingDown,
-  TrendingUp,
-  X,
-  Zap,
-} from "lucide-react";
+import { Plus, Sparkles, TrendingDown, TrendingUp, X, Zap } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Spinner } from "@/components/ui/spinner";
@@ -91,7 +84,10 @@ export function UpsellSuggestionCard({
             ) : (
               <TrendingDown className="size-3" />
             )}
-            {isPositiveMargin ? `+${marginDeltaPct.toFixed(1)}%` : `${marginDeltaPct.toFixed(1)}%`} Margin Delta
+            {isPositiveMargin
+              ? `+${marginDeltaPct.toFixed(1)}%`
+              : `${marginDeltaPct.toFixed(1)}%`}{" "}
+            Margin Delta
           </Badge>
 
           <span className="text-xs text-muted-foreground">

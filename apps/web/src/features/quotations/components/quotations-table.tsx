@@ -88,7 +88,8 @@ export function QuotationsTable({
     if (search.trim().length > 0) {
       const query = search.toLowerCase().trim();
       const matchesNum = q.quotationNumber.toLowerCase().includes(query);
-      const matchesCust = q.customer?.name.toLowerCase().includes(query) ?? false;
+      const matchesCust =
+        q.customer?.name.toLowerCase().includes(query) ?? false;
       return matchesNum || matchesCust;
     }
     return true;
@@ -160,10 +161,12 @@ export function QuotationsTable({
                     ? "secondary"
                     : "warning";
 
-              const formattedTotal = (quote.grandTotalMinor / 100).toLocaleString(
-                undefined,
-                { minimumFractionDigits: 2, maximumFractionDigits: 2 },
-              );
+              const formattedTotal = (
+                quote.grandTotalMinor / 100
+              ).toLocaleString(undefined, {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2,
+              });
 
               return (
                 <TableRow key={quote.id}>
@@ -196,7 +199,8 @@ export function QuotationsTable({
                   </TableCell>
                   <TableCell>
                     <span className="font-mono text-xs text-foreground">
-                      {quote.lines.length} {quote.lines.length === 1 ? "line" : "lines"}
+                      {quote.lines.length}{" "}
+                      {quote.lines.length === 1 ? "line" : "lines"}
                     </span>
                   </TableCell>
                   <TableCell>
@@ -230,7 +234,11 @@ export function QuotationsTable({
                   <TableCell>{getStatusBadge(quote.status)}</TableCell>
                   <TableCell className="text-right">
                     <Link to={`/app/quotations/${quote.id}`}>
-                      <Button className="h-8 px-2.5 text-xs" size="sm" variant="ghost">
+                      <Button
+                        className="h-8 px-2.5 text-xs"
+                        size="sm"
+                        variant="ghost"
+                      >
                         Open Builder <ArrowUpRight className="ml-1 size-3" />
                       </Button>
                     </Link>
@@ -243,7 +251,9 @@ export function QuotationsTable({
       ) : (
         <div className="flex min-h-60 flex-col items-center justify-center rounded-lg border border-dashed border-border p-6 text-center text-muted-foreground">
           <FileSpreadsheet className="mb-2 size-8 text-muted-foreground/40" />
-          <p className="text-sm font-medium">No quotations match selected filters.</p>
+          <p className="text-sm font-medium">
+            No quotations match selected filters.
+          </p>
           <p className="text-xs text-muted-foreground">
             Clear filter criteria or initialize a new draft quotation.
           </p>

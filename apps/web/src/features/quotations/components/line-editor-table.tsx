@@ -166,9 +166,7 @@ export function LineEditorTable({
                   <button
                     className="flex size-7 items-center justify-center rounded border border-border bg-surface text-muted-foreground hover:bg-surface-muted hover:text-foreground"
                     type="button"
-                    onClick={() =>
-                      onUpdateLine(line.id, { qty: line.qty + 1 })
-                    }
+                    onClick={() => onUpdateLine(line.id, { qty: line.qty + 1 })}
                   >
                     <Plus className="size-3" />
                   </button>
@@ -202,11 +200,13 @@ export function LineEditorTable({
               <TableCell>
                 {isCompliant ? (
                   <span className="inline-flex items-center gap-1 text-xs font-medium text-success-dark">
-                    <ShieldCheck className="size-3.5" /> Cap {applicableCap}% (Safe)
+                    <ShieldCheck className="size-3.5" /> Cap {applicableCap}%
+                    (Safe)
                   </span>
                 ) : (
                   <span className="inline-flex items-center gap-1 text-xs font-semibold text-danger-dark">
-                    <AlertTriangle className="size-3.5" /> Cap {applicableCap}% (+{excess.toFixed(1)}% Excess)
+                    <AlertTriangle className="size-3.5" /> Cap {applicableCap}%
+                    (+{excess.toFixed(1)}% Excess)
                   </span>
                 )}
               </TableCell>

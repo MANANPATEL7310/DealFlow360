@@ -34,7 +34,11 @@ type TabFilter = "ALL" | "ACTIONABLE" | "HIGH_RISK";
 function getTierBadge(tier?: string) {
   switch (tier?.toUpperCase()) {
     case "GOLD":
-      return <Badge className="border-amber-400/40 bg-amber-400/10 text-amber-500">Gold</Badge>;
+      return (
+        <Badge className="border-amber-400/40 bg-amber-400/10 text-amber-500">
+          Gold
+        </Badge>
+      );
     case "SILVER":
       return <Badge tone="secondary">Silver</Badge>;
     case "BRONZE":
@@ -167,26 +171,54 @@ export function ApprovalsInboxTable({
             <TableRow className="border-border bg-surface-muted/50">
               <TableHead className="text-xs font-semibold">Quotation</TableHead>
               <TableHead className="text-xs font-semibold">Customer</TableHead>
-              <TableHead className="text-right text-xs font-semibold">Grand Total</TableHead>
-              <TableHead className="text-center text-xs font-semibold">Margin</TableHead>
-              <TableHead className="text-center text-xs font-semibold">Risk Profile</TableHead>
-              <TableHead className="text-xs font-semibold">Pending Review Level</TableHead>
-              <TableHead className="text-center text-xs font-semibold">Status</TableHead>
-              <TableHead className="text-right text-xs font-semibold">Action</TableHead>
+              <TableHead className="text-right text-xs font-semibold">
+                Grand Total
+              </TableHead>
+              <TableHead className="text-center text-xs font-semibold">
+                Margin
+              </TableHead>
+              <TableHead className="text-center text-xs font-semibold">
+                Risk Profile
+              </TableHead>
+              <TableHead className="text-xs font-semibold">
+                Pending Review Level
+              </TableHead>
+              <TableHead className="text-center text-xs font-semibold">
+                Status
+              </TableHead>
+              <TableHead className="text-right text-xs font-semibold">
+                Action
+              </TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {isLoading ? (
               Array.from({ length: 4 }).map((_, i) => (
                 <TableRow key={`skeleton-row-${i}`}>
-                  <TableCell><Skeleton className="h-4 w-24" /></TableCell>
-                  <TableCell><Skeleton className="h-4 w-32" /></TableCell>
-                  <TableCell className="text-right"><Skeleton className="ml-auto h-4 w-16" /></TableCell>
-                  <TableCell><Skeleton className="mx-auto h-4 w-12" /></TableCell>
-                  <TableCell><Skeleton className="mx-auto h-4 w-16" /></TableCell>
-                  <TableCell><Skeleton className="h-4 w-28" /></TableCell>
-                  <TableCell><Skeleton className="mx-auto h-4 w-20" /></TableCell>
-                  <TableCell className="text-right"><Skeleton className="ml-auto h-8 w-20" /></TableCell>
+                  <TableCell>
+                    <Skeleton className="h-4 w-24" />
+                  </TableCell>
+                  <TableCell>
+                    <Skeleton className="h-4 w-32" />
+                  </TableCell>
+                  <TableCell className="text-right">
+                    <Skeleton className="ml-auto h-4 w-16" />
+                  </TableCell>
+                  <TableCell>
+                    <Skeleton className="mx-auto h-4 w-12" />
+                  </TableCell>
+                  <TableCell>
+                    <Skeleton className="mx-auto h-4 w-16" />
+                  </TableCell>
+                  <TableCell>
+                    <Skeleton className="h-4 w-28" />
+                  </TableCell>
+                  <TableCell>
+                    <Skeleton className="mx-auto h-4 w-20" />
+                  </TableCell>
+                  <TableCell className="text-right">
+                    <Skeleton className="ml-auto h-8 w-20" />
+                  </TableCell>
                 </TableRow>
               ))
             ) : filteredItems.length === 0 ? (

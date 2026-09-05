@@ -11,7 +11,7 @@
 
 import { createRouter } from "../../lib/create-router.js";
 import { requireAuth } from "../../middleware/require-auth.js";
-// import { requireRole } from "../../middleware/require-role.js"; // ← Dev 1 M0 pending
+import { requireRole } from "../../middleware/require-role.js";
 import { validateRequest } from "../../lib/validate-request.js";
 import {
   createCustomerSchema,
@@ -39,10 +39,10 @@ customerRouter.patch(
   c.updateCustomerController,
 );
 
-// Sensitive — optionally: requireRole("sales_manager", "admin")
+// Sensitive — requireRole("sales_manager", "admin")
 customerRouter.delete(
   "/:id",
-  /* requireRole("sales_manager", "admin"), */
+  requireRole("sales_manager", "admin"),
   c.deleteCustomerController,
 );
 

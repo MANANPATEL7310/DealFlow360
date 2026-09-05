@@ -40,9 +40,7 @@ export function optimizeSplits(
   for (const w of warehouses) {
     stock.set(w.id, new Map(Object.entries(w.stock)));
   }
-  const weightOf = new Map(
-    warehouses.map((w) => [w.id, w.shippingCostWeight]),
-  );
+  const weightOf = new Map(warehouses.map((w) => [w.id, w.shippingCostWeight]));
 
   // Consolidate demand per product
   const demand = new Map<string, number>();

@@ -4,6 +4,7 @@ import { requireAuth } from "../../middleware/require-auth.js";
 import { requireRole } from "../../middleware/require-role.js";
 import { updateSettingSchema } from "./admin.schema.js";
 import {
+  aiUsageSummaryController,
   listAuditLogsController,
   listSettingsController,
   updateSettingController,
@@ -14,6 +15,7 @@ export const adminRouter = createRouter();
 adminRouter.use(requireAuth, requireRole("admin"));
 
 adminRouter.get("/audit-logs", listAuditLogsController);
+adminRouter.get("/ai-usage", aiUsageSummaryController);
 adminRouter.get("/settings", listSettingsController);
 adminRouter.put(
   "/settings/:key",

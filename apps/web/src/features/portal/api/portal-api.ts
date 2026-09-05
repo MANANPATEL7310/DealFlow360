@@ -14,10 +14,12 @@ export const portalApi = {
     const { data } = await portalHttp.get(apiRoutes.portal.quotation.path);
     return data.data;
   },
+
   async markOpened(): Promise<{ status: string }> {
     const { data } = await portalHttp.post(apiRoutes.portal.open.path);
     return data.data;
   },
+
   async createNegotiation(
     input: CreateNegotiationInput,
   ): Promise<NegotiationRequest> {
@@ -27,29 +29,34 @@ export const portalApi = {
     );
     return data.data;
   },
+
   async confirmProposal(): Promise<PortalConfirmResult> {
     const { data } = await portalHttp.post(apiRoutes.portal.confirm.path);
     return data.data;
   },
+
   async submitNegotiation(
     input: CreateNegotiationInput,
   ): Promise<PortalQuotationView> {
     await this.createNegotiation(input);
     return this.getQuotation();
   },
+
   async confirmQuotation(): Promise<PortalConfirmResult> {
     return this.confirmProposal();
   },
+
   async sendQuotation(
     quotationId: string,
-    contactId: string,
-  ): Promise<{ token: string; url: string }> {
+    contactId?: string,
+  ): Promise<{ token: string; url?: string; magicLink?: string }> {
     const { data } = await apiClient.post(
       apiRoutes.quotations.send.path.replace(":id", quotationId),
       { contactId },
     );
     return data.data;
   },
+
   async getInternalNegotiations(
     quotationId: string,
   ): Promise<NegotiationRequest[]> {
@@ -58,6 +65,7 @@ export const portalApi = {
     );
     return data.data;
   },
+
   async answerNegotiation(
     quotationId: string,
     negotiationId: string,

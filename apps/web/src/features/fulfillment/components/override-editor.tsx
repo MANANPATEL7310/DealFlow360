@@ -4,13 +4,7 @@ import type {
   ManualSplitInput,
   Warehouse,
 } from "@template/shared";
-import {
-  AlertCircle,
-  CheckCircle2,
-  Edit3,
-  Plus,
-  Trash2,
-} from "lucide-react";
+import { AlertCircle, CheckCircle2, Edit3, Plus, Trash2 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -93,7 +87,8 @@ export function OverrideEditor({
 
   const handleAddRow = () => {
     const firstWh = warehouses[0]?.id ?? "wh-01";
-    const firstProduct = [...demandMap.keys()][0] ?? products[0]?.id ?? "prd-hw-01";
+    const firstProduct =
+      [...demandMap.keys()][0] ?? products[0]?.id ?? "prd-hw-01";
     setRows((prev) => [
       ...prev,
       { warehouseId: firstWh, productId: firstProduct, qty: 1 },
@@ -149,10 +144,18 @@ export function OverrideEditor({
           <Table>
             <TableHeader>
               <TableRow className="border-border bg-surface-muted/50">
-                <TableHead className="text-xs font-semibold">Warehouse Origin</TableHead>
-                <TableHead className="text-xs font-semibold">Product SKU</TableHead>
-                <TableHead className="w-32 text-center text-xs font-semibold">Quantity</TableHead>
-                <TableHead className="w-16 text-right text-xs font-semibold">Action</TableHead>
+                <TableHead className="text-xs font-semibold">
+                  Warehouse Origin
+                </TableHead>
+                <TableHead className="text-xs font-semibold">
+                  Product SKU
+                </TableHead>
+                <TableHead className="w-32 text-center text-xs font-semibold">
+                  Quantity
+                </TableHead>
+                <TableHead className="w-16 text-right text-xs font-semibold">
+                  Action
+                </TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>

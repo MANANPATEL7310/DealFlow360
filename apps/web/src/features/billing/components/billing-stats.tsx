@@ -1,8 +1,5 @@
 import type { BillingSchedule } from "@template/shared";
-import {
-  paidMinor,
-  remainingMinor,
-} from "@template/shared";
+import { paidMinor, remainingMinor } from "@template/shared";
 import {
   CheckCircle2,
   Clock,

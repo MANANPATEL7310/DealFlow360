@@ -46,9 +46,7 @@ export function useCreateQuotation() {
       quotationsApi.createQuotation(input),
     onSuccess: (newQuote) => {
       queryClient.invalidateQueries({ queryKey: QUOTATIONS_QUERY_KEY });
-      toast.success(
-        `Draft quotation ${newQuote.quotationNumber} initialized.`,
-      );
+      toast.success(`Draft quotation ${newQuote.quotationNumber} initialized.`);
     },
     onError: (error: { message?: string }) => {
       toast.error(error.message || "Failed to create quotation.");

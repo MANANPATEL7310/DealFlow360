@@ -95,7 +95,8 @@ export function DealHealthWidget() {
               All Deals Healthy
             </h3>
             <p className="mx-auto mt-1 max-w-xs text-xs text-muted-foreground">
-              Zero margin erosions, stalled quotations, or warehouse slippages detected.
+              Zero margin erosions, stalled quotations, or warehouse slippages
+              detected.
             </p>
           </div>
         ) : (

@@ -51,7 +51,9 @@ export function AuditLogTab() {
         <div className="flex items-center justify-between border-b border-border/60 pb-2.5">
           <div className="flex items-center gap-2">
             <Filter className="size-4 text-primary" />
-            <h4 className="text-sm font-semibold text-foreground">Audit Log Filters</h4>
+            <h4 className="text-sm font-semibold text-foreground">
+              Audit Log Filters
+            </h4>
           </div>
           {(filters.action || filters.entity || filters.from || filters.to) && (
             <Button
@@ -67,47 +69,63 @@ export function AuditLogTab() {
 
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 md:grid-cols-4">
           <div className="space-y-1">
-            <label className="text-xs font-medium text-muted-foreground">Action Keyword</label>
+            <label className="text-xs font-medium text-muted-foreground">
+              Action Keyword
+            </label>
             <div className="relative">
               <Search className="size-3.5 absolute top-2.5 left-2.5 text-muted-foreground" />
               <Input
                 placeholder="e.g. approved, settings..."
                 value={filters.action ?? ""}
-                onChange={(e) => handleFilterChange({ action: e.target.value || undefined })}
+                onChange={(e) =>
+                  handleFilterChange({ action: e.target.value || undefined })
+                }
                 className="h-8 pl-8 text-xs"
               />
             </div>
           </div>
 
           <div className="space-y-1">
-            <label className="text-xs font-medium text-muted-foreground">Entity Name</label>
+            <label className="text-xs font-medium text-muted-foreground">
+              Entity Name
+            </label>
             <Input
               placeholder="e.g. Quotation, SystemSetting..."
               value={filters.entity ?? ""}
-              onChange={(e) => handleFilterChange({ entity: e.target.value || undefined })}
-              className="h-8 text-xs"
-            />
-          </div>
-
-          <div className="space-y-1">
-            <label className="text-xs font-medium text-muted-foreground">From Date</label>
-            <Input
-              type="date"
-              value={formatDateValue(filters.from)}
               onChange={(e) =>
-                handleFilterChange({ from: e.target.value ? new Date(e.target.value) : undefined })
+                handleFilterChange({ entity: e.target.value || undefined })
               }
               className="h-8 text-xs"
             />
           </div>
 
           <div className="space-y-1">
-            <label className="text-xs font-medium text-muted-foreground">To Date</label>
+            <label className="text-xs font-medium text-muted-foreground">
+              From Date
+            </label>
+            <Input
+              type="date"
+              value={formatDateValue(filters.from)}
+              onChange={(e) =>
+                handleFilterChange({
+                  from: e.target.value ? new Date(e.target.value) : undefined,
+                })
+              }
+              className="h-8 text-xs"
+            />
+          </div>
+
+          <div className="space-y-1">
+            <label className="text-xs font-medium text-muted-foreground">
+              To Date
+            </label>
             <Input
               type="date"
               value={formatDateValue(filters.to)}
               onChange={(e) =>
-                handleFilterChange({ to: e.target.value ? new Date(e.target.value) : undefined })
+                handleFilterChange({
+                  to: e.target.value ? new Date(e.target.value) : undefined,
+                })
               }
               className="h-8 text-xs"
             />
@@ -119,9 +137,12 @@ export function AuditLogTab() {
       <div className="surface-card rounded-2xl border border-border overflow-hidden shadow-sm">
         <div className="p-5 border-b border-border flex items-center justify-between">
           <div>
-            <h3 className="text-base font-bold text-foreground">Compliance Activity Stream</h3>
+            <h3 className="text-base font-bold text-foreground">
+              Compliance Activity Stream
+            </h3>
             <p className="text-xs text-muted-foreground">
-              Immutable SOC2/ISO audit log recording all quotations, approvals, governance, and config events.
+              Immutable SOC2/ISO audit log recording all quotations, approvals,
+              governance, and config events.
             </p>
           </div>
           <Badge tone="neutral" className="text-xs font-mono">
@@ -152,7 +173,11 @@ export function AuditLogTab() {
               </thead>
               <tbody className="divide-y divide-border/50">
                 {data?.items.map((log) => {
-                  const actorTone: "primary" | "warning" | "secondary" | "neutral" =
+                  const actorTone:
+                    | "primary"
+                    | "warning"
+                    | "secondary"
+                    | "neutral" =
                     log.actorKind === "customer"
                       ? "warning"
                       : log.actorKind === "system"
@@ -160,7 +185,10 @@ export function AuditLogTab() {
                         : "primary";
 
                   return (
-                    <tr key={log.id} className="hover:bg-surface-muted/30 transition-colors">
+                    <tr
+                      key={log.id}
+                      className="hover:bg-surface-muted/30 transition-colors"
+                    >
                       <td className="py-3 px-4 font-mono text-muted-foreground whitespace-nowrap">
                         {new Date(log.createdAt).toLocaleString("en-US", {
                           month: "short",
@@ -172,7 +200,10 @@ export function AuditLogTab() {
                       </td>
                       <td className="py-3 px-4 whitespace-nowrap">
                         <div className="flex items-center gap-1.5">
-                          <Badge tone={actorTone} className="text-xs font-semibold uppercase">
+                          <Badge
+                            tone={actorTone}
+                            className="text-xs font-semibold uppercase"
+                          >
                             {log.actorKind}
                           </Badge>
                           <span className="font-medium text-foreground text-xs">
@@ -186,7 +217,9 @@ export function AuditLogTab() {
                         </code>
                       </td>
                       <td className="py-3 px-4 whitespace-nowrap">
-                        <span className="font-semibold text-foreground">{log.entity}</span>{" "}
+                        <span className="font-semibold text-foreground">
+                          {log.entity}
+                        </span>{" "}
                         <span className="text-xs text-muted-foreground font-mono">
                           #{log.entityId.slice(0, 10)}
                         </span>
@@ -205,7 +238,9 @@ export function AuditLogTab() {
                             <Code className="size-3 text-primary" /> View Diff
                           </Button>
                         ) : (
-                          <span className="text-muted-foreground/50 text-xs">—</span>
+                          <span className="text-muted-foreground/50 text-xs">
+                            —
+                          </span>
                         )}
                       </td>
                     </tr>
@@ -272,16 +307,21 @@ export function AuditLogTab() {
               <div className="grid grid-cols-2 gap-2 text-muted-foreground">
                 <div>
                   <span className="block font-medium text-xs">Entity:</span>
-                  <span className="text-foreground font-semibold">{selectedLog.entity}</span>
+                  <span className="text-foreground font-semibold">
+                    {selectedLog.entity}
+                  </span>
                 </div>
                 <div>
                   <span className="block font-medium text-xs">Entity ID:</span>
-                  <span className="text-foreground font-mono">{selectedLog.entityId}</span>
+                  <span className="text-foreground font-mono">
+                    {selectedLog.entityId}
+                  </span>
                 </div>
                 <div>
                   <span className="block font-medium text-xs">Actor:</span>
                   <span className="text-foreground font-medium">
-                    {selectedLog.actorName ?? selectedLog.actorId ?? "System"} ({selectedLog.actorKind})
+                    {selectedLog.actorName ?? selectedLog.actorId ?? "System"} (
+                    {selectedLog.actorKind})
                   </span>
                 </div>
                 <div>
@@ -303,7 +343,7 @@ export function AuditLogTab() {
 
               <div>
                 <span className="block text-xs font-semibold text-foreground mb-1.5">
-                  State Mutation Diff ({'{ before, after }'}):
+                  State Mutation Diff ({"{ before, after }"}):
                 </span>
                 <pre className="rounded-xl bg-slate-950 p-4 font-mono text-xs text-emerald-400 overflow-x-auto border border-slate-800 max-h-60">
                   {JSON.stringify(selectedLog.diff, null, 2)}
@@ -312,7 +352,11 @@ export function AuditLogTab() {
             </div>
 
             <div className="p-4 border-t border-border flex justify-end bg-surface-muted/20">
-              <Button size="sm" onClick={() => setSelectedLog(null)} className="h-8 text-xs">
+              <Button
+                size="sm"
+                onClick={() => setSelectedLog(null)}
+                className="h-8 text-xs"
+              >
                 Close Inspector
               </Button>
             </div>

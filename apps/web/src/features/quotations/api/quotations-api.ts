@@ -82,7 +82,12 @@ export const quotationsApi = {
     );
     return data.data;
   },
-  async confirmQuotation(id: string) {
+  async confirmQuotation(id: string): Promise<{
+    quotation: Quotation;
+    risk: QuotationRiskEvaluation;
+    status: string;
+    message: string;
+  }> {
     const { data } = await apiClient.post(
       apiRoutes.quotations.confirm.path.replace(":id", id),
     );

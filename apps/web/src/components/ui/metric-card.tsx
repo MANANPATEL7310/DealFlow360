@@ -10,7 +10,12 @@ export interface MetricTrend {
   positive?: boolean;
 }
 
-export type MetricTone = "primary" | "secondary" | "warning" | "danger" | "neutral";
+export type MetricTone =
+  | "primary"
+  | "secondary"
+  | "warning"
+  | "danger"
+  | "neutral";
 
 export interface MetricCardProps {
   title: string;

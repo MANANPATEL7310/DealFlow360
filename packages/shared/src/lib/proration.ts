@@ -21,7 +21,10 @@ export function prorate(
 ): number {
   const total = daysBetween(periodStart, periodEnd);
   if (total <= 0) return 0;
-  const remaining = Math.min(Math.max(daysBetween(changeDate, periodEnd), 0), total);
+  const remaining = Math.min(
+    Math.max(daysBetween(changeDate, periodEnd), 0),
+    total,
+  );
   return Math.round(planAmountMinor * (remaining / total));
 }
 
@@ -85,8 +88,14 @@ export function groupInvoices(invoices: Invoice[]): {
  */
 export function summarizeSchedule(schedule: BillingSchedule) {
   const nonVoidInvoices = schedule.invoices.filter((i) => i.status !== "VOID");
-  const totalInvoicedMinor = nonVoidInvoices.reduce((sum, i) => sum + i.amountMinor, 0);
-  const totalPaidMinor = nonVoidInvoices.reduce((sum, i) => sum + paidMinor(i), 0);
+  const totalInvoicedMinor = nonVoidInvoices.reduce(
+    (sum, i) => sum + i.amountMinor,
+    0,
+  );
+  const totalPaidMinor = nonVoidInvoices.reduce(
+    (sum, i) => sum + paidMinor(i),
+    0,
+  );
   const totalOutstandingMinor = nonVoidInvoices
     .filter((i) => i.status === "ISSUED")
     .reduce((sum, i) => sum + remainingMinor(i), 0);

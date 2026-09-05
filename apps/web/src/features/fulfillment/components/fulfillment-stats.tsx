@@ -1,10 +1,5 @@
 import type { FulfillmentPlan } from "@template/shared";
-import {
-  AlertTriangle,
-  Boxes,
-  DollarSign,
-  Truck,
-} from "lucide-react";
+import { AlertTriangle, Boxes, DollarSign, Truck } from "lucide-react";
 import { MetricCard } from "@/components/ui/metric-card";
 
 interface FulfillmentStatsProps {

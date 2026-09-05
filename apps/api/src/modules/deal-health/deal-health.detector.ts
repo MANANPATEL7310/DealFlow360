@@ -44,12 +44,17 @@ export function scanQuotationForAnomalies(
   const alerts: DealHealthAlert[] = [];
   const repName = quote.salesRepId ?? "Alex Miller";
   const customerName = quote.customer?.name ?? "Enterprise Client";
-  const customerTier = (quote.customer?.tier as "BRONZE" | "SILVER" | "GOLD") ?? "SILVER";
+  const customerTier =
+    (quote.customer?.tier as "BRONZE" | "SILVER" | "GOLD") ?? "SILVER";
   const nowStr = referenceDate.toISOString();
 
-  const isTerminal = ["CONFIRMED", "FULFILLMENT", "BILLING", "PAID", "REJECTED"].includes(
-    quote.status,
-  );
+  const isTerminal = [
+    "CONFIRMED",
+    "FULFILLMENT",
+    "BILLING",
+    "PAID",
+    "REJECTED",
+  ].includes(quote.status);
 
   // 1. ─── STALLED PIPELINE DETECTION ─────────────────────────────────────────
   if (!isTerminal) {
@@ -70,7 +75,8 @@ export function scanQuotationForAnomalies(
           idleDays,
           atRiskAmountMinor: quote.grandTotalMinor,
         },
-        recommendedAction: "Schedule executive touchpoint or issue automated engagement pulse via Customer Portal.",
+        recommendedAction:
+          "Schedule executive touchpoint or issue automated engagement pulse via Customer Portal.",
         status: "open",
         createdAt: nowStr,
         updatedAt: nowStr,
@@ -91,7 +97,8 @@ export function scanQuotationForAnomalies(
           idleDays,
           atRiskAmountMinor: quote.grandTotalMinor,
         },
-        recommendedAction: "Nudge designated approver on Slack/Workbench to expedite commercial clearance.",
+        recommendedAction:
+          "Nudge designated approver on Slack/Workbench to expedite commercial clearance.",
         status: "open",
         createdAt: nowStr,
         updatedAt: nowStr,
@@ -101,15 +108,19 @@ export function scanQuotationForAnomalies(
 
   // 2. ─── STATISTICAL DISCOUNT ANOMALY ───────────────────────────────────────
   const repBaseline = getRepBaseline(repName);
-  const orderDiscount = quote.discountTotalMinor > 0 && quote.subtotalMinor > 0
-    ? (quote.discountTotalMinor / quote.subtotalMinor) * 100
-    : 0;
+  const orderDiscount =
+    quote.discountTotalMinor > 0 && quote.subtotalMinor > 0
+      ? (quote.discountTotalMinor / quote.subtotalMinor) * 100
+      : 0;
 
-  const discountThreshold = repBaseline.meanDiscountPct + 1.5 * repBaseline.stdDevPct;
-  const tierCeiling = customerTier === "GOLD" ? 18.0 : customerTier === "SILVER" ? 12.0 : 7.0;
+  const discountThreshold =
+    repBaseline.meanDiscountPct + 1.5 * repBaseline.stdDevPct;
+  const tierCeiling =
+    customerTier === "GOLD" ? 18.0 : customerTier === "SILVER" ? 12.0 : 7.0;
 
   if (orderDiscount > discountThreshold || orderDiscount > tierCeiling) {
-    const isCritical = orderDiscount >= tierCeiling + 5.0 || orderDiscount >= 20.0;
+    const isCritical =
+      orderDiscount >= tierCeiling + 5.0 || orderDiscount >= 20.0;
     alerts.push({
       id: `alt-dsc-${quote.id}-${Date.now()}`,
       quotationId: quote.id,
@@ -126,7 +137,8 @@ export function scanQuotationForAnomalies(
         baselineDiscountPct: repBaseline.meanDiscountPct,
         atRiskAmountMinor: quote.discountTotalMinor,
       },
-      recommendedAction: "Require Deal Desk manager review or restructure deal with extended subscription term.",
+      recommendedAction:
+        "Require Deal Desk manager review or restructure deal with extended subscription term.",
       status: "open",
       createdAt: nowStr,
       updatedAt: nowStr,
@@ -150,7 +162,8 @@ export function scanQuotationForAnomalies(
         marginPct: quote.marginPct,
         atRiskAmountMinor: quote.grandTotalMinor,
       },
-      recommendedAction: "Counter with high-margin SaaS/Service attachment (e.g. Threat Shield or Premium Support).",
+      recommendedAction:
+        "Counter with high-margin SaaS/Service attachment (e.g. Threat Shield or Premium Support).",
       status: "open",
       createdAt: nowStr,
       updatedAt: nowStr,
@@ -179,7 +192,8 @@ export function scanQuotationForAnomalies(
         deficitUnits: totalHardwareUnitsRequested - 20,
         atRiskAmountMinor: quote.grandTotalMinor,
       },
-      recommendedAction: "Initiate proactive fulfillment routing or notify customer of phased delivery milestone.",
+      recommendedAction:
+        "Initiate proactive fulfillment routing or notify customer of phased delivery milestone.",
       status: "open",
       createdAt: nowStr,
       updatedAt: nowStr,
@@ -198,7 +212,8 @@ export function computeDealHealthScore(
   activeAlerts: DealHealthAlert[],
 ): DealHealthScore {
   const customerName = quote.customer?.name ?? "Enterprise Client";
-  const customerTier = (quote.customer?.tier as "BRONZE" | "SILVER" | "GOLD") ?? "SILVER";
+  const customerTier =
+    (quote.customer?.tier as "BRONZE" | "SILVER" | "GOLD") ?? "SILVER";
   const salesRepName = quote.salesRepId ?? "Alex Miller";
 
   // Factor 1: Margin Health (0 - 100)
@@ -212,14 +227,18 @@ export function computeDealHealthScore(
   if (idleDays > 3) velocityHealth = Math.max(0, 100 - (idleDays - 3) * 7);
 
   // Factor 3: Fulfillment Health (0 - 100)
-  const hasDeliveryAlert = activeAlerts.some((a) => a.type === "DELIVERY_SLIPPAGE");
+  const hasDeliveryAlert = activeAlerts.some(
+    (a) => a.type === "DELIVERY_SLIPPAGE",
+  );
   const fulfillmentHealth = hasDeliveryAlert ? 45 : 100;
 
   // Factor 4: Discount Compliance (0 - 100)
-  const orderDiscount = quote.discountTotalMinor > 0 && quote.subtotalMinor > 0
-    ? (quote.discountTotalMinor / quote.subtotalMinor) * 100
-    : 0;
-  const tierCeiling = customerTier === "GOLD" ? 18.0 : customerTier === "SILVER" ? 12.0 : 7.0;
+  const orderDiscount =
+    quote.discountTotalMinor > 0 && quote.subtotalMinor > 0
+      ? (quote.discountTotalMinor / quote.subtotalMinor) * 100
+      : 0;
+  const tierCeiling =
+    customerTier === "GOLD" ? 18.0 : customerTier === "SILVER" ? 12.0 : 7.0;
   let discountCompliance = 100;
   if (orderDiscount > tierCeiling) {
     const gap = orderDiscount - tierCeiling;
@@ -230,8 +249,8 @@ export function computeDealHealthScore(
   const rawScore =
     0.35 * marginHealth +
     0.25 * velocityHealth +
-    0.20 * fulfillmentHealth +
-    0.20 * discountCompliance;
+    0.2 * fulfillmentHealth +
+    0.2 * discountCompliance;
 
   const score = Math.round(Math.min(100, Math.max(0, rawScore)));
 

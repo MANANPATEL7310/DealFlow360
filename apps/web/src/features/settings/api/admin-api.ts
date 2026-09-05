@@ -13,14 +13,15 @@ export const adminApi = {
   },
   async updateSetting(key: string, value: unknown): Promise<SystemSetting> {
     const { data } = await apiClient.put(
-      apiRoutes.admin.updateSetting.path.replace(":key", key),
+      apiRoutes.admin.updateSetting.path.replace(
+        ":key",
+        encodeURIComponent(key),
+      ),
       { value },
     );
     return data.data;
   },
-  async listAuditLogs(
-    filters: AuditLogQuery = {},
-  ): Promise<{
+  async listAuditLogs(filters: AuditLogQuery = {}): Promise<{
     items: AuditLog[];
     total: number;
     page: number;

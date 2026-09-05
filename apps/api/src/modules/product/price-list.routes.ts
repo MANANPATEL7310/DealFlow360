@@ -5,7 +5,7 @@
 // requireRole("admin") is commented pending Dev 1's M0 completion of require-role.ts.
 
 import { requireAuth } from "../../middleware/require-auth.js";
-// import { requireRole } from "../../middleware/require-role.js"; // ← Dev 1 M0 pending
+import { requireRole } from "../../middleware/require-role.js";
 import { createRouter } from "../../lib/create-router.js";
 import { validateRequest } from "../../lib/validate-request.js";
 import {
@@ -25,31 +25,31 @@ priceListRouter.get("/:id", c.getPriceListController);
 
 priceListRouter.post(
   "/",
-  /* requireRole("admin"), */
+  requireRole("admin"),
   validateRequest(createPriceListSchema),
   c.createPriceListController,
 );
 priceListRouter.patch(
   "/:id",
-  /* requireRole("admin"), */
+  requireRole("admin"),
   validateRequest(updatePriceListSchema),
   c.updatePriceListController,
 );
 priceListRouter.delete(
   "/:id",
-  /* requireRole("admin"), */
+  requireRole("admin"),
   c.deletePriceListController,
 );
 
 // ─── Price List Items sub-resource (/price-lists/:id/items) ──────────────────
 priceListRouter.post(
   "/:id/items",
-  /* requireRole("admin"), */
+  requireRole("admin"),
   validateRequest(addPriceListItemSchema),
   c.addPriceListItemController,
 );
 priceListRouter.delete(
   "/:id/items/:itemId",
-  /* requireRole("admin"), */
+  requireRole("admin"),
   c.deletePriceListItemController,
 );

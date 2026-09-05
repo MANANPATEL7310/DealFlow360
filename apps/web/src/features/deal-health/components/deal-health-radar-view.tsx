@@ -1,10 +1,9 @@
-import {
-  Activity,
-  Layers,
-  Percent,
-  ShieldCheck,
-} from "lucide-react";
-import type { DealHealthScore, DealHealthSummary, HealthCategory } from "@template/shared";
+import { Activity, Layers, Percent, ShieldCheck } from "lucide-react";
+import type {
+  DealHealthScore,
+  DealHealthSummary,
+  HealthCategory,
+} from "@template/shared";
 
 interface DealHealthRadarViewProps {
   summary: DealHealthSummary;
@@ -28,16 +27,20 @@ export function DealHealthRadarView({
 
   // Calculate average factor scores across all monitored quotations
   const avgMargin = Math.round(
-    scores.reduce((sum, s) => sum + s.factors.marginHealth, 0) / (scores.length || 1),
+    scores.reduce((sum, s) => sum + s.factors.marginHealth, 0) /
+      (scores.length || 1),
   );
   const avgVelocity = Math.round(
-    scores.reduce((sum, s) => sum + s.factors.velocityHealth, 0) / (scores.length || 1),
+    scores.reduce((sum, s) => sum + s.factors.velocityHealth, 0) /
+      (scores.length || 1),
   );
   const avgFulfillment = Math.round(
-    scores.reduce((sum, s) => sum + s.factors.fulfillmentHealth, 0) / (scores.length || 1),
+    scores.reduce((sum, s) => sum + s.factors.fulfillmentHealth, 0) /
+      (scores.length || 1),
   );
   const avgDiscount = Math.round(
-    scores.reduce((sum, s) => sum + s.factors.discountCompliance, 0) / (scores.length || 1),
+    scores.reduce((sum, s) => sum + s.factors.discountCompliance, 0) /
+      (scores.length || 1),
   );
 
   return (
@@ -53,7 +56,8 @@ export function DealHealthRadarView({
                 Deal Health Radar & Risk Distribution
               </h2>
               <p className="text-xs text-muted-foreground">
-                Continuous deterministic monitoring across margin, velocity, stock, and discount metrics.
+                Continuous deterministic monitoring across margin, velocity,
+                stock, and discount metrics.
               </p>
             </div>
           </div>
@@ -137,7 +141,9 @@ export function DealHealthRadarView({
           <div className="space-y-2">
             <div className="flex items-center justify-between text-xs font-semibold text-foreground">
               <span>Pipeline Health Distribution Spectrum</span>
-              <span className="text-muted-foreground">{summary.monitoredDealsCount} Active Opportunities</span>
+              <span className="text-muted-foreground">
+                {summary.monitoredDealsCount} Active Opportunities
+              </span>
             </div>
 
             {/* Stacked percentage bar */}
@@ -178,7 +184,9 @@ export function DealHealthRadarView({
             <div className="rounded-xl border border-danger/20 bg-danger/5 p-3 space-y-1">
               <div className="flex items-center justify-between text-xs text-danger font-semibold">
                 <span>Critical</span>
-                <span className="font-mono text-sm">{summary.criticalDealsCount}</span>
+                <span className="font-mono text-sm">
+                  {summary.criticalDealsCount}
+                </span>
               </div>
               <p className="text-xs text-muted-foreground">Score 0 – 44</p>
             </div>
@@ -186,7 +194,9 @@ export function DealHealthRadarView({
             <div className="rounded-xl border border-warning/20 bg-warning/5 p-3 space-y-1">
               <div className="flex items-center justify-between text-xs text-warning font-semibold">
                 <span>At Risk</span>
-                <span className="font-mono text-sm">{summary.atRiskDealsCount}</span>
+                <span className="font-mono text-sm">
+                  {summary.atRiskDealsCount}
+                </span>
               </div>
               <p className="text-xs text-muted-foreground">Score 45 – 64</p>
             </div>
@@ -194,7 +204,9 @@ export function DealHealthRadarView({
             <div className="rounded-xl border border-primary/20 bg-primary/5 p-3 space-y-1">
               <div className="flex items-center justify-between text-xs text-primary font-semibold">
                 <span>Watch</span>
-                <span className="font-mono text-sm">{summary.watchDealsCount}</span>
+                <span className="font-mono text-sm">
+                  {summary.watchDealsCount}
+                </span>
               </div>
               <p className="text-xs text-muted-foreground">Score 65 – 79</p>
             </div>
@@ -202,7 +214,9 @@ export function DealHealthRadarView({
             <div className="rounded-xl border border-success/20 bg-success/5 p-3 space-y-1">
               <div className="flex items-center justify-between text-xs text-success font-semibold">
                 <span>Healthy</span>
-                <span className="font-mono text-sm">{summary.healthyDealsCount}</span>
+                <span className="font-mono text-sm">
+                  {summary.healthyDealsCount}
+                </span>
               </div>
               <p className="text-xs text-muted-foreground">Score 80 – 100</p>
             </div>
@@ -215,7 +229,9 @@ export function DealHealthRadarView({
             <span className="text-xs font-bold text-foreground">
               Composite Dimension Averages
             </span>
-            <span className="text-xs text-muted-foreground">PS B9 Algorithm</span>
+            <span className="text-xs text-muted-foreground">
+              PS B9 Algorithm
+            </span>
           </div>
 
           <div className="space-y-2.5 text-xs">
@@ -223,12 +239,18 @@ export function DealHealthRadarView({
             <div>
               <div className="flex justify-between mb-1">
                 <span className="text-muted-foreground flex items-center gap-1">
-                  <Percent className="size-3 text-primary" /> Margin Viability (35% wt)
+                  <Percent className="size-3 text-primary" /> Margin Viability
+                  (35% wt)
                 </span>
-                <span className="font-mono font-bold text-foreground">{avgMargin}%</span>
+                <span className="font-mono font-bold text-foreground">
+                  {avgMargin}%
+                </span>
               </div>
               <div className="h-1.5 w-full rounded-full bg-surface-muted overflow-hidden">
-                <div style={{ width: `${avgMargin}%` }} className="h-full bg-primary rounded-full" />
+                <div
+                  style={{ width: `${avgMargin}%` }}
+                  className="h-full bg-primary rounded-full"
+                />
               </div>
             </div>
 
@@ -236,12 +258,18 @@ export function DealHealthRadarView({
             <div>
               <div className="flex justify-between mb-1">
                 <span className="text-muted-foreground flex items-center gap-1">
-                  <Activity className="size-3 text-warning" /> Pipeline Velocity (25% wt)
+                  <Activity className="size-3 text-warning" /> Pipeline Velocity
+                  (25% wt)
                 </span>
-                <span className="font-mono font-bold text-foreground">{avgVelocity}%</span>
+                <span className="font-mono font-bold text-foreground">
+                  {avgVelocity}%
+                </span>
               </div>
               <div className="h-1.5 w-full rounded-full bg-surface-muted overflow-hidden">
-                <div style={{ width: `${avgVelocity}%` }} className="h-full bg-warning rounded-full" />
+                <div
+                  style={{ width: `${avgVelocity}%` }}
+                  className="h-full bg-warning rounded-full"
+                />
               </div>
             </div>
 
@@ -249,12 +277,18 @@ export function DealHealthRadarView({
             <div>
               <div className="flex justify-between mb-1">
                 <span className="text-muted-foreground flex items-center gap-1">
-                  <Layers className="size-3 text-emerald-500" /> Stock Feasibility (20% wt)
+                  <Layers className="size-3 text-emerald-500" /> Stock
+                  Feasibility (20% wt)
                 </span>
-                <span className="font-mono font-bold text-foreground">{avgFulfillment}%</span>
+                <span className="font-mono font-bold text-foreground">
+                  {avgFulfillment}%
+                </span>
               </div>
               <div className="h-1.5 w-full rounded-full bg-surface-muted overflow-hidden">
-                <div style={{ width: `${avgFulfillment}%` }} className="h-full bg-emerald-500 rounded-full" />
+                <div
+                  style={{ width: `${avgFulfillment}%` }}
+                  className="h-full bg-emerald-500 rounded-full"
+                />
               </div>
             </div>
 
@@ -262,12 +296,18 @@ export function DealHealthRadarView({
             <div>
               <div className="flex justify-between mb-1">
                 <span className="text-muted-foreground flex items-center gap-1">
-                  <ShieldCheck className="size-3 text-primary" /> Tier Compliance (20% wt)
+                  <ShieldCheck className="size-3 text-primary" /> Tier
+                  Compliance (20% wt)
                 </span>
-                <span className="font-mono font-bold text-foreground">{avgDiscount}%</span>
+                <span className="font-mono font-bold text-foreground">
+                  {avgDiscount}%
+                </span>
               </div>
               <div className="h-1.5 w-full rounded-full bg-surface-muted overflow-hidden">
-                <div style={{ width: `${avgDiscount}%` }} className="h-full bg-primary rounded-full" />
+                <div
+                  style={{ width: `${avgDiscount}%` }}
+                  className="h-full bg-primary rounded-full"
+                />
               </div>
             </div>
           </div>

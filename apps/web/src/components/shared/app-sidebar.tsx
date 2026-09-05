@@ -6,7 +6,7 @@ import { useAuthStore } from "@/stores/auth-store";
 
 export function AppSidebar() {
   const user = useAuthStore((state) => state.user);
-  const activeRole = user?.role;
+  const activeRole = user?.role ?? "sales_rep";
   const initials =
     user?.name
       .split(" ")
@@ -14,6 +14,7 @@ export function AppSidebar() {
       .join("")
       .slice(0, 2)
       .toUpperCase() ?? "?";
+
   return (
     <aside className="bg-card/50 sticky top-0 z-40 flex h-screen w-64 shrink-0 flex-col justify-between border-r border-border p-4 backdrop-blur-xl">
       <div className="flex flex-col gap-6 overflow-y-auto">
@@ -22,12 +23,13 @@ export function AppSidebar() {
         </div>
         <nav className="flex flex-col gap-5">
           {navigationSections.map((section) => {
-            const visibleItems = section.items.filter(
-              (item) =>
-                !item.roles?.length ||
-                (activeRole && item.roles.includes(activeRole)),
-            );
-            if (!visibleItems.length) return null;
+            const visibleItems = section.items.filter((item) => {
+              if (!item.roles || item.roles.length === 0) return true;
+              return activeRole && item.roles.includes(activeRole);
+            });
+
+            if (visibleItems.length === 0) return null;
+
             return (
               <div key={section.title} className="flex flex-col gap-1.5">
                 <p className="px-3 text-xs font-bold tracking-wider text-muted-foreground/70 uppercase">

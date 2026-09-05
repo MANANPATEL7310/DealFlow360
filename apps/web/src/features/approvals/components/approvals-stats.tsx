@@ -1,9 +1,4 @@
-import {
-  AlertTriangle,
-  CheckCircle2,
-  DollarSign,
-  Inbox,
-} from "lucide-react";
+import { AlertTriangle, CheckCircle2, DollarSign, Inbox } from "lucide-react";
 import { MetricCard } from "@/components/ui/metric-card";
 import type { ApprovalQueueItem } from "@/features/approvals/api/approvals-api";
 

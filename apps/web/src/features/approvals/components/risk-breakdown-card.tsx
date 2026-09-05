@@ -1,7 +1,4 @@
-import type {
-  Quotation,
-  QuotationRiskEvaluation,
-} from "@template/shared";
+import type { Quotation, QuotationRiskEvaluation } from "@template/shared";
 import {
   AlertCircle,
   AlertTriangle,
@@ -78,14 +75,17 @@ export function RiskBreakdownCard({
               Risk & Policy Compliance Analysis
             </h3>
             <p className="text-xs text-muted-foreground">
-              Evaluated against customer tier ceilings, product category caps, and margin thresholds
+              Evaluated against customer tier ceilings, product category caps,
+              and margin thresholds
             </p>
           </div>
         </div>
 
         <div className="flex items-center gap-3">
           <div className="text-right">
-            <span className="text-xs text-muted-foreground">Blended Risk Score</span>
+            <span className="text-xs text-muted-foreground">
+              Blended Risk Score
+            </span>
             <div className="flex items-baseline justify-end gap-1">
               <span
                 className={`text-2xl font-black ${
@@ -102,7 +102,11 @@ export function RiskBreakdownCard({
             </div>
           </div>
           <Badge tone={riskTone} className="px-3 py-1 font-bold">
-            {isHighRisk ? "High Risk" : isMediumRisk ? "Medium Risk" : "Low Risk"}
+            {isHighRisk
+              ? "High Risk"
+              : isMediumRisk
+                ? "Medium Risk"
+                : "Low Risk"}
           </Badge>
         </div>
       </div>
@@ -134,11 +138,17 @@ export function RiskBreakdownCard({
         <div className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-border bg-surface-muted/40 p-3 text-xs">
           <div className="flex items-center gap-2">
             <Shield className="size-4 text-primary" />
-            <span className="font-medium text-foreground">Triggered Policy Rule:</span>
-            <span className="text-muted-foreground">{risk.matchedRuleName || "Standard Tier Ceilings"}</span>
+            <span className="font-medium text-foreground">
+              Triggered Policy Rule:
+            </span>
+            <span className="text-muted-foreground">
+              {risk.matchedRuleName || "Standard Tier Ceilings"}
+            </span>
           </div>
           <div className="flex items-center gap-2">
-            <span className="font-medium text-foreground">Required Review Sequence:</span>
+            <span className="font-medium text-foreground">
+              Required Review Sequence:
+            </span>
             <div className="flex items-center gap-1">
               {risk.requiredLevels.map((lvl, idx) => (
                 <span key={lvl} className="flex items-center gap-1">
@@ -164,12 +174,24 @@ export function RiskBreakdownCard({
           <Table>
             <TableHeader>
               <TableRow className="border-border bg-surface-muted/50">
-                <TableHead className="text-xs font-semibold">Product & Category</TableHead>
-                <TableHead className="text-center text-xs font-semibold">Requested Discount</TableHead>
-                <TableHead className="text-center text-xs font-semibold">Policy Ceiling</TableHead>
-                <TableHead className="text-center text-xs font-semibold">Excess Overage</TableHead>
-                <TableHead className="text-center text-xs font-semibold">Risk Score</TableHead>
-                <TableHead className="text-right text-xs font-semibold">Status</TableHead>
+                <TableHead className="text-xs font-semibold">
+                  Product & Category
+                </TableHead>
+                <TableHead className="text-center text-xs font-semibold">
+                  Requested Discount
+                </TableHead>
+                <TableHead className="text-center text-xs font-semibold">
+                  Policy Ceiling
+                </TableHead>
+                <TableHead className="text-center text-xs font-semibold">
+                  Excess Overage
+                </TableHead>
+                <TableHead className="text-center text-xs font-semibold">
+                  Risk Score
+                </TableHead>
+                <TableHead className="text-right text-xs font-semibold">
+                  Status
+                </TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -203,7 +225,9 @@ export function RiskBreakdownCard({
                             +{line.excessDiscountPct.toFixed(1)}%
                           </Badge>
                         ) : (
-                          <span className="text-xs text-muted-foreground">None (0.0%)</span>
+                          <span className="text-xs text-muted-foreground">
+                            None (0.0%)
+                          </span>
                         )}
                       </TableCell>
 
@@ -239,7 +263,10 @@ export function RiskBreakdownCard({
                 })
               ) : (
                 <TableRow>
-                  <TableCell colSpan={6} className="py-6 text-center text-xs text-muted-foreground">
+                  <TableCell
+                    colSpan={6}
+                    className="py-6 text-center text-xs text-muted-foreground"
+                  >
                     No line items available for policy risk breakdown.
                   </TableCell>
                 </TableRow>

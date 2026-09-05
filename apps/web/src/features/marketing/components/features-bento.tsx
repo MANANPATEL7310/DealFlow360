@@ -11,7 +11,10 @@ import { SpotlightCard } from "@/components/ui/spotlight-card";
 
 export function FeaturesBento() {
   return (
-    <section id="features" className="relative overflow-hidden bg-background py-20">
+    <section
+      id="features"
+      className="relative overflow-hidden bg-background py-20"
+    >
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="mx-auto mb-16 max-w-3xl text-center">
           <div className="mb-3 inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/10 px-3.5 py-1 text-xs font-semibold text-primary">
@@ -21,8 +24,9 @@ export function FeaturesBento() {
             Intelligent Core Platform Architecture
           </h2>
           <p className="mt-3 text-base text-muted-foreground sm:text-lg">
-            DealFlow360 replaces fragmented CRM spreadsheets, manual manager signoffs, and disconnected
-            fulfillment silos with an automated, self-governing operating engine.
+            DealFlow360 replaces fragmented CRM spreadsheets, manual manager
+            signoffs, and disconnected fulfillment silos with an automated,
+            self-governing operating engine.
           </p>
         </div>
 
@@ -42,14 +46,18 @@ export function FeaturesBento() {
               Blended Discount Risk Engine
             </h3>
             <p className="mb-6 text-sm leading-relaxed text-muted-foreground">
-              Never let margin erode silently. DealFlow360 calculates effective ceilings by combining
-              customer tiers (Bronze, Silver, Gold) with category margin limits. A value-weighted score
-              detects distributed leaks across large orders even when individual lines look harmless.
+              Never let margin erode silently. DealFlow360 calculates effective
+              ceilings by combining customer tiers (Bronze, Silver, Gold) with
+              category margin limits. A value-weighted score detects distributed
+              leaks across large orders even when individual lines look
+              harmless.
             </p>
 
             <div className="grid gap-4 rounded-xl border border-border bg-surface-muted/50 p-4 sm:grid-cols-2">
               <div className="space-y-1">
-                <p className="text-xs font-bold text-foreground">Trigger 1: Egregious Line</p>
+                <p className="text-xs font-bold text-foreground">
+                  Trigger 1: Egregious Line
+                </p>
                 <p className="text-xs text-muted-foreground">
                   Catches single lines exceeding category or tier caps.
                 </p>
@@ -58,9 +66,12 @@ export function FeaturesBento() {
                 </span>
               </div>
               <div className="space-y-1">
-                <p className="text-xs font-bold text-foreground">Trigger 2: Blended Order Score</p>
+                <p className="text-xs font-bold text-foreground">
+                  Trigger 2: Blended Order Score
+                </p>
                 <p className="text-xs text-muted-foreground">
-                  Value-weights small discount violations across all line subtotals.
+                  Value-weights small discount violations across all line
+                  subtotals.
                 </p>
                 <span className="inline-block font-mono text-xs font-semibold text-primary">
                   Σ (violation_i × line_i / total)
@@ -87,14 +98,19 @@ export function FeaturesBento() {
                 Live Upsell &amp; Cross-Sell
               </h3>
               <p className="mb-4 text-sm leading-relaxed text-muted-foreground">
-                Suggest complementary products, service packages, and recurring maintenance directly
-                within the quotation builder with instant margin delta preview.
+                Suggest complementary products, service packages, and recurring
+                maintenance directly within the quotation builder with instant
+                margin delta preview.
               </p>
             </div>
             <div className="space-y-2 rounded-xl border border-border bg-surface-muted/50 p-3.5 text-xs">
               <div className="flex items-center justify-between">
-                <span className="text-muted-foreground">Premium Support Add-on:</span>
-                <span className="font-bold text-secondary">+6.2% Margin Delta</span>
+                <span className="text-muted-foreground">
+                  Premium Support Add-on:
+                </span>
+                <span className="font-bold text-secondary">
+                  +6.2% Margin Delta
+                </span>
               </div>
               <div className="flex items-center gap-2 text-xs font-medium text-secondary">
                 <CheckCircle2 className="size-4" />
@@ -118,18 +134,25 @@ export function FeaturesBento() {
                 Multi-Warehouse Split
               </h3>
               <p className="mb-4 text-sm leading-relaxed text-muted-foreground">
-                Intelligently routes confirmed line items to regional warehouses based on stock
-                levels, minimizes split shipping freight costs, and automatically logs backorders.
+                Intelligently routes confirmed line items to regional warehouses
+                based on stock levels, minimizes split shipping freight costs,
+                and automatically logs backorders.
               </p>
             </div>
             <div className="space-y-2 text-xs">
               <div className="flex justify-between rounded-lg bg-surface-muted/60 p-2">
-                <span className="text-muted-foreground">Warehouse Central:</span>
-                <span className="font-semibold text-foreground">60 Units (Ready)</span>
+                <span className="text-muted-foreground">
+                  Warehouse Central:
+                </span>
+                <span className="font-semibold text-foreground">
+                  60 Units (Ready)
+                </span>
               </div>
               <div className="flex justify-between rounded-lg bg-surface-muted/60 p-2">
                 <span className="text-muted-foreground">Warehouse West:</span>
-                <span className="font-semibold text-warning">20 Units (Backorder)</span>
+                <span className="font-semibold text-warning">
+                  20 Units (Backorder)
+                </span>
               </div>
             </div>
           </SpotlightCard>
@@ -152,18 +175,23 @@ export function FeaturesBento() {
                 Unified Hybrid Invoicing
               </h3>
               <p className="mb-4 text-sm leading-relaxed text-muted-foreground">
-                Handle hardware capital expenditures and recurring software subscriptions on the exact
-                same quotation. Includes proration engines and credit notes.
+                Handle hardware capital expenditures and recurring software
+                subscriptions on the exact same quotation. Includes proration
+                engines and credit notes.
               </p>
             </div>
             <div className="space-y-1.5 rounded-xl border border-border bg-surface-muted/50 p-3.5 text-xs">
               <div className="flex justify-between text-muted-foreground">
                 <span>Hardware Equipment:</span>
-                <span className="font-semibold text-foreground">$12,500 (One-Time)</span>
+                <span className="font-semibold text-foreground">
+                  $12,500 (One-Time)
+                </span>
               </div>
               <div className="flex justify-between text-muted-foreground">
                 <span>Cloud Platform License:</span>
-                <span className="font-semibold text-secondary">$890/mo (Recurring)</span>
+                <span className="font-semibold text-secondary">
+                  $890/mo (Recurring)
+                </span>
               </div>
             </div>
           </SpotlightCard>
@@ -186,8 +214,9 @@ export function FeaturesBento() {
                 Deal Health &amp; Anomaly Radar
               </h3>
               <p className="mb-4 text-sm leading-relaxed text-muted-foreground">
-                Continuous background surveillance flags stalled quotations, abnormal margin erosion,
-                and fulfillment delays before deals go cold.
+                Continuous background surveillance flags stalled quotations,
+                abnormal margin erosion, and fulfillment delays before deals go
+                cold.
               </p>
             </div>
             <div className="flex items-center gap-2.5 rounded-xl border border-warning/20 bg-warning/5 p-3 text-xs">

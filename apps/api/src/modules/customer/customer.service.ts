@@ -93,3 +93,87 @@ function stripHash<T extends { passwordHash: string | null }>(
   const { passwordHash: _omit, ...safe } = row;
   return safe;
 }
+
+/**
+ * Load non-PII aggregate customer history for AI agents.
+ * Returns only tier, avg discount, deal count, and won rate.
+ */
+export async function loadCustomerHistory(params: {
+  customerId?: string;
+  quotationId?: string;
+  requestId?: string;
+}) {
+  let customerId = params.customerId;
+
+  if (!customerId && params.quotationId) {
+    const q = await db.quotation.findUnique({
+      where: { id: params.quotationId },
+      select: { customerId: true },
+    });
+    customerId = q?.customerId;
+  }
+
+  if (!customerId && params.requestId) {
+    const neg = await db.negotiationRequest.findUnique({
+      where: { id: params.requestId },
+      select: { quotation: { select: { customerId: true } } },
+    });
+    customerId = neg?.quotation?.customerId;
+  }
+
+  if (!customerId) {
+    return {
+      tier: "STANDARD",
+      avgDiscountPct: 0,
+      dealCount: 0,
+      wonRate: 0,
+    };
+  }
+
+  const customer = await db.customer.findUnique({
+    where: { id: customerId },
+    include: {
+      quotations: {
+        include: {
+          lines: {
+            select: { discountPct: true },
+          },
+        },
+      },
+    },
+  });
+
+  if (!customer) {
+    return {
+      tier: "STANDARD",
+      avgDiscountPct: 0,
+      dealCount: 0,
+      wonRate: 0,
+    };
+  }
+
+  const quotations = customer.quotations || [];
+  const dealCount = quotations.length;
+  const wonCount = quotations.filter((q) =>
+    ["CONFIRMED", "BILLING", "PAID"].includes(q.status),
+  ).length;
+  const wonRate = dealCount > 0 ? Number((wonCount / dealCount).toFixed(2)) : 0;
+
+  const allLines = quotations.flatMap((q) => q.lines);
+  const avgDiscountPct =
+    allLines.length > 0
+      ? Number(
+          (
+            allLines.reduce((acc, l) => acc + (l.discountPct || 0), 0) /
+            allLines.length
+          ).toFixed(2),
+        )
+      : 0;
+
+  return {
+    tier: customer.tier,
+    avgDiscountPct,
+    dealCount,
+    wonRate,
+  };
+}

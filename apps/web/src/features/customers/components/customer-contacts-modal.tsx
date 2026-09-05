@@ -4,15 +4,7 @@ import {
   type Customer,
   type CustomerContact,
 } from "@template/shared";
-import {
-  Mail,
-  Phone,
-  Plus,
-  Send,
-  UserPlus,
-  Users,
-  X,
-} from "lucide-react";
+import { Mail, Phone, Plus, Send, UserPlus, Users, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -78,8 +70,8 @@ export function CustomerContactsModal({
               {customer.name}
             </h2>
             <p className="text-xs text-muted-foreground">
-              Procurement stakeholders eligible to receive quotation magic
-              links and negotiate line items.
+              Procurement stakeholders eligible to receive quotation magic links
+              and negotiate line items.
             </p>
           </div>
           <button

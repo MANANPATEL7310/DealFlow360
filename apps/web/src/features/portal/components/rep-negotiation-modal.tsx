@@ -1,8 +1,11 @@
 import { useState } from "react";
 import {
+  Check,
   CheckCircle2,
   Clock,
+  Copy,
   CornerDownRight,
+  ExternalLink,
   Lock,
   MessageSquare,
   Sparkles,
@@ -17,6 +20,7 @@ import type {
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { AiNegotiationSimulatorCard } from "./ai-negotiation-simulator-card";
 
 interface RepNegotiationModalProps {
@@ -42,9 +46,30 @@ export function RepNegotiationModal({
   const [activeTab, setActiveTab] = useState<"SHARE" | "LOG">("LOG");
   const [repReplies, setRepReplies] = useState<Record<string, string>>({});
   const [isAnswering, setIsAnswering] = useState<string | null>(null);
+  const [copied, setCopied] = useState(false);
 
   if (!isOpen) return null;
 
+  // Mint mock customer token for sharing
+  const tokenPayload = JSON.stringify({
+    quotationId: quotation.id,
+    contactId: quotation.customer?.contacts?.[0]?.id ?? "cst-01-c1",
+  });
+  const mockToken = btoa(tokenPayload);
+  const portalUrl =
+    typeof window !== "undefined"
+      ? `${window.location.origin}/portal?token=${mockToken}`
+      : `/portal?token=${mockToken}`;
+
+  const handleCopyLink = async () => {
+    try {
+      await navigator.clipboard.writeText(portalUrl);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2500);
+    } catch {
+      // Fallback
+    }
+  };
   const handleAcceptNegotiation = async (neg: NegotiationRequest) => {
     setIsAnswering(neg.id);
     const reply =
@@ -164,11 +189,54 @@ export function RepNegotiationModal({
                 </p>
               </div>
 
-              <p className="rounded-lg border border-border bg-surface p-3 text-xs text-muted-foreground">
-                Send the quotation from the quotation workspace after selecting
-                a customer contact. The server then mints and returns a scoped
-                portal link.
-              </p>
+              <div className="space-y-2">
+                <Label className="text-xs font-semibold text-foreground">
+                  Magic Portal Link
+                </Label>
+                <div className="flex items-center gap-2">
+                  <Input
+                    readOnly
+                    value={portalUrl}
+                    className="font-mono text-xs bg-surface-muted/50 select-all"
+                  />
+                  <Button
+                    onClick={handleCopyLink}
+                    variant="outline"
+                    size="sm"
+                    className="gap-1.5 shrink-0"
+                  >
+                    {copied ? (
+                      <>
+                        <Check className="size-3.5 text-emerald-500" />
+                        <span>Copied!</span>
+                      </>
+                    ) : (
+                      <>
+                        <Copy className="size-3.5" />
+                        <span>Copy</span>
+                      </>
+                    )}
+                  </Button>
+                </div>
+              </div>
+
+              <div className="flex flex-col sm:flex-row gap-3 pt-2">
+                <a
+                  href={portalUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex-1"
+                >
+                  <Button
+                    variant="primary"
+                    size="md"
+                    className="w-full gap-2 text-xs"
+                  >
+                    <ExternalLink className="size-4" />
+                    <span>Launch Customer View in New Tab</span>
+                  </Button>
+                </a>
+              </div>
             </div>
           ) : (
             /* Negotiations Log & Rep Workbench */

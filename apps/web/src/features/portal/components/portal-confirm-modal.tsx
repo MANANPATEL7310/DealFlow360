@@ -30,27 +30,35 @@ export function PortalConfirmModal({
   onConfirmSuccess,
   onExecuteConfirm,
 }: PortalConfirmModalProps) {
-  const [signerName, setSignerName] = useState(quotation.contactName || "Authorized Signatory");
+  const [signerName, setSignerName] = useState(
+    quotation.contactName || "Authorized Signatory",
+  );
   const [agreedToTerms, setAgreedToTerms] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
-  const [gateResult, setGateResult] = useState<PortalConfirmResult | null>(null);
+  const [gateResult, setGateResult] = useState<PortalConfirmResult | null>(
+    null,
+  );
 
   if (!isOpen) return null;
 
   const formattedGrandTotal = (quotation.grandTotalMinor / 100).toLocaleString(
     undefined,
-    { minimumFractionDigits: 2, maximumFractionDigits: 2 }
+    { minimumFractionDigits: 2, maximumFractionDigits: 2 },
   );
 
   const handleConfirm = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!agreedToTerms) {
-      setErrorMsg("Please accept the terms and conditions to authorize commercial acceptance.");
+      setErrorMsg(
+        "Please accept the terms and conditions to authorize commercial acceptance.",
+      );
       return;
     }
     if (!signerName.trim()) {
-      setErrorMsg("Please provide your full legal name as authorized signatory.");
+      setErrorMsg(
+        "Please provide your full legal name as authorized signatory.",
+      );
       return;
     }
 
@@ -62,7 +70,8 @@ export function PortalConfirmModal({
       setGateResult(result);
       onConfirmSuccess(result);
     } catch (err: unknown) {
-      const msg = err instanceof Error ? err.message : "Failed to confirm proposal.";
+      const msg =
+        err instanceof Error ? err.message : "Failed to confirm proposal.";
       setErrorMsg(msg);
     } finally {
       setIsSubmitting(false);
@@ -113,22 +122,33 @@ export function PortalConfirmModal({
                     Proposal Successfully Confirmed!
                   </h4>
                   <p className="mt-1 text-xs text-muted-foreground max-w-sm mx-auto">
-                    Commercial terms and agreed concessions are locked in. Order processing and fulfillment workflows have been initialized.
+                    Commercial terms and agreed concessions are locked in. Order
+                    processing and fulfillment workflows have been initialized.
                   </p>
                 </div>
 
                 <div className="rounded-xl border border-border bg-surface-muted/50 p-4 text-left space-y-2 text-xs">
                   <div className="flex justify-between">
-                    <span className="text-muted-foreground">Confirmation Code:</span>
-                    <span className="font-mono font-bold text-foreground">{quotation.code}</span>
+                    <span className="text-muted-foreground">
+                      Confirmation Code:
+                    </span>
+                    <span className="font-mono font-bold text-foreground">
+                      {quotation.code}
+                    </span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-muted-foreground">Authorized By:</span>
-                    <span className="font-medium text-foreground">{signerName}</span>
+                    <span className="text-muted-foreground">
+                      Authorized By:
+                    </span>
+                    <span className="font-medium text-foreground">
+                      {signerName}
+                    </span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-muted-foreground">Locked Total:</span>
-                    <span className="font-mono font-bold text-foreground">${formattedGrandTotal}</span>
+                    <span className="font-mono font-bold text-foreground">
+                      ${formattedGrandTotal}
+                    </span>
                   </div>
                 </div>
               </div>
@@ -153,7 +173,10 @@ export function PortalConfirmModal({
                     <span>Governance Threshold Applied</span>
                   </div>
                   <p className="text-muted-foreground leading-relaxed">
-                    Because accepted counter-discounts exceed automatic delegation limits, our deal desk has been assigned to expedite the final approval. You will receive email confirmation the moment review is complete.
+                    Because accepted counter-discounts exceed automatic
+                    delegation limits, our deal desk has been assigned to
+                    expedite the final approval. You will receive email
+                    confirmation the moment review is complete.
                   </p>
                 </div>
               </div>
@@ -184,13 +207,17 @@ export function PortalConfirmModal({
                 </span>
               </div>
               <p className="text-xs text-muted-foreground">
-                Includes all quoted hardware, software subscriptions, and service deliverables.
+                Includes all quoted hardware, software subscriptions, and
+                service deliverables.
               </p>
             </div>
 
             {/* Authorized Signatory Input */}
             <div className="space-y-1.5">
-              <Label htmlFor="signerName" className="text-xs font-semibold text-foreground">
+              <Label
+                htmlFor="signerName"
+                className="text-xs font-semibold text-foreground"
+              >
                 Authorized Signatory Full Name
               </Label>
               <Input
@@ -212,9 +239,13 @@ export function PortalConfirmModal({
                 className="mt-0.5 size-4 rounded border-border text-primary focus:ring-primary"
               />
               <span className="text-xs text-muted-foreground leading-relaxed">
-                I confirm that I am authorized to enter into this agreement on behalf of{" "}
-                <strong className="text-foreground">{quotation.customerName}</strong>. 
-                I accept the pricing, terms of service, and agreed delivery milestones.
+                I confirm that I am authorized to enter into this agreement on
+                behalf of{" "}
+                <strong className="text-foreground">
+                  {quotation.customerName}
+                </strong>
+                . I accept the pricing, terms of service, and agreed delivery
+                milestones.
               </span>
             </label>
 

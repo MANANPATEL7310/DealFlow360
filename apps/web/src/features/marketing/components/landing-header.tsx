@@ -20,7 +20,10 @@ export function LandingHeader() {
     <header className="sticky top-0 z-50 w-full border-b border-border/80 bg-background/85 backdrop-blur-xl transition-all">
       <div className="mx-auto flex h-18 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
         <div className="flex items-center gap-8">
-          <Link to={appRoutes.home} className="group hover:scale-1.02 transition-transform">
+          <Link
+            to={appRoutes.home}
+            className="group hover:scale-1.02 transition-transform"
+          >
             <LogoMark />
           </Link>
 
@@ -61,7 +64,11 @@ export function LandingHeader() {
             className="flex size-10 items-center justify-center rounded-lg border border-border bg-surface text-foreground"
             aria-label="Toggle menu"
           >
-            {mobileMenuOpen ? <X className="size-5" /> : <Menu className="size-5" />}
+            {mobileMenuOpen ? (
+              <X className="size-5" />
+            ) : (
+              <Menu className="size-5" />
+            )}
           </button>
         </div>
       </div>
@@ -82,7 +89,10 @@ export function LandingHeader() {
             ))}
             <div className="my-2 border-t border-border" />
             <div className="flex flex-col gap-2">
-              <Link to={appRoutes.login} onClick={() => setMobileMenuOpen(false)}>
+              <Link
+                to={appRoutes.login}
+                onClick={() => setMobileMenuOpen(false)}
+              >
                 <Button variant="outline" className="w-full justify-center">
                   Sign In
                 </Button>

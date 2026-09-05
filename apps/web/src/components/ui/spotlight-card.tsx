@@ -1,4 +1,9 @@
-import { useRef, useState, type HTMLAttributes, type PropsWithChildren } from "react";
+import {
+  useRef,
+  useState,
+  type HTMLAttributes,
+  type PropsWithChildren,
+} from "react";
 import { cn } from "@/lib/cn";
 
 interface SpotlightCardProps extends HTMLAttributes<HTMLDivElement> {

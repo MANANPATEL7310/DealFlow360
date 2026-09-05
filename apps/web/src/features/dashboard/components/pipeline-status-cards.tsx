@@ -44,7 +44,8 @@ export function PipelineStatusCards() {
       count: stages?.sent ?? 0,
       icon: Send,
       toneColor: "text-primary-light",
-      badgeColor: "bg-primary-light/10 text-primary-light border-primary-light/20",
+      badgeColor:
+        "bg-primary-light/10 text-primary-light border-primary-light/20",
     },
     {
       key: "underNegotiation",

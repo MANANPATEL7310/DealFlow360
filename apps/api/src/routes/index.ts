@@ -26,6 +26,14 @@ import {
 } from "../modules/billing/billing.routes.js";
 import { reportsRouter } from "../modules/reports/reports.routes.js";
 import { aiRouter } from "../modules/ai/ai.routes.js";
+import { aiFulfillmentRouter } from "../modules/ai/fulfillment/routes.js";
+import { aiDealHealthRouter } from "../modules/ai/deal-health/routes.js";
+import { aiInsightsRouter } from "../modules/ai/insights/routes.js";
+import { aiApprovalsRouter } from "../modules/ai/approvals/approvals.routes.js";
+import { discountApprovalRouter } from "../modules/ai/discount-approval/routes.js";
+import { negotiationRouter } from "../modules/ai/negotiation/routes.js";
+import { aiRecommendationsRouter } from "../modules/ai/recommendations/routes.js";
+import { aiBillingRouter } from "../modules/ai/billing/routes.js";
 
 export const apiRouter = Router();
 
@@ -52,4 +60,14 @@ apiRouter.use("/quotations", billingRouter);
 apiRouter.use("/invoices", invoiceRouter);
 apiRouter.use("/portal", portalRouter);
 apiRouter.use("/reports", reportsRouter);
+
+// === Agentic AI Endpoints ===
 apiRouter.use("/ai", aiRouter);
+apiRouter.use("/ai", aiApprovalsRouter);
+apiRouter.use("/ai", discountApprovalRouter);
+apiRouter.use("/ai", negotiationRouter);
+apiRouter.use("/ai", aiFulfillmentRouter);
+apiRouter.use("/ai", aiDealHealthRouter);
+apiRouter.use("/ai", aiInsightsRouter);
+apiRouter.use("/ai", aiRecommendationsRouter);
+apiRouter.use("/ai", aiBillingRouter);
