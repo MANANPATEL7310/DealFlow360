@@ -136,7 +136,8 @@ export async function runAgent<T>(
       try {
         const text = msg.content?.trim() ?? "{}";
         const jsonMatch = text.match(/```(?:json)?\s*([\s\S]*?)\s*```/);
-        const jsonStr = jsonMatch ? jsonMatch[1] : text;
+        const jsonStr =
+          (jsonMatch && jsonMatch[1] ? jsonMatch[1] : text) ?? "{}";
         rawJson = JSON.parse(jsonStr);
       } catch (parseErr: unknown) {
         const errMsg =

@@ -248,11 +248,34 @@ export async function applyProposedAction(
           "Missing quotationId in FULFILLMENT_OVERRIDE proposedAction",
         );
       }
-      const splits = (action.splits ?? []) as Array<{
-        lineId: string;
+      const rawSplits = (action?.splits ?? []) as Array<{
+        lineId?: string;
+        productId?: string;
         warehouseId: string;
         qty: number;
       }>;
+      const splits: Array<{
+        warehouseId: string;
+        productId: string;
+        qty: number;
+      }> = [];
+      for (const s of rawSplits) {
+        let productId = s.productId;
+        if (!productId && s.lineId) {
+          const line = await db.quotationLine.findUnique({
+            where: { id: s.lineId },
+          });
+          productId = line?.productId;
+        }
+        if (!productId) {
+          throw new Error("Missing productId for fulfillment split");
+        }
+        splits.push({
+          warehouseId: s.warehouseId,
+          productId,
+          qty: s.qty,
+        });
+      }
       const result = await overridePlan(quotationId, ctx.actorId, {
         splits,
       });

@@ -1,5 +1,5 @@
 import type { LucideIcon } from "lucide-react";
-import { LayoutDashboard, LogIn, Settings } from "lucide-react";
+import { LayoutDashboard, LogIn, Settings, ShieldCheck } from "lucide-react";
 import { appRoutes } from "@template/shared";
 
 export type NavigationItem = {
@@ -13,6 +13,11 @@ export const privateNavigation: NavigationItem[] = [
     title: "Dashboard",
     href: appRoutes.dashboard,
     icon: LayoutDashboard,
+  },
+  {
+    title: "AI Approvals",
+    href: appRoutes.approvals,
+    icon: ShieldCheck,
   },
   {
     title: "Settings",

@@ -19,13 +19,13 @@ export const discountApprovalEval = {
     const input = rawInput as EvalInput | undefined;
     // Deterministic evaluation logic for governance compliance:
     // Hard rule: An over-ceiling quote MUST NOT receive an APPROVE recommendation.
-    const hasBreaches = input?.breaches && input.breaches.length > 0;
-    if (hasBreaches) {
+    const breaches = input?.breaches;
+    if (breaches && breaches.length > 0) {
       return {
         recommendation: "ADJUST",
         rationale:
           "Discount exceeds authorized policy ceiling; adjustments recommended",
-        suggestedAdjustments: input.breaches.map((b) => ({
+        suggestedAdjustments: breaches.map((b) => ({
           lineId: b.lineId,
           toDiscountPct: b.ceilingPct ?? 10,
         })),
