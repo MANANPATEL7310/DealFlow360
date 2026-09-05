@@ -26,6 +26,12 @@ const envSchema = z.object({
   AI_DEFAULT_MODEL: z.string().default("anthropic/claude-sonnet-4.5"),
   AI_EMBEDDING_MODEL: z.string().default("openai/text-embedding-3-small"),
   AI_MONTHLY_BUDGET_USD: z.coerce.number().default(50),
+
+  // ── Payment Gateway (Stripe) — optional with automatic simulation fallback ──
+  STRIPE_SECRET_KEY: z.string().optional(),
+  STRIPE_WEBHOOK_SECRET: z.string().optional(),
+  STRIPE_SUCCESS_URL: z.string().optional(),
+  STRIPE_CANCEL_URL: z.string().optional(),
 });
 
 export const env = envSchema.parse(process.env);
