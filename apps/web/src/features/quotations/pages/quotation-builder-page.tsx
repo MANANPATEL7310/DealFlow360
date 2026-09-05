@@ -231,7 +231,7 @@ export function QuotationBuilderPage() {
               <Globe className="size-3.5 text-primary" />
               <span>Customer Portal</span>
               {negotiations.length > 0 && (
-                <span className="rounded-full bg-primary/10 px-1.5 py-0.5 font-mono text-[10px] font-semibold text-primary">
+                <span className="rounded-full bg-primary/10 px-1.5 py-0.5 font-mono text-xs font-semibold text-primary">
                   {negotiations.length}
                 </span>
               )}

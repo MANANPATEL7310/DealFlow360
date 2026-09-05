@@ -30,7 +30,7 @@ export const useAuthStore = create<AuthStore>()(
       setSession: (session) =>
         set({
           user: session.user,
-          accessToken: session.accessToken,
+          accessToken: session.accessToken ?? session.token ?? null,
           status: "authenticated",
         }),
       clearSession: () =>
