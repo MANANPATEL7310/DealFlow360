@@ -9,11 +9,11 @@ import "@/style.css";
 
 export const meta: MetaFunction = () => {
   return [
-    { title: "App Template" },
+    { title: "DealFlow360 · Intelligent Sales Operations" },
     {
       name: "description",
       content:
-        "Production-ready full-stack template with React Router v7 SSR & SSG.",
+        "Intelligent, self-governing sales operations from quotation to cash.",
     },
   ];
 };

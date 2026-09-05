@@ -81,19 +81,24 @@ export function ProductPickerModal({
   const formattedUnitDollars = (computedUnitCents / 100).toFixed(2);
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-xs">
-      <div className="surface-card flex max-h-160 w-full max-w-3xl flex-col rounded-xl border border-border p-6 shadow-2xl">
+    <div
+      aria-label="Add catalog product to quotation"
+      aria-modal="true"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-xs"
+      role="dialog"
+    >
+      <div className="surface-card viewport-dialog flex w-full max-w-3xl flex-col rounded-xl border border-border p-4 shadow-2xl sm:p-6">
         {/* Header */}
-        <div className="mb-4 flex items-center justify-between border-b border-border pb-3">
-          <div className="flex items-center gap-2">
+        <div className="mb-4 flex items-start justify-between gap-3 border-b border-border pb-3">
+          <div className="flex min-w-0 items-center gap-2">
             <div className="flex size-8 items-center justify-center rounded-lg bg-primary/10 text-primary">
               <Package className="size-4" />
             </div>
-            <div>
-              <h3 className="text-base font-semibold text-foreground">
+            <div className="min-w-0">
+              <h3 className="truncate text-base font-semibold text-foreground">
                 Add Catalog Product to Quotation
               </h3>
-              <p className="text-xs text-muted-foreground">
+              <p className="hidden text-xs text-muted-foreground sm:block">
                 Browse catalog, select variant specifications, and configure
                 line pricing.
               </p>
@@ -103,16 +108,17 @@ export function ProductPickerModal({
             className="rounded p-1 text-muted-foreground hover:bg-surface-muted hover:text-foreground"
             type="button"
             onClick={onClose}
+            aria-label="Close product picker"
           >
             <X className="size-4" />
           </button>
         </div>
 
         {/* Content Split: Left Catalog List, Right Line Config */}
-        <div className="grid min-h-0 flex-1 grid-cols-1 gap-6 overflow-hidden md:grid-cols-12">
+        <div className="grid min-h-0 flex-1 grid-cols-1 gap-4 overflow-y-auto md:grid-cols-12 md:gap-6 md:overflow-hidden">
           {/* Left: Search & Products List (7 cols) */}
-          <div className="flex flex-col space-y-3 overflow-hidden md:col-span-7">
-            <div className="flex gap-2">
+          <div className="flex min-h-64 flex-col space-y-3 overflow-hidden md:col-span-7 md:min-h-0">
+            <div className="flex flex-col gap-2 sm:flex-row">
               <div className="relative flex-1">
                 <Search className="pointer-events-none absolute top-2.5 left-3 size-4 text-muted-foreground" />
                 <Input
@@ -122,13 +128,13 @@ export function ProductPickerModal({
                   onChange={(e) => setSearch(e.target.value)}
                 />
               </div>
-              <div className="flex gap-1">
+              <div className="flex overflow-x-auto rounded-lg">
                 {(
                   ["ALL", "HARDWARE", "SERVICES", "SUBSCRIPTIONS"] as const
                 ).map((cat) => (
                   <button
                     key={cat}
-                    className={`rounded-lg px-2 py-1 text-xs font-semibold transition-colors ${
+                    className={`shrink-0 rounded-lg px-2 py-1 text-xs font-semibold transition-colors ${
                       selectedCategory === cat
                         ? "bg-primary text-surface"
                         : "bg-surface-muted/50 text-muted-foreground hover:bg-surface-muted"
@@ -148,18 +154,24 @@ export function ProductPickerModal({
                 <div className="p-4 text-center text-xs text-muted-foreground">
                   Loading catalog products...
                 </div>
+              ) : filteredProducts.length === 0 ? (
+                <div className="p-4 text-center text-xs text-muted-foreground">
+                  No catalog products match those filters.
+                </div>
               ) : (
                 filteredProducts.map((p) => {
                   const isSelected = p.id === selectedProductId;
                   return (
-                    <div
+                    <button
                       key={p.id}
-                      className={`cursor-pointer rounded-lg border p-3 transition-all ${
+                      aria-pressed={isSelected}
+                      className={`w-full rounded-lg border p-3 text-left transition-all ${
                         isSelected
                           ? "border-primary bg-primary-light/10 shadow-xs"
                           : "border-border bg-surface hover:bg-surface-muted/50"
                       }`}
                       onClick={() => handleSelectProduct(p)}
+                      type="button"
                     >
                       <div className="flex items-start justify-between gap-2">
                         <div>
@@ -188,7 +200,7 @@ export function ProductPickerModal({
                           ${(p.basePrice / 100).toFixed(2)}
                         </span>
                       </div>
-                    </div>
+                    </button>
                   );
                 })
               )}
@@ -330,7 +342,7 @@ export function ProductPickerModal({
                   <div className="flex justify-between border-t border-border pt-1 font-bold text-foreground">
                     <span>Net Total:</span>
                     <span className="font-mono text-primary">
-                      -$
+                      $
                       {(
                         (computedUnitCents * qty * (1 - discountPct / 100)) /
                         100
