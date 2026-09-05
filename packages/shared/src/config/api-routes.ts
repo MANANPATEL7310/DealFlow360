@@ -54,10 +54,7 @@ export const apiRoutes = {
     },
   },
 
-  // ─── ADD NEW ROUTES BELOW THIS LINE ────────────────────────────────────────
-  // Follow the same pattern: add here first, then implement on backend, then consume on frontend.
-
-  // === M1: Products (Dev 2) ===
+  // ─── Products & Price Lists ────────────────────────────────────────────────
   products: {
     list: {
       path: "/products",
@@ -69,7 +66,7 @@ export const apiRoutes = {
       path: "/products",
       method: "POST",
       auth: true,
-      description: "Create a product. (admin only)",
+      description: "Create a product.",
     },
     getById: {
       path: "/products/:id",
@@ -81,17 +78,16 @@ export const apiRoutes = {
       path: "/products/:id",
       method: "PATCH",
       auth: true,
-      description: "Update a product. (admin only)",
+      description: "Update a product.",
     },
     remove: {
       path: "/products/:id",
       method: "DELETE",
       auth: true,
-      description: "Delete a product. (admin only)",
+      description: "Delete a product.",
     },
   },
 
-  // === M1: Price Lists (Dev 2) ===
   priceLists: {
     list: {
       path: "/price-lists",
@@ -103,7 +99,7 @@ export const apiRoutes = {
       path: "/price-lists",
       method: "POST",
       auth: true,
-      description: "Create a price list. (admin only)",
+      description: "Create a price list.",
     },
     getById: {
       path: "/price-lists/:id",
@@ -115,53 +111,53 @@ export const apiRoutes = {
       path: "/price-lists/:id",
       method: "PATCH",
       auth: true,
-      description: "Update a price list. (admin only)",
+      description: "Update a price list.",
     },
     remove: {
       path: "/price-lists/:id",
       method: "DELETE",
       auth: true,
-      description: "Delete a price list. (admin only)",
+      description: "Delete a price list.",
     },
     addItem: {
       path: "/price-lists/:id/items",
       method: "POST",
       auth: true,
-      description: "Add an item to a price list. (admin only)",
+      description: "Add or override item in price list.",
     },
   },
 
-  // === M2: Customers (Dev 2) ===
+  // ─── Customers ──────────────────────────────────────────────────────────────
   customers: {
     list: {
       path: "/customers",
       method: "GET",
       auth: true,
-      description: "List all customers.",
+      description: "List all customer accounts.",
     },
     create: {
       path: "/customers",
       method: "POST",
       auth: true,
-      description: "Create a customer.",
+      description: "Create a new customer account.",
     },
     getById: {
       path: "/customers/:id",
       method: "GET",
       auth: true,
-      description: "Get customer by ID.",
+      description: "Get customer account by ID.",
     },
     update: {
       path: "/customers/:id",
       method: "PATCH",
       auth: true,
-      description: "Update a customer.",
+      description: "Update customer account details.",
     },
     remove: {
       path: "/customers/:id",
       method: "DELETE",
       auth: true,
-      description: "Delete a customer.",
+      description: "Delete a customer account.",
     },
     contacts: {
       path: "/customers/:id/contacts",
@@ -173,69 +169,75 @@ export const apiRoutes = {
       path: "/customers/:id/contacts",
       method: "POST",
       auth: true,
-      description: "Add a contact to a customer.",
+      description: "Add contact to a customer.",
+    },
+    magicLink: {
+      path: "/customers/:id/magic-link",
+      method: "POST",
+      auth: true,
+      description: "Generate customer portal magic link.",
     },
   },
 
-  // ─── Governance (M3 — Dev 1) ──────────────────────────────────────────────
+  // ─── Governance ────────────────────────────────────────────────────────────
   governance: {
     discountTiers: {
-      list: {
-        path: "/governance/discount-tiers",
-        method: "GET",
-        auth: true,
-        description: "List all discount tier ceilings.",
-      },
-      upsert: {
-        path: "/governance/discount-tiers",
-        method: "PUT",
-        auth: true,
-        description: "Upsert a discount tier ceiling.",
-      },
+      path: "/governance/discount-tiers",
+      method: "GET",
+      auth: true,
+      description: "List or upsert discount tier ceilings.",
+    },
+    upsertDiscountTier: {
+      path: "/governance/discount-tiers",
+      method: "POST",
+      auth: true,
+      description: "Upsert discount tier ceiling.",
     },
     categoryCeilings: {
-      list: {
-        path: "/governance/category-ceilings",
-        method: "GET",
-        auth: true,
-        description: "List all category discount ceilings.",
-      },
-      upsert: {
-        path: "/governance/category-ceilings",
-        method: "PUT",
-        auth: true,
-        description: "Upsert a category discount ceiling.",
-      },
+      path: "/governance/category-ceilings",
+      method: "GET",
+      auth: true,
+      description: "List or upsert category discount ceilings.",
+    },
+    upsertCategoryCeiling: {
+      path: "/governance/category-ceilings",
+      method: "POST",
+      auth: true,
+      description: "Upsert category discount ceiling.",
     },
     approvalRules: {
-      list: {
-        path: "/governance/approval-rules",
-        method: "GET",
-        auth: true,
-        description: "List all approval chain rules.",
-      },
-      create: {
-        path: "/governance/approval-rules",
-        method: "POST",
-        auth: true,
-        description: "Create an approval chain rule.",
-      },
-      update: {
-        path: "/governance/approval-rules/:id",
-        method: "PATCH",
-        auth: true,
-        description: "Update an approval chain rule.",
-      },
-      remove: {
-        path: "/governance/approval-rules/:id",
-        method: "DELETE",
-        auth: true,
-        description: "Delete an approval chain rule.",
-      },
+      path: "/governance/approval-rules",
+      method: "GET",
+      auth: true,
+      description: "List approval chain rules.",
+    },
+    createApprovalRule: {
+      path: "/governance/approval-rules",
+      method: "POST",
+      auth: true,
+      description: "Create approval chain rule.",
+    },
+    updateApprovalRule: {
+      path: "/governance/approval-rules/:id",
+      method: "PATCH",
+      auth: true,
+      description: "Update approval chain rule by ID.",
+    },
+    approvalRuleById: {
+      path: "/governance/approval-rules/:id",
+      method: "PATCH",
+      auth: true,
+      description: "Update or delete approval chain rule by ID.",
+    },
+    removeApprovalRule: {
+      path: "/governance/approval-rules/:id",
+      method: "DELETE",
+      auth: true,
+      description: "Delete an approval chain rule.",
     },
   },
 
-  // ─── Quotations (M5 — Dev 1) ──────────────────────────────────────────────
+  // ─── Quotations ────────────────────────────────────────────────────────────
   quotations: {
     list: {
       path: "/quotations",
@@ -255,6 +257,12 @@ export const apiRoutes = {
       auth: true,
       description: "Create a new quotation.",
     },
+    update: {
+      path: "/quotations/:id",
+      method: "PATCH",
+      auth: true,
+      description: "Update quotation header or metadata.",
+    },
     addLine: {
       path: "/quotations/:id/lines",
       method: "POST",
@@ -273,11 +281,23 @@ export const apiRoutes = {
       auth: true,
       description: "Delete a line item from quotation.",
     },
+    overrideDiscount: {
+      path: "/quotations/:id/override-discount",
+      method: "POST",
+      auth: true,
+      description: "Apply bulk order-level discount override.",
+    },
     confirm: {
       path: "/quotations/:id/confirm",
       method: "POST",
       auth: true,
       description: "Confirm quotation and trigger risk evaluation.",
+    },
+    risk: {
+      path: "/quotations/:id/risk",
+      method: "GET",
+      auth: true,
+      description: "Evaluate live blended risk score and breakdown.",
     },
     approvalDecision: {
       path: "/quotations/:id/approvals/decision",
@@ -306,39 +326,41 @@ export const apiRoutes = {
     },
   },
 
-  // ─── Customer Portal (M9) ───────────────────────────────────────────────────
-  portal: {
-    quotation: {
-      path: "/portal/quotation",
+  // ─── Approvals & Reviews ───────────────────────────────────────────────────
+  approvals: {
+    list: {
+      path: "/approvals",
       method: "GET",
-      auth: false,
-      description:
-        "Customer view of the quotation (safe projection, cost & margin stripped).",
+      auth: true,
+      description: "List pending quotations requiring reviewer action.",
     },
-    open: {
-      path: "/portal/open",
-      method: "POST",
-      auth: false,
-      description:
-        "Mark quotation as UNDER_NEGOTIATION when opened by customer.",
+    inbox: {
+      path: "/approvals",
+      method: "GET",
+      auth: true,
+      description: "List pending quotations requiring reviewer action.",
     },
-    negotiations: {
-      path: "/portal/negotiations",
+    decide: {
+      path: "/quotations/:id/approvals/decision",
       method: "POST",
-      auth: false,
-      description:
-        "Customer submits a comment or counter-discount negotiation request.",
+      auth: true,
+      description: "Submit audited approval decision.",
     },
-    confirm: {
-      path: "/portal/confirm",
+    decision: {
+      path: "/quotations/:id/approvals/decision",
       method: "POST",
-      auth: false,
-      description:
-        "Customer confirms quote — folds accepted counters and re-evaluates risk governance gate.",
+      auth: true,
+      description: "Submit audited approval decision.",
+    },
+    steps: {
+      path: "/quotations/:id/approvals",
+      method: "GET",
+      auth: true,
+      description: "Get ordered approval steps.",
     },
   },
 
-  // ─── Fulfillment (M7) ─────────────────────────────────────────────────────
+  // ─── Fulfillment ───────────────────────────────────────────────────────────
   fulfillment: {
     get: {
       path: "/quotations/:id/fulfillment",
@@ -374,13 +396,28 @@ export const apiRoutes = {
     },
   },
 
-  // ─── Deal Health (M10) ────────────────────────────────────────────────────
+  warehouses: {
+    list: {
+      path: "/warehouses",
+      method: "GET",
+      auth: true,
+      description: "List all regional warehouses.",
+    },
+  },
+
+  // ─── Deal Health ───────────────────────────────────────────────────────────
   dealHealth: {
+    summary: {
+      path: "/deal-health/summary",
+      method: "GET",
+      auth: true,
+      description: "Get deal health radar metrics and KPIs.",
+    },
     alerts: {
       path: "/deal-health/alerts",
       method: "GET",
       auth: true,
-      description: "List deal health alerts.",
+      description: "List deal health anomaly alerts.",
     },
     detect: {
       path: "/deal-health/detect",
@@ -408,13 +445,13 @@ export const apiRoutes = {
     },
   },
 
-  // === M6: Upsell & Cross-sell (Dev 2) ===
+  // ─── Upsell & Recommendations ───────────────────────────────────────────────
   upsell: {
     list: {
       path: "/quotations/:id/upsell",
       method: "GET",
       auth: true,
-      description: "Get ranked upsell suggestions for a quotation.",
+      description: "Get ranked upsell recommendations with margin-delta.",
     },
     add: {
       path: "/quotations/:id/upsell/:suggestedId",
@@ -424,13 +461,25 @@ export const apiRoutes = {
     },
   },
 
-  // === M8: Billing (Dev 2) ===
+  // ─── Hybrid Billing ────────────────────────────────────────────────────────
   billing: {
+    schedule: {
+      path: "/quotations/:id/billing",
+      method: "GET",
+      auth: true,
+      description: "Get billing schedule for a quotation.",
+    },
     getSchedule: {
       path: "/quotations/:id/billing",
       method: "GET",
       auth: true,
       description: "Get billing schedule for a quotation.",
+    },
+    change: {
+      path: "/quotations/:id/billing/subscription-change",
+      method: "POST",
+      auth: true,
+      description: "Modify or cancel a subscription line with proration.",
     },
     subscriptionChange: {
       path: "/quotations/:id/billing/subscription-change",
@@ -441,8 +490,14 @@ export const apiRoutes = {
     },
   },
 
-  // === M8: Invoices (Dev 2) ===
+  // ─── Invoices ──────────────────────────────────────────────────────────────
   invoices: {
+    pay: {
+      path: "/invoices/:invoiceId/payments",
+      method: "POST",
+      auth: true,
+      description: "Record payment against an invoice.",
+    },
     recordPayment: {
       path: "/invoices/:invoiceId/payments",
       method: "POST",
@@ -451,7 +506,39 @@ export const apiRoutes = {
     },
   },
 
-  // ─── Reports (M11) ───────────────────────────────────────────────────────
+  // ─── Customer Portal (External Scoped Access) ──────────────────────────────
+  portal: {
+    quotation: {
+      path: "/portal/quotation",
+      method: "GET",
+      auth: false,
+      description:
+        "Customer view of the quotation (safe projection, cost & margin stripped).",
+    },
+    open: {
+      path: "/portal/open",
+      method: "POST",
+      auth: false,
+      description:
+        "Mark quotation as UNDER_NEGOTIATION when opened by customer.",
+    },
+    negotiations: {
+      path: "/portal/negotiations",
+      method: "POST",
+      auth: false,
+      description:
+        "Customer submits a comment or counter-discount negotiation request.",
+    },
+    confirm: {
+      path: "/portal/confirm",
+      method: "POST",
+      auth: false,
+      description:
+        "Customer confirms quote — folds accepted counters and re-evaluates risk governance gate.",
+    },
+  },
+
+  // ─── Executive Reporting & Analytics ───────────────────────────────────────
   reports: {
     sales: {
       path: "/reports/sales",
@@ -473,7 +560,7 @@ export const apiRoutes = {
     },
   },
 
-  // ─── Admin (M12) ─────────────────────────────────────────────────────────
+  // ─── Compliance Audit Trail & System Configuration ─────────────────────────
   admin: {
     settings: {
       path: "/admin/settings",

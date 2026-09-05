@@ -3,10 +3,11 @@ import { HomePage } from "@/features/marketing/pages/home-page";
 
 export const meta: MetaFunction = () => {
   return [
-    { title: "Home | Template" },
+    { title: "DealFlow360 · Intelligent Self-Governing Sales Operations" },
     {
       name: "description",
-      content: "Fast, modern full-stack web application template.",
+      content:
+        "Autonomous quotation-to-cash platform with blended discount risk governance, multi-warehouse fulfillment split, and hybrid billing.",
     },
   ];
 };
