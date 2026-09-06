@@ -9,6 +9,7 @@ import {
   Cpu,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { BorderBeam } from "@/components/ui/border-beam";
 import {
   fetchNegotiationEvaluation,
   fetchAiStatus,
@@ -68,7 +69,8 @@ export function AiNegotiationSimulatorCard({
   }
 
   return (
-    <div className="rounded-xl border border-primary/30 bg-gradient-to-br from-primary/5 via-background to-background p-4 shadow-sm space-y-3">
+    <div className="relative overflow-hidden rounded-xl border border-primary/30 bg-gradient-to-br from-primary/5 via-background to-background p-4 shadow-sm space-y-3">
+      <BorderBeam duration={8} />
       {/* Header */}
       <div className="flex flex-wrap items-center justify-between gap-2 border-b border-border/60 pb-2.5">
         <div className="flex items-center gap-2">

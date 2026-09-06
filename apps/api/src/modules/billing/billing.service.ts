@@ -241,38 +241,83 @@ export async function changeSubscription(
  * If total recorded payments cover invoice amount, flips status to PAID.
  * If all due invoices are settled, finalizes quotation to PAID.
  */
+export interface RecordPaymentOptions {
+  paymentMethod?: string;
+  reference?: string | null;
+  /**
+   * Idempotency key from an external provider (e.g. Stripe event/session id).
+   * When supplied, a matching existing payment short-circuits and returns the
+   * current invoice instead of recording a duplicate.
+   */
+  externalRef?: string | null;
+}
+
 export async function recordPayment(
   invoiceId: string,
   amountMinor: number,
   actorId: string,
+  options: RecordPaymentOptions = {},
 ) {
-  const invoice = await db.invoice.findUnique({
-    where: { id: invoiceId },
-    include: { payments: true },
-  });
-
-  if (!invoice) {
-    throw Object.assign(new Error("INVOICE_NOT_FOUND"), { http: 404 });
-  }
-  if (invoice.status === "VOID") {
-    throw Object.assign(new Error("INVOICE_VOID"), { http: 409 });
+  if (!Number.isInteger(amountMinor) || amountMinor <= 0) {
+    throw Object.assign(new Error("INVALID_PAYMENT_AMOUNT"), { http: 400 });
   }
 
   return db.$transaction(async (tx) => {
-    await tx.payment.create({
+    // Read inside the transaction so concurrent payments see each other's
+    // writes and the overpayment guard cannot be bypassed by a stale snapshot.
+    const invoice = await tx.invoice.findUnique({
+      where: { id: invoiceId },
+      include: { payments: true },
+    });
+
+    if (!invoice) {
+      throw Object.assign(new Error("INVOICE_NOT_FOUND"), { http: 404 });
+    }
+    if (invoice.status === "VOID") {
+      throw Object.assign(new Error("INVOICE_VOID"), { http: 409 });
+    }
+
+    // Idempotency: a webhook retry carrying the same external id is a no-op.
+    if (options.externalRef) {
+      const existing = await tx.payment.findUnique({
+        where: { externalRef: options.externalRef },
+      });
+      if (existing) {
+        const current = await tx.invoice.findUniqueOrThrow({
+          where: { id: invoiceId },
+          include: { payments: true },
+        });
+        return { invoice: current, payment: existing };
+      }
+    }
+
+    const alreadyPaid = invoice.payments
+      .filter((p) => p.status === "recorded")
+      .reduce((s, p) => s + p.amountMinor, 0);
+    const remaining = invoice.amountMinor - alreadyPaid;
+
+    if (invoice.status === "PAID" || remaining <= 0) {
+      throw Object.assign(new Error("INVOICE_ALREADY_PAID"), { http: 409 });
+    }
+    if (amountMinor > remaining) {
+      throw Object.assign(new Error("PAYMENT_EXCEEDS_BALANCE"), { http: 400 });
+    }
+
+    const payment = await tx.payment.create({
       data: {
         invoiceId,
         amountMinor,
+        paymentMethod: options.paymentMethod ?? "Corporate Wire",
+        reference: options.reference ?? null,
+        externalRef: options.externalRef ?? null,
         status: "recorded",
       },
     });
 
-    const paid =
-      invoice.payments
-        .filter((p) => p.status === "recorded")
-        .reduce((s, p) => s + p.amountMinor, 0) + amountMinor;
+    const paid = alreadyPaid + amountMinor;
 
-    if (paid >= invoice.amountMinor && invoice.status !== "PAID") {
+    // Invoice is guaranteed ISSUED/DRAFT here (VOID and fully-paid rejected above).
+    if (paid >= invoice.amountMinor) {
       await tx.invoice.update({
         where: { id: invoiceId },
         data: { status: "PAID" },
@@ -293,10 +338,12 @@ export async function recordPayment(
 
     await maybeFinalizeQuotation(tx, invoice.scheduleId, actorId);
 
-    return tx.invoice.findUniqueOrThrow({
+    const updatedInvoice = await tx.invoice.findUniqueOrThrow({
       where: { id: invoiceId },
       include: { payments: true },
     });
+
+    return { invoice: updatedInvoice, payment };
   });
 }
 

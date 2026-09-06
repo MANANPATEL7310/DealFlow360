@@ -17,6 +17,11 @@ export function createApp() {
     }),
   );
   app.use(helmet());
+
+  // Stripe signature verification requires the raw, unparsed request body.
+  // This must be registered before the global JSON parser so the webhook
+  // route receives a Buffer instead of a parsed object.
+  app.use("/api/v1/payments/stripe-webhook", express.raw({ type: "*/*" }));
   app.use(express.json());
 
   app.use((req, _res, next) => {

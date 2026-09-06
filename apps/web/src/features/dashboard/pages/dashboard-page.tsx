@@ -18,6 +18,7 @@ import { AiNegotiationAssistant } from "@/features/portal-internal/components/Ai
 import { DashboardHeader } from "../components/dashboard-header";
 import { KpiStatsGrid } from "../components/kpi-stats-grid";
 import { PipelineStatusCards } from "../components/pipeline-status-cards";
+import { PipelineDistributionChart } from "../components/pipeline-distribution-chart";
 import { RecentQuotesTable } from "../components/recent-quotes-table";
 import { DealHealthWidget } from "../components/deal-health-widget";
 
@@ -48,7 +49,8 @@ export function DashboardPage() {
         <div className="lg:col-span-8">
           <RecentQuotesTable />
         </div>
-        <div className="lg:col-span-4">
+        <div className="space-y-6 lg:col-span-4">
+          <PipelineDistributionChart />
           <DealHealthWidget />
         </div>
       </div>

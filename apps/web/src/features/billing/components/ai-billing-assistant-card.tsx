@@ -15,6 +15,7 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Spinner } from "@/components/ui/spinner";
+import { BorderBeam } from "@/components/ui/border-beam";
 import { fetchAiBillingExplanation } from "@/features/ai/services/ai-api";
 import { AiCreditNoteDraftModal } from "./ai-credit-note-draft-modal";
 
@@ -97,7 +98,12 @@ export function AiBillingAssistantCard({
 
   return (
     <>
-      <div className="surface-card rounded-2xl border border-purple-500/20 bg-card p-6 shadow-sm transition-all">
+      <div className="surface-card relative overflow-hidden rounded-2xl border border-purple-500/20 bg-card p-6 shadow-sm transition-all">
+        <BorderBeam
+          duration={8}
+          colorFrom="var(--secondary)"
+          colorTo="var(--primary)"
+        />
         {/* Header */}
         <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
           <div className="flex items-center gap-3">

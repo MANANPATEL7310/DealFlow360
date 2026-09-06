@@ -24,6 +24,7 @@ function client({
     unitPriceMinor: number;
     unitCostMinor: number;
     discountPct: number;
+    product?: { category: string } | null;
   }[];
 }) {
   return {
@@ -142,6 +143,62 @@ describe("buildReportDataset", () => {
     expect(dataset.funnel).toEqual([
       { status: "SENT", count: 2, netMinor: 15000 },
       { status: "PAID", count: 1, netMinor: 18000 },
+    ]);
+  });
+
+  it("aggregates category breakdown sorted by net revenue", async () => {
+    const fake = client({
+      grouped: [],
+      lines: [
+        {
+          qty: 2,
+          unitPriceMinor: 10000,
+          unitCostMinor: 6000,
+          discountPct: 10,
+          product: { category: "HARDWARE" },
+        },
+        {
+          qty: 1,
+          unitPriceMinor: 5000,
+          unitCostMinor: 2000,
+          discountPct: 0,
+          product: { category: "SERVICES" },
+        },
+        {
+          qty: 1,
+          unitPriceMinor: 4000,
+          unitCostMinor: 1000,
+          discountPct: 0,
+          product: { category: "HARDWARE" },
+        },
+      ],
+    });
+
+    const dataset = await buildReportDataset(
+      {},
+      { sub: "cadmin0000000000000000001", role: "admin" },
+      fake,
+    );
+
+    // HARDWARE: gross 20000+4000=24000, discount 2000, net 22000, cost 13000
+    // SERVICES: gross 5000, net 5000, cost 2000
+    expect(dataset.categoryBreakdown).toEqual([
+      {
+        categoryId: "HARDWARE",
+        categoryName: "Hardware",
+        lineCount: 2,
+        grossMinor: 24000,
+        netMinor: 22000,
+        marginPct: ((22000 - 13000) / 22000) * 100,
+      },
+      {
+        categoryId: "SERVICES",
+        categoryName: "Services",
+        lineCount: 1,
+        grossMinor: 5000,
+        netMinor: 5000,
+        marginPct: ((5000 - 2000) / 5000) * 100,
+      },
     ]);
   });
 });

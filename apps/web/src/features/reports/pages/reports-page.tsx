@@ -9,6 +9,7 @@ import { CategoryBreakdown } from "../components/category-breakdown";
 import { ExportButtons } from "../components/export-buttons";
 import { FilterBar } from "../components/filter-bar";
 import { FunnelTable } from "../components/funnel-table";
+import { ReportCharts } from "../components/report-charts";
 import { SummaryCards } from "../components/summary-cards";
 import { AiSalesInsightsCard } from "../components/ai-sales-insights-card";
 import { useSalesReport } from "../hooks/use-reports";
@@ -98,6 +99,12 @@ export default function ReportsPage() {
         <div className="space-y-6">
           {/* KPI Summary Cards */}
           <SummaryCards summary={data.summary} loading={isFetching} />
+
+          {/* DB-driven visualizations */}
+          <ReportCharts
+            funnel={data.funnel}
+            categories={data.categoryBreakdown}
+          />
 
           {/* Pipeline Stage Funnel */}
           <FunnelTable funnel={data.funnel} />

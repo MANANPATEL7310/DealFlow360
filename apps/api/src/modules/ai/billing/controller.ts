@@ -3,6 +3,7 @@ import { sendOk } from "../../../lib/response.js";
 import { aiAgentEnabled } from "../../../ai/flags.js";
 import { runAgent } from "../../../ai/agent-runner.js";
 import { loadActivePrompt } from "../../../ai/prompts.js";
+import { isDegradableAiError } from "../../../ai/degrade.js";
 import { BillingOutput } from "./schema.js";
 import { agent4Tools } from "./tools.js";
 import { buildBillingTaskPrompt } from "./context.js";
@@ -37,9 +38,9 @@ export async function explainBill(req: Request, res: Response) {
       approvalRequestId,
     });
   } catch (e: unknown) {
-    const err = e as Error;
-    if (err.message === "AI_BUDGET_EXCEEDED") {
-      return sendOk(res, { aiAvailable: false });
+    const { degrade, reason } = isDegradableAiError(e);
+    if (degrade) {
+      return sendOk(res, { aiAvailable: false, reason });
     }
     throw e;
   }

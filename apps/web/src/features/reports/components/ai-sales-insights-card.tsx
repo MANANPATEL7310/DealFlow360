@@ -21,6 +21,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Spinner } from "@/components/ui/spinner";
+import { BorderBeam } from "@/components/ui/border-beam";
 import { fetchAiNaturalLanguageReportQuery } from "@/features/ai/services/ai-api";
 
 interface AiSalesInsightsCardProps {
@@ -86,7 +87,8 @@ export function AiSalesInsightsCard({
   };
 
   return (
-    <div className="surface-card rounded-2xl border border-primary/20 bg-card p-6 shadow-sm transition-all">
+    <div className="surface-card relative overflow-hidden rounded-2xl border border-primary/20 bg-card p-6 shadow-sm transition-all">
+      <BorderBeam duration={8} />
       {/* Header */}
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div className="flex items-center gap-3">

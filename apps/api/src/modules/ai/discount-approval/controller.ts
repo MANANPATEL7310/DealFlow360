@@ -3,6 +3,7 @@ import { sendOk } from "../../../lib/response.js";
 import { aiAgentEnabled } from "../../../ai/flags.js";
 import { runAgent } from "../../../ai/agent-runner.js";
 import { loadActivePrompt } from "../../../ai/prompts.js";
+import { isDegradableAiError } from "../../../ai/degrade.js";
 import { DiscountApprovalOutput } from "./schema.js";
 import { agent1Tools } from "./tools.js";
 import { buildDiscountTaskPrompt } from "./context.js";
@@ -43,12 +44,9 @@ export async function reviewDiscountController(req: Request, res: Response) {
       ...result,
     });
   } catch (err: unknown) {
-    const errObj = err as { message?: string; http?: number } | undefined;
-    if (errObj?.message === "AI_BUDGET_EXCEEDED" || errObj?.http === 402) {
-      return sendOk(res, {
-        aiAvailable: false,
-        reason: "AI_BUDGET_EXCEEDED",
-      });
+    const { degrade, reason } = isDegradableAiError(err);
+    if (degrade) {
+      return sendOk(res, { aiAvailable: false, reason });
     }
     throw err;
   }

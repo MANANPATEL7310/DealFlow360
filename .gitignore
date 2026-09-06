@@ -19,3 +19,4 @@ docs/architecture/
 .claude/
 docs/
 .playwright-mcp/
+.pnpm-store/

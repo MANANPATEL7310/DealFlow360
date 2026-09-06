@@ -63,8 +63,8 @@ describe("Stripe Payment Gateway", () => {
     vi.mocked(recordPayment).mockImplementation(async (invId: string) => {
       mockInvoice.status = "PAID";
       return {
-        id: invId,
-        status: "PAID",
+        invoice: { id: invId, status: "PAID" },
+        payment: { id: "pay-1", amountMinor: 10000, status: "recorded" },
       } as never;
     });
   });
@@ -122,6 +122,7 @@ describe("Stripe Payment Gateway", () => {
       invoiceId,
       10000,
       "stripe_webhook",
+      expect.objectContaining({ paymentMethod: "Stripe" }),
     );
   });
 
@@ -148,6 +149,7 @@ describe("Stripe Payment Gateway", () => {
       invoiceId,
       10000,
       "stripe_simulation",
+      expect.objectContaining({ paymentMethod: "Stripe (simulated)" }),
     );
   });
 });

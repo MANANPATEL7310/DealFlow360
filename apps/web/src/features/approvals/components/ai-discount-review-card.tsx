@@ -14,6 +14,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { BorderBeam } from "@/components/ui/border-beam";
 import {
   Table,
   TableBody,
@@ -86,7 +87,8 @@ export function AiDiscountReviewCard({
   const isReject = review.recommendation === "REJECT";
 
   return (
-    <Card className="overflow-hidden border-primary/30 bg-gradient-to-br from-primary/5 via-card/80 to-card p-6 shadow-sm backdrop-blur-xs space-y-5">
+    <Card className="relative overflow-hidden border-primary/30 bg-gradient-to-br from-primary/5 via-card/80 to-card p-6 shadow-sm backdrop-blur-xs space-y-5">
+      <BorderBeam duration={8} />
       {/* Header */}
       <div className="flex flex-wrap items-center justify-between gap-3 border-b border-border/60 pb-4">
         <div className="flex items-center gap-2.5">

@@ -16,6 +16,7 @@ import {
 } from "lucide-react";
 import toast from "react-hot-toast";
 import { Button } from "@/components/ui/button";
+import { BorderBeam } from "@/components/ui/border-beam";
 import { useAiCopilotStore } from "../stores/ai-copilot-store";
 import {
   fetchAiStatus,
@@ -128,6 +129,7 @@ export function CopilotDrawer() {
 
       {/* Slide-out Panel */}
       <div className="relative flex h-dvh w-full max-w-xl flex-col border-l border-border/80 bg-background/95 shadow-2xl backdrop-blur-xl animate-in slide-in-from-right duration-200">
+        <BorderBeam duration={10} borderWidth={2} />
         {/* Drawer Header */}
         <div className="flex items-center justify-between gap-3 border-b border-border/80 px-4 py-4 sm:px-6">
           <div className="flex min-w-0 items-center gap-3">

@@ -32,6 +32,8 @@ export type Payment = z.infer<typeof paymentSchema>;
 
 export const recordPaymentSchema = z.object({
   amountMinor: z.number().int().positive(), // minor units — must be > 0
+  paymentMethod: z.string().min(1).optional(),
+  reference: z.string().optional(),
 });
 export type RecordPaymentInput = z.infer<typeof recordPaymentSchema>;
 

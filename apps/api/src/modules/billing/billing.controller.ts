@@ -43,6 +43,32 @@ export async function subscriptionChangeHandler(req: Request, res: Response) {
 export async function recordPaymentHandler(req: Request, res: Response) {
   const invoiceId = req.params.invoiceId as string;
   const actorId = req.user!.sub;
-  const result = await recordPayment(invoiceId, req.body.amountMinor, actorId);
-  return sendCreated(res, result, "Payment recorded successfully.");
+  const { amountMinor, paymentMethod, reference } = req.body as {
+    amountMinor: number;
+    paymentMethod?: string;
+    reference?: string;
+  };
+  const { invoice, payment } = await recordPayment(
+    invoiceId,
+    amountMinor,
+    actorId,
+    { paymentMethod, reference },
+  );
+
+  // Return the full schedule alongside the invoice + payment so the client's
+  // onSuccess handler (which reads data.payment and data.invoice) works
+  // against the real API, matching the mock fallback's shape.
+  const schedule = await db.billingSchedule.findUnique({
+    where: { id: invoice.scheduleId },
+    include: {
+      invoices: { orderBy: [{ periodStart: "asc" }, { createdAt: "asc" }] },
+      creditNotes: { orderBy: { createdAt: "asc" } },
+    },
+  });
+
+  return sendCreated(
+    res,
+    { schedule, invoice, payment },
+    "Payment recorded successfully.",
+  );
 }

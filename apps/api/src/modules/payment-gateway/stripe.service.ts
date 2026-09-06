@@ -118,16 +118,26 @@ export async function handleStripeWebhookEvent(
 ) {
   let event:
     | Stripe.Event
-    | { type: string; data: { object: Record<string, unknown> } };
+    | { type: string; id?: string; data: { object: Record<string, unknown> } };
 
-  if (stripe && env.STRIPE_WEBHOOK_SECRET && signature) {
+  // Live mode: require a verified signature. Without one, the payload is not
+  // trustworthy — anyone could POST a fake "checkout.session.completed" and
+  // mark arbitrary invoices PAID. Reject rather than trust unsigned input.
+  if (stripe && env.STRIPE_WEBHOOK_SECRET) {
+    if (!signature) {
+      throw Object.assign(new Error("WEBHOOK_SIGNATURE_MISSING"), {
+        http: 400,
+      });
+    }
     event = stripe.webhooks.constructEvent(
       payload as string | Buffer,
       signature,
       env.STRIPE_WEBHOOK_SECRET,
     );
   } else {
-    // If payload is a string, Buffer, or already an object
+    // Simulation mode (no Stripe secret configured). The raw-body middleware
+    // delivers a Buffer; parse it. This branch is only reachable when the
+    // deployment has explicitly opted out of live Stripe.
     if (typeof payload === "string") {
       event = JSON.parse(payload);
     } else if (Buffer.isBuffer(payload)) {
@@ -153,11 +163,20 @@ export async function handleStripeWebhookEvent(
       (session.amount as number) ??
       (session.amount_received as number);
 
+    // Prefer a stable external id for idempotency across Stripe retries.
+    const externalRef =
+      (session.id as string) ??
+      (typeof event === "object" && "id" in event
+        ? (event.id as string)
+        : undefined) ??
+      null;
+
     if (invoiceId && typeof amountMinor === "number") {
-      const updatedInvoice = await recordPayment(
+      const { invoice: updatedInvoice } = await recordPayment(
         invoiceId,
         amountMinor,
         "stripe_webhook",
+        { paymentMethod: "Stripe", externalRef },
       );
       return {
         received: true,
@@ -192,7 +211,12 @@ export async function simulatePaymentSettlement(
   const settleAmount =
     amountMinor ?? Math.max(0, invoice.amountMinor - paidSoFar);
 
-  const updatedInvoice = await recordPayment(invoiceId, settleAmount, actorId);
+  const { invoice: updatedInvoice } = await recordPayment(
+    invoiceId,
+    settleAmount,
+    actorId,
+    { paymentMethod: "Stripe (simulated)" },
+  );
 
   return {
     success: true,

@@ -10,7 +10,7 @@ export async function createCheckoutSessionController(
   req: Request,
   res: Response,
 ) {
-  const invoiceId = (req.params.id || req.params.invoiceId) as string;
+  const invoiceId = req.params.invoiceId as string;
   const { successUrl, cancelUrl } = req.body ?? {};
 
   const session = await createCheckoutSession(invoiceId, {
@@ -24,17 +24,19 @@ export async function createCheckoutSessionController(
 export async function stripeWebhookController(req: Request, res: Response) {
   const signature = req.headers["stripe-signature"] as string | undefined;
 
+  // The stripe-webhook route uses express.raw(), so req.body is a Buffer that
+  // preserves the exact bytes Stripe signed. handleStripeWebhookEvent verifies
+  // the signature against it (live mode) or parses it (simulation mode).
   const result = await handleStripeWebhookEvent(req.body, signature);
 
   return sendOk(res, result);
 }
 
 export async function simulateCheckoutController(req: Request, res: Response) {
-  const { invoiceId, amountMinor } = req.body ?? {};
-
-  if (!invoiceId) {
-    throw Object.assign(new Error("Missing invoiceId"), { http: 400 });
-  }
+  const { invoiceId, amountMinor } = req.body as {
+    invoiceId: string;
+    amountMinor?: number;
+  };
 
   const result = await simulatePaymentSettlement(
     invoiceId,

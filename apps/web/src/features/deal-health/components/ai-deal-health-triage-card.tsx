@@ -20,6 +20,7 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import { BorderBeam } from "@/components/ui/border-beam";
 import { Skeleton } from "@/components/ui/skeleton";
 import {
   fetchAiDealHealthTriage,
@@ -160,8 +161,9 @@ export function AiDealHealthTriageCard({
 
   return (
     <Card
-      className={`overflow-hidden rounded-2xl border-primary/30 bg-gradient-to-br from-primary/5 via-card/95 to-card p-6 shadow-sm backdrop-blur-xs space-y-5 ${className ?? ""}`}
+      className={`relative overflow-hidden rounded-2xl border-primary/30 bg-gradient-to-br from-primary/5 via-card/95 to-card p-6 shadow-sm backdrop-blur-xs space-y-5 ${className ?? ""}`}
     >
+      <BorderBeam duration={8} />
       {/* Header */}
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between border-b border-border/60 pb-4">
         <div className="flex items-center gap-3">

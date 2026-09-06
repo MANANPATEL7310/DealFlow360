@@ -191,6 +191,32 @@
   }
 }
 
+/* Animated conic border for AI surfaces (see BorderBeam). Registering the
+   custom property lets the browser interpolate the angle smoothly. */
+@property --border-beam-angle {
+  syntax: "<angle>";
+  inherits: false;
+  initial-value: 0deg;
+}
+
+@keyframes border-beam-spin {
+  to {
+    --border-beam-angle: 360deg;
+  }
+}
+
+.border-beam {
+  animation-name: border-beam-spin;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .border-beam {
+    animation: none;
+  }
+}
+
 @layer base {
   * {
     @apply border-border outline-none;

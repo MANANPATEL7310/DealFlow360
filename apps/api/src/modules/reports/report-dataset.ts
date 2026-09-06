@@ -22,6 +22,9 @@ type DbClient = {
         unitPriceMinor: number;
         unitCostMinor: number;
         discountPct: number;
+        product?: {
+          category: ProductCategory | string;
+        } | null;
       }[]
     >;
   };
@@ -44,6 +47,20 @@ export type ReportDataset = {
     marginPct: number;
   };
   funnel: { status: string; count: number; netMinor: number }[];
+  categoryBreakdown: {
+    categoryId: string;
+    categoryName: string;
+    lineCount: number;
+    netMinor: number;
+    grossMinor: number;
+    marginPct: number;
+  }[];
+};
+
+const CATEGORY_LABELS: Record<string, string> = {
+  HARDWARE: "Hardware",
+  SERVICES: "Services",
+  SUBSCRIPTIONS: "Subscriptions",
 };
 
 const STAGE_ORDER: QuotationStatus[] = [
@@ -181,9 +198,11 @@ export async function buildReportDataset(
       unitPriceMinor: true,
       unitCostMinor: true,
       discountPct: true,
+      product: { select: { category: true } },
     },
   });
   const summary = summarizeLines(lines);
+  const categoryBreakdown = summarizeByCategory(lines);
 
   return {
     filters: { ...filters, effectiveRepId: repId },
@@ -192,7 +211,58 @@ export async function buildReportDataset(
       ...summary,
     },
     funnel,
+    categoryBreakdown,
   };
+}
+
+function summarizeByCategory(
+  lines: {
+    qty: number;
+    unitPriceMinor: number;
+    unitCostMinor: number;
+    discountPct: number;
+    product?: { category: ProductCategory | string } | null;
+  }[],
+): ReportDataset["categoryBreakdown"] {
+  const buckets = new Map<
+    string,
+    {
+      lineCount: number;
+      grossMinor: number;
+      netMinor: number;
+      costMinor: number;
+    }
+  >();
+
+  for (const line of lines) {
+    const category = line.product?.category ?? "UNCATEGORIZED";
+    const money = lineMoney(line);
+    const bucket = buckets.get(category) ?? {
+      lineCount: 0,
+      grossMinor: 0,
+      netMinor: 0,
+      costMinor: 0,
+    };
+    bucket.lineCount += 1;
+    bucket.grossMinor += money.grossMinor;
+    bucket.netMinor += money.netMinor;
+    bucket.costMinor += money.costMinor;
+    buckets.set(category, bucket);
+  }
+
+  return Array.from(buckets.entries())
+    .map(([categoryId, b]) => ({
+      categoryId,
+      categoryName:
+        CATEGORY_LABELS[categoryId] ??
+        categoryId.charAt(0) + categoryId.slice(1).toLowerCase(),
+      lineCount: b.lineCount,
+      grossMinor: b.grossMinor,
+      netMinor: b.netMinor,
+      marginPct:
+        b.netMinor > 0 ? ((b.netMinor - b.costMinor) / b.netMinor) * 100 : 0,
+    }))
+    .sort((a, b) => b.netMinor - a.netMinor);
 }
 
 export async function runReport(filters: ReportFilters, viewer: ReportViewer) {

@@ -4,3 +4,4 @@ export * from "./components/ai-copilot-trigger";
 export * from "./components/copilot-drawer";
 export * from "./components/hitl-approval-card";
 export * from "./components/degraded-mode-banner";
+export * from "./components/agent-badge";

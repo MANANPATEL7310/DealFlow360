@@ -15,6 +15,7 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import { BorderBeam } from "@/components/ui/border-beam";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Spinner } from "@/components/ui/spinner";
 import {
@@ -146,8 +147,9 @@ export function UpsellPanel({ quotationId, className }: UpsellPanelProps) {
 
     return (
       <Card
-        className={`space-y-5 rounded-2xl border-primary/30 bg-gradient-to-br from-primary/5 via-card/90 to-card p-6 shadow-sm backdrop-blur-xs ${className ?? ""}`}
+        className={`relative overflow-hidden space-y-5 rounded-2xl border-primary/30 bg-gradient-to-br from-primary/5 via-card/90 to-card p-6 shadow-sm backdrop-blur-xs ${className ?? ""}`}
       >
+        <BorderBeam duration={8} />
         {/* Header section */}
         <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between border-b border-border/60 pb-4">
           <div className="flex items-center gap-3">

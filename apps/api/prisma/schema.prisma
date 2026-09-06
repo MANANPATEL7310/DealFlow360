@@ -476,13 +476,17 @@ model CreditNote {
 }
 
 model Payment {
-  id          String   @id @default(cuid())
-  invoiceId   String
-  invoice     Invoice  @relation(fields: [invoiceId], references: [id], onDelete: Cascade)
-  amountMinor Int
-  status      String   @default("recorded") // recorded | failed | refunded
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id            String   @id @default(cuid())
+  invoiceId     String
+  invoice       Invoice  @relation(fields: [invoiceId], references: [id], onDelete: Cascade)
+  amountMinor   Int
+  paymentMethod String   @default("Corporate Wire")
+  reference     String?
+  // External idempotency key (e.g. Stripe event/session id) to dedupe webhook retries.
+  externalRef   String?  @unique
+  status        String   @default("recorded") // recorded | failed | refunded
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
 
   @@index([invoiceId])
 }

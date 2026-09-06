@@ -458,7 +458,7 @@ describe("recordPayment", () => {
     } as unknown as Awaited<ReturnType<typeof db.invoice.findUniqueOrThrow>>);
 
     const res1 = await recordPayment("inv-1", 5000, FINANCE.id);
-    expect(res1.status).toBe("ISSUED");
+    expect(res1.invoice.status).toBe("ISSUED");
     expect(db.invoice.update).not.toHaveBeenCalled();
 
     vi.mocked(db.invoice.findUnique).mockResolvedValueOnce({
@@ -487,7 +487,7 @@ describe("recordPayment", () => {
     } as unknown as Awaited<ReturnType<typeof db.invoice.findUniqueOrThrow>>);
 
     const res2 = await recordPayment("inv-1", 6000, FINANCE.id);
-    expect(res2.status).toBe("PAID");
+    expect(res2.invoice.status).toBe("PAID");
     expect(db.invoice.update).toHaveBeenCalledWith({
       where: { id: "inv-1" },
       data: { status: "PAID" },
