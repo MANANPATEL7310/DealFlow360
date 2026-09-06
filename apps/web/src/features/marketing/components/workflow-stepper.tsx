@@ -31,19 +31,19 @@ export function WorkflowStepper() {
     },
     {
       id: "risk",
-      title: "2. Blended-Risk Gate",
-      subtitle: "Deterministic margin guardrails",
+      title: "2. Discount check",
+      subtitle: "Automatic margin guardrails",
       icon: ShieldAlert,
-      badge: "Automated Engine",
+      badge: "Automated",
       summary:
-        "The blended-risk engine evaluates effective ceilings min(tierCeiling, categoryCeiling) and computes value-weighted violation scores.",
+        "The risk engine sets each line's effective ceiling from the customer tier and category, then scores the whole order for discount overages.",
       details: [
-        "Worst-line violation detection for egregious discounts",
-        "Value-weighted blended score across full order value",
-        "Categorical ceilings: Hardware vs. Services vs. Recurring",
+        "Flags any single line that exceeds its cap",
+        "Weighs small overages across the full order value",
+        "Category ceilings: Hardware vs. Services vs. Recurring",
         "Customer tier ceilings: Bronze 5%, Silver 10%, Gold 15%",
       ],
-      kpi: "PS §10 Crown-Jewel Rule",
+      kpi: "Policy enforced automatically",
     },
     {
       id: "approval",
@@ -127,9 +127,9 @@ export function WorkflowStepper() {
             The Complete Quotation-to-Cash Lifecycle
           </h2>
           <p className="mt-3 text-base text-muted-foreground sm:text-lg">
-            Every step is governed by deterministic business logic, connecting
-            sales representatives, approvers, customers, warehouse logistics,
-            and finance in one seamless flow.
+            Every step follows clear business rules, connecting sales reps,
+            approvers, customers, warehouse logistics, and finance in one
+            seamless flow.
           </p>
         </div>
 
@@ -179,7 +179,7 @@ export function WorkflowStepper() {
                   Step {activeStep + 1} of 6
                 </span>
                 <span className="rounded-full border border-border bg-surface-muted px-3 py-0.5 text-xs font-medium text-muted-foreground">
-                  Role: {current.badge}
+                  {current.badge}
                 </span>
                 <span className="rounded-full border border-secondary/20 bg-secondary/10 px-3 py-0.5 text-xs font-medium text-secondary">
                   {current.kpi}
@@ -220,8 +220,8 @@ export function WorkflowStepper() {
             <div className="lg:col-span-5">
               <div className="space-y-4 rounded-xl border border-border bg-surface-muted/50 p-5 shadow-inner">
                 <div className="flex items-center justify-between border-b border-border pb-3">
-                  <span className="font-mono text-xs font-semibold text-primary uppercase">
-                    Stage Status Machine
+                  <span className="text-xs font-semibold text-primary uppercase">
+                    At this stage
                   </span>
                   <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-secondary">
                     <span className="size-2 animate-pulse rounded-full bg-secondary" />
@@ -231,30 +231,26 @@ export function WorkflowStepper() {
 
                 <div className="space-y-2.5 text-xs">
                   <div className="flex justify-between rounded-lg border border-border bg-surface p-2">
-                    <span className="text-muted-foreground">
-                      Current State:
-                    </span>
-                    <span className="font-mono font-bold text-foreground uppercase">
-                      {current.id}
+                    <span className="text-muted-foreground">Step:</span>
+                    <span className="font-semibold text-foreground">
+                      {current.title}
                     </span>
                   </div>
                   <div className="flex justify-between rounded-lg border border-border bg-surface p-2">
-                    <span className="text-muted-foreground">
-                      Governing Policy:
-                    </span>
+                    <span className="text-muted-foreground">What applies:</span>
                     <span className="font-semibold text-foreground">
                       {current.kpi}
                     </span>
                   </div>
                   <div className="flex justify-between rounded-lg border border-border bg-surface p-2">
-                    <span className="text-muted-foreground">Actor Access:</span>
+                    <span className="text-muted-foreground">Who's here:</span>
                     <span className="font-semibold text-primary">
                       {current.badge}
                     </span>
                   </div>
                   <div className="rounded-lg border border-primary/20 bg-primary/5 p-3 text-xs leading-relaxed text-muted-foreground">
-                    Audit log auto-records actor, precise timestamp, and change
-                    diff into immutable compliance trail.
+                    Every action is recorded with who did it, when, and what
+                    changed — a complete audit trail.
                   </div>
                 </div>
 
@@ -267,7 +263,7 @@ export function WorkflowStepper() {
                     }
                     className="cursor-pointer text-xs font-semibold text-muted-foreground hover:text-foreground disabled:opacity-30"
                   >
-                    ← Previous Step
+                    ← Previous step
                   </button>
                   <button
                     type="button"
@@ -279,7 +275,7 @@ export function WorkflowStepper() {
                     }
                     className="cursor-pointer text-xs font-semibold text-primary hover:text-primary-dark disabled:opacity-30"
                   >
-                    Next Step →
+                    Next step →
                   </button>
                 </div>
               </div>

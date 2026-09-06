@@ -33,18 +33,18 @@ export function SettingsPage() {
               <SettingsIcon className="size-5" />
             </div>
             <h1 className="text-2xl font-bold tracking-tight text-foreground">
-              System Configuration & Compliance
+              Settings
             </h1>
             <Badge
               tone={isAdmin ? "primary" : "warning"}
-              className="text-xs font-mono capitalize"
+              className="text-xs capitalize"
             >
-              Role: {role.replace(/_/g, " ")}
+              {role.replace(/_/g, " ")}
             </Badge>
           </div>
           <p className="text-xs text-muted-foreground">
-            PS A1/A3 Centralized administration: runtime risk parameters,
-            SOC2/ISO compliance audit trail, and discount governance.
+            Manage risk parameters, the compliance audit trail, and discount
+            governance.
           </p>
         </div>
       </div>
@@ -113,7 +113,7 @@ export function SettingsPage() {
           }`}
         >
           <Sparkles className="size-3.5 text-primary" />
-          <span>AI Operations & Observability</span>
+          <span>AI operations</span>
         </button>
       </div>
 

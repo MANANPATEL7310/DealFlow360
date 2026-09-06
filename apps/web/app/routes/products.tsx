@@ -2,7 +2,7 @@ import { ProductsPage } from "@/features/products/pages/products-page";
 
 export function meta() {
   return [
-    { title: "Product & Price List Engine · DealFlow360" },
+    { title: "Products · DealFlow360" },
     {
       name: "description",
       content:

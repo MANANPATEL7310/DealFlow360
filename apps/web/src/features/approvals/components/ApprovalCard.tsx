@@ -74,7 +74,7 @@ export function ApprovalCard({ item }: ApprovalCardProps) {
         id: item.id,
         payload: { decision: "APPROVED" },
       });
-      toast.success("Action approved and applied via Document A service.");
+      toast.success("Approved and applied.");
     } catch (err: unknown) {
       const msg =
         err instanceof Error ? err.message : "Failed to record decision";

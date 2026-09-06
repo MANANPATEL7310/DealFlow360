@@ -42,12 +42,11 @@ export function DiscountSimulatorBench() {
       <div className="flex flex-col gap-2 border-b border-border pb-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <h2 className="flex items-center gap-2 text-base font-semibold text-foreground">
-            <Calculator className="size-4 text-primary" /> Live Governance
-            Simulator Workbench
+            <Calculator className="size-4 text-primary" /> Discount simulator
           </h2>
           <p className="text-xs text-muted-foreground">
-            Test policy interactions, excess calculations, and routing outcomes
-            against configured thresholds before deal drafting.
+            Test how policies, excess calculations, and routing play out against
+            your thresholds before drafting a deal.
           </p>
         </div>
         <Badge tone="primary">Real-Time Engine</Badge>
@@ -238,8 +237,7 @@ export function DiscountSimulatorBench() {
                   <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                     <div>
                       <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
-                        <Zap className="size-3.5 text-primary" /> Blended Risk
-                        Score
+                        <Zap className="size-3.5 text-primary" /> Risk score
                       </div>
                       <div className="font-mono text-2xl font-bold text-foreground">
                         {result.blendedRiskScore.toFixed(2)}
@@ -279,7 +277,7 @@ export function DiscountSimulatorBench() {
                 <span>
                   {result.isAutoApproved
                     ? `The requested discount of ${discountPct}% is at or below the enforced ceiling of ${result.applicableCapPct}%. Deals meeting this criteria automatically pass without routing delay.`
-                    : `The requested discount of ${discountPct}% exceeds the enforced ceiling of ${result.applicableCapPct}% by ${result.excessDiscountPct}%. This generates a blended risk score of ${result.blendedRiskScore}, routing this quote to ${result.requiredApprovers.join(" and ")}.`}
+                    : `The requested discount of ${discountPct}% exceeds the enforced ceiling of ${result.applicableCapPct}% by ${result.excessDiscountPct}%. This produces a risk score of ${result.blendedRiskScore}, routing this quote to ${result.requiredApprovers.join(" and ")}.`}
                 </span>
               </div>
             </div>

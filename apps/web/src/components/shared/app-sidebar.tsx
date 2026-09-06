@@ -34,7 +34,7 @@ export function AppSidebar({ isOpen, onClose }: AppSidebarProps) {
       <aside
         aria-label="Main navigation"
         className={cn(
-          "fixed inset-y-0 left-0 z-50 flex h-dvh w-72 shrink-0 flex-col justify-between border-r border-border bg-card/95 p-4 shadow-2xl backdrop-blur-xl transition-transform duration-200 lg:sticky lg:top-0 lg:z-40 lg:h-screen lg:w-64 lg:translate-x-0 lg:bg-card/50 lg:shadow-none",
+          "fixed inset-y-0 left-0 z-50 flex h-dvh w-72 shrink-0 flex-col justify-between border-r border-border bg-card p-4 shadow-xl transition-transform duration-200 lg:sticky lg:top-0 lg:z-40 lg:h-screen lg:w-64 lg:translate-x-0 lg:shadow-none",
           isOpen ? "translate-x-0" : "-translate-x-full",
         )}
       >
@@ -75,10 +75,10 @@ export function AppSidebar({ isOpen, onClose }: AppSidebarProps) {
                         onClick={onClose}
                         className={({ isActive }) =>
                           cn(
-                            "flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-all duration-200",
+                            "flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors duration-150",
                             isActive
-                              ? "border border-primary/20 bg-primary/10 font-semibold text-primary shadow-sm"
-                              : "text-muted-foreground hover:translate-x-0.5 hover:bg-surface-muted/60 hover:text-foreground",
+                              ? "bg-primary/10 font-semibold text-primary"
+                              : "text-muted-foreground hover:bg-surface-muted hover:text-foreground",
                           )
                         }
                       >

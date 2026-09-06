@@ -157,7 +157,7 @@ export function UpsellPanel({ quotationId, className }: UpsellPanelProps) {
             <div>
               <div className="flex items-center gap-2">
                 <h3 className="text-sm font-bold text-foreground sm:text-base">
-                  Agent 2 · AI Product & Upsell Recommendations
+                  AI product & upsell recommendations
                 </h3>
                 <span className="inline-flex items-center gap-1 rounded bg-primary/10 px-2 py-0.5 font-mono text-xs font-semibold text-primary">
                   <Cpu className="size-2.5" />
@@ -166,7 +166,7 @@ export function UpsellPanel({ quotationId, className }: UpsellPanelProps) {
               </div>
               <p className="text-xs text-muted-foreground mt-0.5">
                 {aiData?.cartSummary ??
-                  "Autonomous affinity ranking matched to quotation basket composition"}
+                  "Add-ons matched to the current quotation basket"}
               </p>
             </div>
           </div>
@@ -321,12 +321,12 @@ export function UpsellPanel({ quotationId, className }: UpsellPanelProps) {
               </div>
             )}
 
-            {/* Document A Master Invariant Note */}
+            {/* Governance Note */}
             <div className="flex items-center gap-2 text-xs text-muted-foreground pt-1">
               <ShieldCheck className="size-3.5 text-primary shrink-0" />
               <span>
-                <strong>Document A Governance:</strong> Adding an item triggers
-                deterministic margin & tier ceiling re-calculation in real-time.
+                <strong>Automatic checks:</strong> Adding an item re-checks
+                margin and tier discount ceilings in real time.
               </span>
             </div>
           </div>
@@ -387,8 +387,7 @@ export function UpsellPanel({ quotationId, className }: UpsellPanelProps) {
               </Badge>
             </div>
             <p className="text-xs text-muted-foreground">
-              Deterministic M6 co-purchase recommendations matched to current
-              lines
+              Add-on recommendations matched to the current lines
             </p>
           </div>
         </div>

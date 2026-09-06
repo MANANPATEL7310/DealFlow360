@@ -116,110 +116,110 @@ export function SubscriptionChangeModal({
   };
 
   return (
-    <div className="animate-in fade-in fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-xs duration-200">
-      <div className="w-full max-w-lg rounded-2xl border border-white/10 bg-slate-900/95 p-6 shadow-2xl backdrop-blur-xl">
+    <div className="animate-in fade-in fixed inset-0 z-50 flex items-center justify-center bg-background/80 p-4 backdrop-blur-xs duration-200">
+      <div className="surface-card w-full max-w-lg rounded-2xl border border-border bg-card p-6 shadow-2xl">
         {/* Header */}
-        <div className="flex items-center justify-between border-b border-white/10 pb-4">
+        <div className="flex items-center justify-between border-b border-border pb-4">
           <div>
-            <h3 className="text-lg font-semibold text-white">
+            <h3 className="text-lg font-semibold text-foreground">
               {mode === "cancel"
-                ? "Cancel Subscription"
-                : "Modify Subscription Seats / Tier"}
+                ? "Cancel subscription"
+                : "Modify subscription seats / tier"}
             </h3>
-            <p className="text-xs text-slate-400">
-              Target Line:{" "}
-              <span className="font-medium text-slate-200">{lineTitle}</span>
+            <p className="text-xs text-muted-foreground">
+              Line:{" "}
+              <span className="font-medium text-foreground">{lineTitle}</span>
             </p>
           </div>
           <button
             type="button"
             onClick={onClose}
-            className="rounded-lg p-1 text-slate-400 transition-colors hover:bg-white/5 hover:text-white"
+            className="rounded-lg p-1 text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
           >
             <X className="size-5" />
           </button>
         </div>
 
         {/* Mode Selector */}
-        <div className="mt-4 grid grid-cols-2 gap-2 rounded-xl border border-white/10 bg-slate-950/60 p-1">
+        <div className="mt-4 grid grid-cols-2 gap-2 rounded-xl border border-border bg-surface-muted/40 p-1">
           <button
             type="button"
             onClick={() => setMode("modify")}
             className={`rounded-lg py-1.5 text-xs font-medium transition-all ${
               mode === "modify"
-                ? "border border-emerald-500/30 bg-emerald-500/20 text-emerald-300"
-                : "text-slate-400 hover:text-white"
+                ? "border border-emerald-500/30 bg-emerald-500/15 text-emerald-600 dark:text-emerald-300"
+                : "text-muted-foreground hover:text-foreground"
             }`}
           >
-            Modify Amount / Seats
+            Modify amount / seats
           </button>
           <button
             type="button"
             onClick={() => setMode("cancel")}
             className={`rounded-lg py-1.5 text-xs font-medium transition-all ${
               mode === "cancel"
-                ? "border border-rose-500/30 bg-rose-500/20 text-rose-300"
-                : "text-slate-400 hover:text-white"
+                ? "border border-rose-500/30 bg-rose-500/15 text-rose-600 dark:text-rose-300"
+                : "text-muted-foreground hover:text-foreground"
             }`}
           >
-            Cancel Subscription
+            Cancel subscription
           </button>
         </div>
 
         <form onSubmit={handleSubmit} className="mt-4 space-y-4">
           {mode === "modify" ? (
             <div>
-              <div className="mb-1.5 flex justify-between text-xs text-slate-400">
-                <span>New Per-Period Amount ($ USD)</span>
+              <div className="mb-1.5 flex justify-between text-xs text-muted-foreground">
+                <span>New per-period amount ($ USD)</span>
                 <span>
                   Current: ${(currentAmountMinor / 100).toFixed(2)}/mo
                 </span>
               </div>
               <div className="relative">
-                <DollarSign className="absolute top-1/2 left-3 size-4 -translate-y-1/2 text-slate-400" />
+                <DollarSign className="absolute top-1/2 left-3 size-4 -translate-y-1/2 text-muted-foreground" />
                 <Input
                   type="number"
                   step="0.01"
                   min="0"
                   value={newAmountDollars}
                   onChange={(e) => setNewAmountDollars(e.target.value)}
-                  className="border-white/10 bg-slate-950/60 pl-9 font-mono text-white"
+                  className="pl-9 font-mono"
                   required
                 />
               </div>
             </div>
           ) : (
-            <div className="flex items-start gap-3 rounded-xl border border-rose-500/20 bg-rose-500/10 p-3.5 text-xs text-rose-300">
-              <AlertCircle className="mt-0.5 size-5 shrink-0 text-rose-400" />
+            <div className="flex items-start gap-3 rounded-xl border border-rose-500/20 bg-rose-500/10 p-3.5 text-xs text-rose-600 dark:text-rose-300">
+              <AlertCircle className="mt-0.5 size-5 shrink-0 text-rose-500 dark:text-rose-400" />
               <div>
                 <strong className="mb-1 block font-semibold">
                   Immediate mid-cycle termination
                 </strong>
-                Cancelling will mark all future DRAFT invoices as VOID and issue
+                Cancelling will mark all future draft invoices as void and issue
                 a prorated credit note for unearned days in the current cycle.
               </div>
             </div>
           )}
 
           {/* Live Proration Breakdown Box */}
-          <div className="space-y-2.5 rounded-xl border border-white/10 bg-white/5 p-3.5 text-xs">
-            <div className="flex items-center justify-between font-medium text-slate-300">
+          <div className="space-y-2.5 rounded-xl border border-border bg-surface-muted/30 p-3.5 text-xs">
+            <div className="flex items-center justify-between font-medium text-foreground">
               <div className="flex items-center gap-1.5">
-                <Info className="size-4 text-sky-400" />
-                <span>Deterministic Proration Preview</span>
+                <Info className="size-4 text-primary" />
+                <span>Proration preview</span>
               </div>
-              <span className="text-xs text-slate-400">
+              <span className="text-xs text-muted-foreground">
                 {remainingDays} of {totalCycleDays} days remaining
               </span>
             </div>
 
-            <div className="grid grid-cols-2 gap-2 border-t border-white/5 pt-1 text-xs text-slate-400">
-              <div>Current Cycle End:</div>
-              <div className="text-right font-mono text-slate-200">
+            <div className="grid grid-cols-2 gap-2 border-t border-border pt-1 text-xs text-muted-foreground">
+              <div>Current cycle end:</div>
+              <div className="text-right font-mono text-foreground">
                 {periodEnd.toISOString().slice(0, 10)}
               </div>
-              <div>Cycle Utilization:</div>
-              <div className="text-right font-mono text-slate-200">
+              <div>Cycle utilization:</div>
+              <div className="text-right font-mono text-foreground">
                 {(
                   ((totalCycleDays - remainingDays) / totalCycleDays) *
                   100
@@ -228,12 +228,12 @@ export function SubscriptionChangeModal({
               </div>
             </div>
 
-            <div className="rounded-lg border border-white/5 bg-slate-950/60 p-2.5">
+            <div className="rounded-lg border border-border bg-background/60 p-2.5">
               {prorationType === "cancel" && (
-                <div className="flex items-center justify-between text-emerald-400">
+                <div className="flex items-center justify-between text-emerald-600 dark:text-emerald-400">
                   <span className="flex items-center gap-1.5">
                     <ArrowDownRight className="size-4" />
-                    Prorated Credit Note:
+                    Prorated credit note:
                   </span>
                   <span className="font-mono text-sm font-bold">
                     +${(prorationMinor / 100).toFixed(2)}
@@ -241,10 +241,10 @@ export function SubscriptionChangeModal({
                 </div>
               )}
               {prorationType === "upgrade" && (
-                <div className="flex items-center justify-between text-amber-400">
+                <div className="flex items-center justify-between text-amber-600 dark:text-amber-400">
                   <span className="flex items-center gap-1.5">
                     <ArrowUpRight className="size-4" />
-                    Immediate Catch-Up Invoice:
+                    Immediate catch-up invoice:
                   </span>
                   <span className="font-mono text-sm font-bold">
                     ${(prorationMinor / 100).toFixed(2)}
@@ -252,10 +252,10 @@ export function SubscriptionChangeModal({
                 </div>
               )}
               {prorationType === "downgrade" && (
-                <div className="flex items-center justify-between text-emerald-400">
+                <div className="flex items-center justify-between text-emerald-600 dark:text-emerald-400">
                   <span className="flex items-center gap-1.5">
                     <ArrowDownRight className="size-4" />
-                    Prorated Overpayment Credit:
+                    Prorated overpayment credit:
                   </span>
                   <span className="font-mono text-sm font-bold">
                     +${(prorationMinor / 100).toFixed(2)}
@@ -263,7 +263,7 @@ export function SubscriptionChangeModal({
                 </div>
               )}
               {prorationType === "none" && (
-                <div className="py-1 text-center text-slate-400">
+                <div className="py-1 text-center text-muted-foreground">
                   No rate change detected.
                 </div>
               )}
@@ -271,26 +271,26 @@ export function SubscriptionChangeModal({
           </div>
 
           <div>
-            <label className="mb-1.5 block text-xs font-medium text-slate-300">
-              Audit Reason (Mandatory)
+            <label className="mb-1.5 block text-xs font-medium text-foreground">
+              Reason (required)
             </label>
             <textarea
               value={reason}
               onChange={(e) => setReason(e.target.value)}
-              placeholder="e.g. Customer requested upgrade from 5 to 10 enterprise seats."
+              placeholder="e.g. Customer requested upgrade from 5 to 10 seats."
               rows={2}
-              className="w-full rounded-md border border-white/10 bg-slate-950/60 p-2.5 text-xs text-white placeholder:text-slate-500 focus:ring-1 focus:ring-emerald-500 focus:outline-none"
+              className="w-full rounded-md border border-border bg-background p-2.5 text-xs text-foreground placeholder:text-muted-foreground focus:ring-1 focus:ring-primary focus:outline-none"
               required
             />
           </div>
 
           {error && (
-            <div className="rounded-lg border border-red-500/20 bg-red-500/10 p-2.5 text-xs text-red-400">
+            <div className="rounded-lg border border-red-500/20 bg-red-500/10 p-2.5 text-xs text-red-600 dark:text-red-400">
               {error}
             </div>
           )}
 
-          <div className="flex items-center justify-end gap-3 border-t border-white/10 pt-3">
+          <div className="flex items-center justify-end gap-3 border-t border-border pt-3">
             <Button
               type="button"
               variant="outline"
@@ -316,9 +316,7 @@ export function SubscriptionChangeModal({
               ) : (
                 <>
                   <CheckCircle className="mr-2 size-4" />
-                  {mode === "cancel"
-                    ? "Confirm Cancellation"
-                    : "Apply Schedule Change"}
+                  {mode === "cancel" ? "Confirm cancellation" : "Apply change"}
                 </>
               )}
             </Button>

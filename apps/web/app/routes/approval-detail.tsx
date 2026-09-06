@@ -2,7 +2,7 @@ import { ApprovalDetailPage } from "@/features/approvals/pages/approval-detail-p
 
 export function meta() {
   return [
-    { title: "Review Quotation Approval · DealFlow360" },
+    { title: "Approval Review · DealFlow360" },
     {
       name: "description",
       content:

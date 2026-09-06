@@ -96,7 +96,7 @@ export function AiSalesInsightsCard({
           <div>
             <div className="flex flex-wrap items-center gap-2">
               <h3 className="text-base font-bold text-foreground">
-                Agent 7: AI Sales Insights & Conversational Analytics
+                AI sales insights & conversational analytics
               </h3>
               <Badge tone="primary" className="text-xs">
                 Claude 4.5 Sonnet

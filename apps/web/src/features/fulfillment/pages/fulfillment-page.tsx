@@ -74,15 +74,14 @@ export function FulfillmentPage() {
         <div className="flex min-h-80 flex-col items-center justify-center space-y-3 text-center">
           <FileSpreadsheet className="size-10 text-muted-foreground/50" />
           <h2 className="text-lg font-bold text-foreground">
-            No Fulfillment Plan Found
+            No fulfillment plan yet
           </h2>
           <p className="text-xs text-muted-foreground">
-            This quotation has not initialized a warehouse allocation plan.
+            This quotation doesn't have a warehouse allocation plan.
           </p>
           <Link to={appRoutes.quotationBuilder(quotationId)}>
             <Button size="sm" variant="outline">
-              <ArrowLeft className="mr-1.5 size-4" /> Return to Quotation
-              Builder
+              <ArrowLeft className="mr-1.5 size-4" /> Back to quotation
             </Button>
           </Link>
         </div>
@@ -118,10 +117,10 @@ export function FulfillmentPage() {
             className="px-3 py-1 font-semibold"
           >
             {isAccepted
-              ? "Plan Committed (Read-Only)"
+              ? "Committed"
               : plan.status === "OVERRIDDEN"
-                ? "Manually Reallocated"
-                : "Optimizer Suggested"}
+                ? "Manually adjusted"
+                : "Suggested plan"}
           </Badge>
         </div>
 
@@ -134,7 +133,7 @@ export function FulfillmentPage() {
                   <Truck className="size-5" />
                 </div>
                 <h1 className="text-2xl font-bold tracking-tight text-foreground">
-                  Fulfillment & Warehouse Allocation
+                  Fulfillment
                 </h1>
               </div>
 
@@ -150,7 +149,7 @@ export function FulfillmentPage() {
                 )}
                 <div className="flex items-center gap-1">
                   <Package className="size-3.5" />
-                  <span>{quote?.lines.length ?? 0} Commercial Lines</span>
+                  <span>{quote?.lines.length ?? 0} line items</span>
                 </div>
               </div>
             </div>
@@ -190,7 +189,7 @@ export function FulfillmentPage() {
         {/* Headline KPI Ribbon */}
         <FulfillmentStats isLoading={isLoading} plan={plan} />
 
-        {/* AI Multi-Warehouse Planner (Agent 3) */}
+        {/* AI Multi-Warehouse Planner */}
         <AiFulfillmentPlannerCard
           quotationId={quotationId}
           isPlanAccepted={isAccepted}

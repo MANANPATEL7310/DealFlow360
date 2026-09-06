@@ -2,7 +2,7 @@ import { BillingPage } from "@/features/billing/pages/billing-page";
 
 export function meta() {
   return [
-    { title: "Hybrid Billing Operations · DealFlow360" },
+    { title: "Billing · DealFlow360" },
     {
       name: "description",
       content:

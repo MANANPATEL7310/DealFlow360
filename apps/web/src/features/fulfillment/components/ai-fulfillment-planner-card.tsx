@@ -97,8 +97,7 @@ export function AiFulfillmentPlannerCard({
           <Spinner className="size-5 text-primary" />
           <div className="space-y-1">
             <div className="text-sm font-semibold text-foreground">
-              Agent 3: Calculating Multi-Warehouse Allocation & Freight
-              Trade-offs...
+              Calculating warehouse allocation and freight trade-offs...
             </div>
             <div className="text-xs text-muted-foreground">
               Evaluating warehouse inventory proximity, backorder lead times,
@@ -125,7 +124,7 @@ export function AiFulfillmentPlannerCard({
           <div>
             <div className="flex flex-wrap items-center gap-2">
               <h3 className="text-base font-bold text-foreground">
-                Agent 3: AI Fulfillment & Multi-Warehouse Planner
+                AI fulfillment & multi-warehouse planner
               </h3>
               <Badge tone="primary" className="text-xs">
                 Claude 4.5 Sonnet
@@ -306,16 +305,14 @@ export function AiFulfillmentPlannerCard({
         </div>
       )}
 
-      {/* HITL Notice if Manager Approval Required */}
+      {/* Manager approval notice */}
       {proposal.requiresManagerApproval && (
         <div className="mt-4 flex items-start gap-2.5 rounded-xl border border-amber-500/30 bg-amber-500/10 p-3 text-xs text-amber-800 dark:text-amber-300">
           <AlertTriangle className="mt-0.5 size-4 shrink-0" />
           <div>
-            <span className="font-semibold">
-              Managerial Override Approval Required:{" "}
-            </span>
-            Freight cost delta or warehouse reallocation threshold exceeded. A
-            manager review will be staged upon applying.
+            <span className="font-semibold">Manager approval required: </span>
+            Freight cost change or warehouse reallocation threshold exceeded. A
+            manager review will be staged when you apply.
           </div>
         </div>
       )}

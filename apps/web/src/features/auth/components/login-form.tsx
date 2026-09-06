@@ -47,13 +47,13 @@ export function LoginForm() {
           <div className="space-y-2">
             <div className="inline-flex items-center gap-2 rounded-full border border-emerald-500/20 bg-emerald-500/10 px-3 py-1 text-xs font-medium text-emerald-500">
               <ShieldCheck className="size-4" />
-              Role-Based Access Control
+              Welcome back
             </div>
             <h1 className="text-2xl font-bold tracking-tight text-foreground">
               Sign in to DealFlow360
             </h1>
             <p className="text-sm text-muted-foreground">
-              Enter your assigned account credentials to access your workspace.
+              Enter your email and password to access your account.
             </p>
           </div>
 
@@ -173,18 +173,18 @@ export function LoginForm() {
             </label>
 
             <Button className="w-full" disabled={isPending} type="submit">
-              <span>{isPending ? "Signing in..." : "Enter Workspace"}</span>
+              <span>{isPending ? "Signing in..." : "Sign in"}</span>
               <ArrowRight className="size-4" />
             </Button>
           </form>
 
           <p className="text-center text-sm text-muted-foreground">
-            Want to inspect the public landing flow?{" "}
+            Just looking around?{" "}
             <Link
               className="font-medium text-primary hover:underline"
               to={appRoutes.home}
             >
-              Return home
+              Back to home
             </Link>
           </p>
         </div>

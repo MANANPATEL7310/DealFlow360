@@ -16,13 +16,13 @@ export function DegradedModeBanner({
 
   const reason =
     status.degradedReason ??
-    "AI automation is inactive. System running strictly in deterministic Document A mode.";
+    "AI assistance is currently unavailable. The app is running on its standard rules-based logic.";
 
   if (compact) {
     return (
       <div className="inline-flex items-center gap-1.5 rounded-full border border-amber-500/30 bg-amber-500/10 px-2.5 py-1 text-xs font-medium text-amber-500">
         <AlertTriangle className="size-3.5 shrink-0" />
-        <span>Deterministic Fallback</span>
+        <span>AI unavailable</span>
       </div>
     );
   }
@@ -35,17 +35,16 @@ export function DegradedModeBanner({
         </div>
         <div className="flex-1 space-y-1">
           <div className="flex items-center gap-2 font-semibold text-amber-500">
-            <span>Agentic AI Degraded Mode Active</span>
+            <span>AI assistance unavailable</span>
             <span className="inline-flex items-center gap-1 rounded bg-secondary/20 px-1.5 py-0.5 text-xs font-medium text-secondary">
               <ShieldCheck className="size-3" />
-              Document A Enforced
+              Core logic active
             </span>
           </div>
           <p className="text-muted-foreground leading-relaxed">{reason}</p>
           <p className="text-xs text-muted-foreground/80">
-            Master governance engines, discount ceiling checks, warehouse
-            allocations, and billing schedules remain 100% authoritative and
-            functional.
+            Discount governance, ceiling checks, warehouse allocations, and
+            billing schedules remain fully authoritative and functional.
           </p>
         </div>
       </div>

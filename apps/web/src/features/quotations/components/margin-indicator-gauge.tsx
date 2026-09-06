@@ -32,7 +32,7 @@ export function MarginIndicatorGauge({
   isConfirming,
 }: MarginIndicatorGaugeProps) {
   const isDraft = quote.status === "DRAFT";
-  const hasLines = quote.lines.length > 0;
+  const hasLines = (quote.lines?.length ?? quote._count?.lines ?? 0) > 0;
 
   // Margin threshold colors
   const marginPct = liveTotals.marginPct;
@@ -152,9 +152,7 @@ export function MarginIndicatorGauge({
 
         <div className="space-y-2 rounded-lg border border-border bg-surface-muted/30 p-3">
           <div className="flex items-center justify-between">
-            <span className="text-xs text-muted-foreground">
-              Blended Risk Score:
-            </span>
+            <span className="text-xs text-muted-foreground">Risk score:</span>
             <span
               className={`font-mono text-sm font-bold ${
                 riskScore === 0 ? "text-success-dark" : "text-danger-dark"
@@ -186,7 +184,7 @@ export function MarginIndicatorGauge({
         </div>
 
         {/* Per-line violations alert */}
-        {risk && risk.lines.some((l) => !l.isCompliant) && (
+        {risk && (risk.lines ?? []).some((l) => !l.isCompliant) && (
           <div className="space-y-1 rounded-lg border border-danger/30 bg-danger-light/10 p-2.5">
             <div className="flex items-center gap-1 text-xs font-semibold text-danger-dark">
               <AlertTriangle className="size-3.5 shrink-0" />

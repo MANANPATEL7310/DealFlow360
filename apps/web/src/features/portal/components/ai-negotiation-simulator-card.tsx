@@ -76,7 +76,7 @@ export function AiNegotiationSimulatorCard({
             <Sparkles className="size-3.5" />
           </div>
           <span className="text-xs font-bold text-foreground">
-            Agent 6 · Negotiation Simulator
+            Negotiation Simulator
           </span>
           <span className="inline-flex items-center gap-1 rounded bg-primary/10 px-1.5 py-0.5 font-mono text-xs font-semibold text-primary">
             <Cpu className="size-2.5" />

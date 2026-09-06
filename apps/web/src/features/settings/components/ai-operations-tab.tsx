@@ -37,18 +37,18 @@ interface AgentMetadata {
 const AGENTS_LIST: AgentMetadata[] = [
   {
     id: "discount-approval",
-    name: "Agent 1: AI Discount Reviewer",
-    code: "M2 · PS A2/B4",
+    name: "Discount Reviewer",
+    code: "Approvals",
     route: "/app/approvals",
     description:
-      "Evaluates margin leakage, policy thresholds, and RAG historical win-rates.",
+      "Evaluates margin leakage, policy thresholds, and historical win rates.",
     model: "claude-sonnet-4.5",
     avgLatency: "380ms",
   },
   {
     id: "product-recommendation",
-    name: "Agent 2: AI Upsell Recommender",
-    code: "M6 · PS A6/B5",
+    name: "Upsell Recommender",
+    code: "Quotations",
     route: "/app/quotations/:id",
     description:
       "Scores customer basket fit, protects margin floors, and ranks add-ons.",
@@ -57,8 +57,8 @@ const AGENTS_LIST: AgentMetadata[] = [
   },
   {
     id: "fulfillment-planner",
-    name: "Agent 3: AI Fulfillment Planner",
-    code: "M7 · PS A7/B6",
+    name: "Fulfillment Planner",
+    code: "Fulfillment",
     route: "/app/quotations/:id/fulfillment",
     description:
       "Proposes multi-depot inventory splits, cuts transit hops, and flags backorders.",
@@ -67,28 +67,28 @@ const AGENTS_LIST: AgentMetadata[] = [
   },
   {
     id: "billing-assistant",
-    name: "Agent 4: AI Billing Assistant",
-    code: "M8 · PS A8/B7",
+    name: "Billing Assistant",
+    code: "Billing",
     route: "/app/quotations/:id/billing",
     description:
-      "Blueprint hybrid schedule explainer, proration formula auditor, and credit note drafter.",
+      "Explains hybrid schedules, audits proration, and drafts credit notes.",
     model: "claude-sonnet-4.5",
     avgLatency: "310ms",
   },
   {
     id: "deal-health-monitor",
-    name: "Agent 5: AI Deal Health Radar",
-    code: "M10 · PS A10/B9",
+    name: "Deal Health Monitor",
+    code: "Deal Health",
     route: "/app/deal-health",
     description:
-      "Prioritizes velocity anomalies into P1/P2/P3 tiers and drafts recovery outreach.",
+      "Prioritizes velocity anomalies by severity and drafts recovery outreach.",
     model: "claude-sonnet-4.5",
     avgLatency: "350ms",
   },
   {
     id: "negotiation-assistant",
-    name: "Agent 6: Negotiation Simulator",
-    code: "M9 · PS A9/B10",
+    name: "Negotiation Simulator",
+    code: "Portal",
     route: "/portal",
     description:
       "Simulates customer counter-offers, protects margin floors, and drafts win-win terms.",
@@ -97,11 +97,11 @@ const AGENTS_LIST: AgentMetadata[] = [
   },
   {
     id: "sales-insights",
-    name: "Agent 7: Conversational Analytics",
-    code: "M11 · PS A11/B8",
+    name: "Conversational Analytics",
+    code: "Reports",
     route: "/app/reports",
     description:
-      "Processes conversational queries into safe filters with executive synthesis.",
+      "Turns conversational queries into safe filters with executive summaries.",
     model: "claude-sonnet-4.5",
     avgLatency: "360ms",
   },
@@ -167,8 +167,8 @@ export function AiOperationsTab() {
       setStatus(updated);
       setSaveNotice(
         nextEnabled
-          ? "Master AI layer enabled. All 7 agents operational."
-          : "Master AI kill-switch engaged. Operating in deterministic fallback mode.",
+          ? "AI assistance enabled. All features are now active."
+          : "AI assistance turned off. The app is running on its standard rules-based logic.",
       );
       setTimeout(() => setSaveNotice(null), 4000);
     } catch (err) {
@@ -271,12 +271,12 @@ export function AiOperationsTab() {
                 tone={status.enabled ? "success" : "warning"}
                 className="text-xs font-semibold"
               >
-                {status.enabled ? "System Operational" : "Kill-Switch Engaged"}
+                {status.enabled ? "Active" : "Turned off"}
               </Badge>
             </div>
             <p className="text-xs text-muted-foreground">
-              Centralized runtime management for all 7 autonomous agents.
-              Instant kill-switch activates Document A deterministic fallback.
+              One switch to enable or disable all AI features. When off, the app
+              runs on its standard rules-based logic.
             </p>
           </div>
 
@@ -314,11 +314,9 @@ export function AiOperationsTab() {
           <div className="mt-4 flex items-start gap-2.5 rounded-xl border border-amber-500/30 bg-amber-500/10 p-3 text-xs text-amber-800 dark:text-amber-300">
             <ShieldAlert className="mt-0.5 size-4 shrink-0" />
             <div>
-              <span className="font-semibold">
-                Deterministic Fallback Active:{" "}
-              </span>
+              <span className="font-semibold">AI assistance is off: </span>
               {status.degradedReason ??
-                "All agents are currently disabled. User interfaces will operate using Document A deterministic rules."}
+                "AI features are currently disabled. The app continues to run on its standard rules-based logic."}
             </div>
           </div>
         )}
@@ -439,12 +437,11 @@ export function AiOperationsTab() {
             <div className="flex items-center gap-2">
               <Layers className="size-4 text-primary" />
               <h3 className="text-base font-bold text-foreground">
-                Per-Agent Governance Switchboard
+                Individual AI features
               </h3>
             </div>
             <p className="text-xs text-muted-foreground">
-              Granularly enable or disable specific autonomous agents across
-              DealFlow360 interfaces.
+              Turn specific AI features on or off across DealFlow360.
             </p>
           </div>
         </div>
@@ -454,9 +451,9 @@ export function AiOperationsTab() {
             <thead className="border-b border-border bg-muted/50 text-muted-foreground">
               <tr>
                 <th className="px-3 py-2.5 font-semibold">Agent Name</th>
-                <th className="px-3 py-2.5 font-semibold">Specification</th>
-                <th className="px-3 py-2.5 font-semibold">Model Provider</th>
-                <th className="px-3 py-2.5 font-semibold">Target Interface</th>
+                <th className="px-3 py-2.5 font-semibold">Area</th>
+                <th className="px-3 py-2.5 font-semibold">Model</th>
+                <th className="px-3 py-2.5 font-semibold">Route</th>
                 <th className="px-3 py-2.5 font-semibold">Avg Latency</th>
                 <th className="px-3 py-2.5 text-center font-semibold">
                   Status
@@ -538,12 +535,11 @@ export function AiOperationsTab() {
             <div className="flex items-center gap-2">
               <Activity className="size-4 text-emerald-500" />
               <h3 className="text-base font-bold text-foreground">
-                Agent Execution Run Telemetry
+                Recent AI runs
               </h3>
             </div>
             <p className="text-xs text-muted-foreground">
-              Step-by-step audit logs showing token costs, latency, and
-              invocation status.
+              Step-by-step logs showing token costs, latency, and run status.
             </p>
           </div>
           <span className="text-xs text-muted-foreground font-mono">

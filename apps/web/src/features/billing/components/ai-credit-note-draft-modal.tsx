@@ -103,10 +103,10 @@ export function AiCreditNoteDraftModal({
             <div>
               <div className="flex items-center gap-2">
                 <h3 className="text-base font-bold text-foreground">
-                  Draft Credit Note (HITL)
+                  Draft credit note
                 </h3>
                 <Badge tone="primary" className="text-xs">
-                  Agent 4
+                  AI assisted
                 </Badge>
               </div>
               <p className="text-xs text-muted-foreground">
@@ -177,11 +177,10 @@ export function AiCreditNoteDraftModal({
               <ShieldAlert className="mt-0.5 size-4 shrink-0 text-purple-600 dark:text-purple-400" />
               <div>
                 <span className="font-semibold text-foreground">
-                  HITL Governance Assurance:{" "}
+                  Nothing posts automatically:{" "}
                 </span>
-                Agent 4 does not post directly to general ledgers. Submitting
-                stages a formal credit note proposal into the Finance Approval
-                Queue.
+                AI never posts directly to the ledger. Submitting stages a
+                formal credit note proposal for Finance to review and approve.
               </div>
             </div>
 
@@ -303,7 +302,7 @@ export function AiCreditNoteDraftModal({
                 ) : (
                   <FileText className="size-3.5" />
                 )}
-                Submit Draft to Finance (HITL)
+                Submit draft to Finance
               </Button>
             </div>
           </form>

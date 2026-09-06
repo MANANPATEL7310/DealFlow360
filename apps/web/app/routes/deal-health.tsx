@@ -3,7 +3,7 @@ import { DealHealthPage } from "@/features/deal-health/pages/deal-health-page";
 
 export const meta: MetaFunction = () => {
   return [
-    { title: "Deal Health Radar & Anomaly Detection · DealFlow360" },
+    { title: "Deal Health · DealFlow360" },
     {
       name: "description",
       content:

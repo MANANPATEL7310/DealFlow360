@@ -70,15 +70,12 @@ export function PipelineStatusCards() {
       <div className="mb-4 flex items-center justify-between border-b border-border pb-3">
         <div>
           <h2 className="text-sm font-bold text-foreground sm:text-base">
-            Quotation Pipeline Lifecycle
+            Pipeline by stage
           </h2>
           <p className="text-xs text-muted-foreground">
-            Current distribution across the 6-stage quotation-to-cash workflow
+            Where your quotations sit across the quote-to-cash workflow
           </p>
         </div>
-        <span className="hidden font-mono text-xs text-muted-foreground sm:inline-block">
-          Auto-Governance Enforced
-        </span>
       </div>
 
       <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6">
@@ -87,7 +84,7 @@ export function PipelineStatusCards() {
           return (
             <div
               key={st.key}
-              className="flex flex-col justify-between rounded-xl border border-border bg-surface-muted/30 p-3.5 transition-all hover:bg-surface-muted/60"
+              className="flex flex-col justify-between rounded-xl border border-border bg-surface-muted/30 p-3.5 transition-colors hover:bg-surface-muted/60"
             >
               <div className="flex items-center justify-between">
                 <Icon className={`size-4 ${st.toneColor}`} />

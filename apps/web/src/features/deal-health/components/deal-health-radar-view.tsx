@@ -56,8 +56,8 @@ export function DealHealthRadarView({
                 Deal Health Radar & Risk Distribution
               </h2>
               <p className="text-xs text-muted-foreground">
-                Continuous deterministic monitoring across margin, velocity,
-                stock, and discount metrics.
+                Continuous monitoring across margin, velocity, stock, and
+                discount metrics.
               </p>
             </div>
           </div>
@@ -228,9 +228,6 @@ export function DealHealthRadarView({
           <div className="flex items-center justify-between border-b border-border pb-2">
             <span className="text-xs font-bold text-foreground">
               Composite Dimension Averages
-            </span>
-            <span className="text-xs text-muted-foreground">
-              PS B9 Algorithm
             </span>
           </div>
 

@@ -30,19 +30,19 @@ export function GovernancePage() {
                 <Shield className="size-5" />
               </div>
               <h1 className="text-2xl font-bold tracking-tight text-foreground">
-                Discount Governance & Ceilings
+                Discount governance
               </h1>
-              <Badge tone="primary">Admin Guarded</Badge>
+              <Badge tone="primary">Admin only</Badge>
             </div>
             <p className="mt-1 text-sm text-muted-foreground">
-              Define customer tier discount limits, product category margin
-              ceilings, and multi-tier approval escalation rules.
+              Set tier discount limits, category margin ceilings, and approval
+              escalation rules.
             </p>
           </div>
 
           <div className="flex items-center gap-2">
             <span className="flex items-center gap-1.5 rounded-full border border-border bg-surface px-3 py-1 text-xs font-medium text-muted-foreground">
-              <Sparkles className="size-3.5 text-primary" /> Active Rule Engine
+              <Sparkles className="size-3.5 text-primary" /> Rules active
             </span>
           </div>
         </div>
@@ -64,7 +64,7 @@ export function GovernancePage() {
         {/* Approval Chain Rules Table */}
         <ApprovalRulesCard />
 
-        {/* Live Simulator Workbench */}
+        {/* Discount Simulator */}
         <DiscountSimulatorBench />
       </div>
     </RoleGuard>

@@ -2,7 +2,7 @@ import { GovernancePage } from "@/features/governance/pages/governance-page";
 
 export function meta() {
   return [
-    { title: "Discount Governance & Ceilings · DealFlow360" },
+    { title: "Discount Governance · DealFlow360" },
     {
       name: "description",
       content:

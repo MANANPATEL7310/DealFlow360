@@ -18,15 +18,15 @@ export function FeaturesBento() {
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="mx-auto mb-16 max-w-3xl text-center">
           <div className="mb-3 inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/10 px-3.5 py-1 text-xs font-semibold text-primary">
-            <span>Built for Modern Sales Ops</span>
+            <span>Built for modern sales ops</span>
           </div>
           <h2 className="text-3xl font-extrabold tracking-tight text-foreground sm:text-4xl">
-            Intelligent Core Platform Architecture
+            Everything your quote-to-cash flow needs
           </h2>
           <p className="mt-3 text-base text-muted-foreground sm:text-lg">
-            DealFlow360 replaces fragmented CRM spreadsheets, manual manager
-            signoffs, and disconnected fulfillment silos with an automated,
-            self-governing operating engine.
+            DealFlow360 replaces scattered spreadsheets, manual manager
+            sign-offs, and disconnected fulfillment tools with one connected
+            system.
           </p>
         </div>
 
@@ -39,43 +39,36 @@ export function FeaturesBento() {
                 <ShieldAlert className="size-6" />
               </div>
               <span className="rounded-full bg-primary/10 px-3 py-1 text-xs font-bold text-primary">
-                PS §10 Formula
+                Discount governance
               </span>
             </div>
             <h3 className="mb-2 text-xl font-bold text-foreground">
-              Blended Discount Risk Engine
+              Discount risk engine
             </h3>
             <p className="mb-6 text-sm leading-relaxed text-muted-foreground">
-              Never let margin erode silently. DealFlow360 calculates effective
+              Never let margin erode silently. DealFlow360 sets effective
               ceilings by combining customer tiers (Bronze, Silver, Gold) with
-              category margin limits. A value-weighted score detects distributed
-              leaks across large orders even when individual lines look
+              category limits, then scores the whole order to catch discount
+              leaks spread across many lines — even when each line looks
               harmless.
             </p>
 
             <div className="grid gap-4 rounded-xl border border-border bg-surface-muted/50 p-4 sm:grid-cols-2">
               <div className="space-y-1">
                 <p className="text-xs font-bold text-foreground">
-                  Trigger 1: Egregious Line
+                  Catches oversized lines
                 </p>
                 <p className="text-xs text-muted-foreground">
-                  Catches single lines exceeding category or tier caps.
+                  Flags any single line that exceeds its category or tier cap.
                 </p>
-                <span className="inline-block font-mono text-xs font-semibold text-warning">
-                  max(0, applied − ceiling) &gt; tolerance
-                </span>
               </div>
               <div className="space-y-1">
                 <p className="text-xs font-bold text-foreground">
-                  Trigger 2: Blended Order Score
+                  Catches spread-out leaks
                 </p>
                 <p className="text-xs text-muted-foreground">
-                  Value-weights small discount violations across all line
-                  subtotals.
+                  Weighs small discount overages across the full order value.
                 </p>
-                <span className="inline-block font-mono text-xs font-semibold text-primary">
-                  Σ (violation_i × line_i / total)
-                </span>
               </div>
             </div>
           </SpotlightCard>

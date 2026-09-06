@@ -171,7 +171,7 @@ export function AiDealHealthTriageCard({
           <div>
             <div className="flex items-center gap-2">
               <h2 className="text-base font-bold text-foreground">
-                Agent 5 · AI Deal Health Monitor & Recovery Assistant
+                AI deal health monitor & recovery assistant
               </h2>
               <span className="inline-flex items-center gap-1 rounded bg-primary/10 px-2 py-0.5 font-mono text-xs font-semibold text-primary">
                 <Cpu className="size-2.5" />
@@ -179,8 +179,8 @@ export function AiDealHealthTriageCard({
               </span>
             </div>
             <p className="text-xs text-muted-foreground mt-0.5">
-              Autonomous velocity triage, stagnation diagnosis, and personalized
-              buyer recovery drafts
+              Flags stalling deals, diagnoses why, and drafts buyer recovery
+              outreach
             </p>
           </div>
         </div>
@@ -196,7 +196,7 @@ export function AiDealHealthTriageCard({
             <RefreshCw
               className={`size-3.5 ${isFetching ? "animate-spin" : ""}`}
             />
-            <span>Refresh Telemetry</span>
+            <span>Refresh</span>
           </Button>
 
           <Button
@@ -268,7 +268,7 @@ export function AiDealHealthTriageCard({
       <div className="rounded-xl border border-border/80 bg-background/80 p-4 space-y-2">
         <div className="flex items-center gap-2 text-xs font-bold text-foreground">
           <Sparkles className="size-3.5 text-primary" />
-          <span>Executive Telemetry & Recovery Rationale</span>
+          <span>Summary & recovery rationale</span>
         </div>
         <p className="text-xs text-muted-foreground leading-relaxed">
           {executiveSummary}
@@ -345,13 +345,13 @@ export function AiDealHealthTriageCard({
             ))}
           </div>
 
-          {/* HITL Notice Footer */}
+          {/* Review Notice Footer */}
           <div className="flex items-center gap-2 border-t border-border/60 pt-3 text-xs text-muted-foreground">
             <ShieldCheck className="size-4 shrink-0 text-primary" />
             <span>
-              <strong>HITL Compliance:</strong> Sales reps review, refine, and
-              authorize every outward message. Dispatched nudges record full
-              audit snapshots in compliance logs.
+              <strong>You stay in control:</strong> Sales reps review, refine,
+              and authorize every outgoing message. Sent nudges are recorded in
+              the audit log.
             </span>
           </div>
         </div>

@@ -74,7 +74,7 @@ export function AiReviewPanel({
     onSuccess: (resData) => {
       setData(resData);
       if (!resData.aiAvailable) {
-        toast("AI advisory inactive; displaying deterministic M4 risk view.", {
+        toast("AI advisory inactive; showing the standard risk view.", {
           icon: "ℹ️",
         });
       }
@@ -106,11 +106,10 @@ export function AiReviewPanel({
           </div>
           <div>
             <h3 className="text-sm font-semibold tracking-tight text-foreground">
-              AI Discount Advisory (Agent 1)
+              AI discount advisory
             </h3>
             <p className="text-xs text-muted-foreground">
-              Evaluates margin health against M3 policies and past approved
-              quotes.
+              Checks margin health against policy and past approved quotes.
             </p>
           </div>
         </div>
@@ -159,23 +158,20 @@ export function AiReviewPanel({
         <div className="space-y-3 rounded-xl border border-border bg-surface-muted/30 p-4">
           <div className="flex items-center gap-2 text-xs font-semibold text-foreground">
             <ShieldCheck className="size-4 text-primary" />
-            Deterministic M4 Risk Breakdown (AI Inactive)
+            Standard risk breakdown (AI inactive)
           </div>
           <p className="text-xs text-muted-foreground">
-            AI advisory is currently disabled or at monthly budget limit. Human
-            approval decisions remain 100% functional via standard M4/M5 policy
+            AI advisory is currently disabled or at its monthly budget limit.
+            Approval decisions remain fully functional through standard policy
             gates.
           </p>
           <div className="rounded-lg border border-border/60 bg-surface p-3 text-xs">
             <span className="font-semibold text-foreground">
-              Governance Fallback Rule:
+              Fallback rules:
             </span>
             <ul className="mt-1 list-inside list-disc space-y-1 text-muted-foreground">
               <li>Category discount ceilings are strictly enforced.</li>
-              <li>
-                Required approval chain calculated deterministically by M4
-                engine.
-              </li>
+              <li>The required approval chain is calculated automatically.</li>
               <li>No automated adjustments applied.</li>
             </ul>
           </div>
@@ -333,7 +329,7 @@ export function AiReviewPanel({
               </strong>
               <p className="mt-0.5 text-muted-foreground">
                 AI cannot approve or modify quotations. Applying adjustments
-                re-enters the M5 edit flow and triggers full M4 risk governance.
+                reopens the edit flow and re-runs the full risk check.
               </p>
             </div>
           </div>

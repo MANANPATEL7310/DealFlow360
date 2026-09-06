@@ -194,9 +194,7 @@ export function PortalPage() {
         <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-3 px-4 sm:flex-row sm:px-6 lg:px-8">
           <div className="flex items-center gap-2">
             <ShieldCheck className="size-4 text-primary" />
-            <span>
-              DealFlow360 External Enterprise Gateway • ISO 27001 Certified
-            </span>
+            <span>DealFlow360 secure customer portal</span>
           </div>
           <p>© 2026 DealFlow360 Technologies Inc. All rights reserved.</p>
         </div>

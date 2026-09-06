@@ -2,7 +2,7 @@ import { FulfillmentPage } from "@/features/fulfillment/pages/fulfillment-page";
 
 export function meta() {
   return [
-    { title: "Warehouse Fulfillment · DealFlow360" },
+    { title: "Fulfillment · DealFlow360" },
     {
       name: "description",
       content:

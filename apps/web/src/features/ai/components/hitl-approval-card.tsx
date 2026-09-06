@@ -127,7 +127,7 @@ export function HitlApprovalCard({
       <div className="mt-3 space-y-2">
         <div className="flex items-baseline justify-between gap-2">
           <h4 className="text-sm font-semibold text-foreground">
-            {request.customerName ?? "Enterprise Account"}
+            {request.customerName ?? "Customer"}
           </h4>
           {request.quotationNumber && (
             <span className="inline-flex items-center gap-1 font-mono text-xs font-medium text-primary">
