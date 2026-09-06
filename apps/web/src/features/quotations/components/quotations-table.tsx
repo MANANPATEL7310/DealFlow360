@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router";
 import type { Quotation, QuotationStatus } from "@template/shared";
 import {
@@ -22,6 +22,8 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { Pagination } from "@/components/ui/pagination";
+import { usePagination } from "@/hooks/use-pagination";
 
 interface QuotationsTableProps {
   quotations: Quotation[];
@@ -95,6 +97,14 @@ export function QuotationsTable({
     return true;
   });
 
+  const pagination = usePagination(filtered);
+  const { setPage } = pagination;
+
+  // Reset to the first page whenever the active filter or search narrows the set.
+  useEffect(() => {
+    setPage(1);
+  }, [activeStatus, search, setPage]);
+
   return (
     <div className="space-y-4">
       {/* Filters Bar */}
@@ -152,7 +162,7 @@ export function QuotationsTable({
             </TableRow>
           </TableHeader>
           <TableBody>
-            {filtered.map((quote) => {
+            {pagination.pageItems.map((quote) => {
               const customerTier = quote.customer?.tier ?? "BRONZE";
               const tierBadgeTone =
                 customerTier === "GOLD"
@@ -251,7 +261,26 @@ export function QuotationsTable({
             })}
           </TableBody>
         </Table>
-      ) : (
+      ) : null}
+
+      {!isLoading && filtered.length > 0 ? (
+        <Pagination
+          page={pagination.page}
+          pageCount={pagination.pageCount}
+          pageSize={pagination.pageSize}
+          total={pagination.total}
+          from={pagination.from}
+          to={pagination.to}
+          canPrev={pagination.canPrev}
+          canNext={pagination.canNext}
+          onPrev={pagination.prevPage}
+          onNext={pagination.nextPage}
+          onPageSizeChange={pagination.setPageSize}
+          itemLabel="quotation"
+        />
+      ) : null}
+
+      {!isLoading && filtered.length === 0 ? (
         <div className="flex min-h-60 flex-col items-center justify-center rounded-lg border border-dashed border-border p-6 text-center text-muted-foreground">
           <FileSpreadsheet className="mb-2 size-8 text-muted-foreground/40" />
           <p className="text-sm font-medium">
@@ -261,7 +290,7 @@ export function QuotationsTable({
             Clear filter criteria or initialize a new draft quotation.
           </p>
         </div>
-      )}
+      ) : null}
     </div>
   );
 }

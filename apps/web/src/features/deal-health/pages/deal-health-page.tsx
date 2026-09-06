@@ -10,7 +10,6 @@ import type {
   HealthCategory,
   ResolveAlertInput,
 } from "@template/shared";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Spinner } from "@/components/ui/spinner";
@@ -141,16 +140,12 @@ export function DealHealthPage() {
           <div className="space-y-1">
             <div className="flex items-center gap-2">
               <h1 className="text-xl font-bold tracking-tight text-foreground sm:text-2xl">
-                Deal Health Radar
+                Deal Health
               </h1>
-              <Badge tone="primary" className="text-xs font-semibold">
-                Autonomous PS B9
-              </Badge>
             </div>
             <p className="text-xs text-muted-foreground max-w-xl">
-              Real-time telemetry continuously monitoring pipeline stagnation,
-              statistical discount anomalies, and warehouse fulfillment
-              bottlenecks.
+              Continuous monitoring for stalled deals, discount anomalies, and
+              fulfillment bottlenecks.
             </p>
           </div>
 
@@ -203,7 +198,7 @@ export function DealHealthPage() {
           }`}
         >
           <AlertTriangle className="size-3.5" />
-          <span>Active Anomaly Stream</span>
+          <span>Active alerts</span>
           <span className="rounded-full bg-surface-muted px-2 py-0.5 font-mono text-xs">
             {alerts?.filter((a) => a.status === "open").length ?? 0}
           </span>

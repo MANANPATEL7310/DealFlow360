@@ -122,15 +122,11 @@ export function CustomersPage() {
         <div>
           <div className="flex items-center gap-2">
             <h1 className="text-2xl font-bold tracking-tight text-foreground">
-              Customer Account Directory
+              Customers
             </h1>
-            <span className="rounded-full border border-primary/20 bg-primary/10 px-2.5 py-0.5 text-xs font-semibold text-primary">
-              Module M1
-            </span>
           </div>
           <p className="mt-1 text-xs text-muted-foreground">
-            Tier-based discount governance, credit lines, payment terms, and
-            negotiation portal access.
+            Account tiers, credit lines, payment terms, and portal access.
           </p>
         </div>
 
@@ -144,7 +140,7 @@ export function CustomersPage() {
             }}
           >
             <UserPlus className="size-4" />
-            <span>Add Customer Account</span>
+            <span>Add customer</span>
           </Button>
         )}
       </div>

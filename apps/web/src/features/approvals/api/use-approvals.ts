@@ -12,13 +12,14 @@ export function useApprovals(status?: string) {
   return useQuery({
     queryKey: approvalsKeys.list(status),
     queryFn: async () => {
-      const response = await apiClient.get<{
-        success: boolean;
-        data: ApprovalItem[];
-      }>(apiRoutes.aiApprovals.list.path, {
+      const response = await apiClient.get<
+        ApprovalItem[] | { success: boolean; data: ApprovalItem[] }
+      >(apiRoutes.aiApprovals.list.path, {
         params: status && status !== "ALL" ? { status } : undefined,
       });
-      return response.data.data;
+      // This endpoint returns a bare array; other endpoints wrap in { data }.
+      const body = response.data;
+      return Array.isArray(body) ? body : (body.data ?? []);
     },
     refetchInterval: 10000,
   });

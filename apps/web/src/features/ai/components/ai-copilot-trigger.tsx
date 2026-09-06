@@ -16,7 +16,7 @@ export function AiCopilotTrigger() {
           ? "border-primary bg-primary/10 text-primary shadow-sm"
           : "border-primary/40 bg-background/90 text-foreground hover:border-primary hover:bg-primary/5 hover:text-primary"
       }`}
-      title="Open DealFlow AI Copilot & HITL Approvals"
+      title="Open DealFlow AI Copilot"
     >
       <div className="relative flex items-center justify-center">
         <Sparkles className="size-3.5 text-primary animate-pulse" />

@@ -27,20 +27,10 @@ export function AppHeader({ onOpenNavigation }: AppHeaderProps) {
           <Menu className="size-5" />
         </Button>
         <div className="flex min-w-0 items-center gap-2">
-          <span className="truncate text-xs font-bold tracking-wider text-primary uppercase">
+          <span className="truncate text-sm font-bold tracking-tight text-foreground">
             {appMeta.name}
           </span>
-          <span className="hidden font-mono text-xs text-muted-foreground/40 sm:inline">
-            /
-          </span>
-          <span className="hidden text-xs font-medium text-muted-foreground sm:inline">
-            Operations Workspace
-          </span>
         </div>
-        <span className="hidden items-center gap-1.5 rounded-full border border-secondary/30 bg-secondary/10 px-2.5 py-0.5 text-xs font-semibold text-secondary sm:inline-flex">
-          <span className="size-1.5 animate-pulse rounded-full bg-secondary" />
-          Live Governance
-        </span>
       </div>
 
       <div className="flex shrink-0 items-center gap-1.5 sm:gap-3">

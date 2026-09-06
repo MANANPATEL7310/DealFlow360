@@ -15,7 +15,7 @@ export function RegisterForm({ onSwitchToLogin }: RegisterFormProps) {
 
   const handleFillSample = () => {
     const randomId = Math.floor(1000 + Math.random() * 9000);
-    form.setValue("name", `Enterprise User ${randomId}`);
+    form.setValue("name", `Demo User ${randomId}`);
     form.setValue("email", `demo.user.${randomId}@dealflow360.dev`);
     form.setValue("password", "password123");
     form.clearErrors();
@@ -26,13 +26,13 @@ export function RegisterForm({ onSwitchToLogin }: RegisterFormProps) {
       <div className="space-y-2">
         <div className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/10 px-3 py-1 text-xs font-medium text-primary">
           <ShieldCheck className="size-4" />
-          Enterprise Provisioning
+          Create your account
         </div>
         <h2 className="text-2xl font-bold tracking-tight text-foreground">
           Create platform account
         </h2>
         <p className="text-sm text-muted-foreground">
-          Provision your DealFlow360 account with your assigned enterprise role.
+          Set up your DealFlow360 account and pick the role that fits you.
         </p>
       </div>
 
@@ -156,7 +156,7 @@ export function RegisterForm({ onSwitchToLogin }: RegisterFormProps) {
 
       <div className="text-center">
         <p className="text-sm text-muted-foreground">
-          Already have an enterprise account?{" "}
+          Already have an account?{" "}
           <button
             className="font-medium text-primary hover:underline"
             type="button"

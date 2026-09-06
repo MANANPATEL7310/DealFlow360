@@ -22,20 +22,18 @@ export function ApprovalsInboxPage() {
                 <Inbox className="size-5" />
               </div>
               <h1 className="text-2xl font-bold tracking-tight text-foreground">
-                Deal Approvals & Governance
+                Approvals
               </h1>
-              <Badge tone="primary">Reviewer Workbench</Badge>
             </div>
             <p className="mt-1 text-sm text-muted-foreground">
-              Review escalated quotations requiring managerial sign-off or
-              finance margin concession authorization.
+              Review quotations that need manager sign-off or finance approval.
             </p>
           </div>
 
           <div className="flex items-center gap-2">
             <span className="flex items-center gap-1.5 rounded-full border border-border bg-surface px-3 py-1 text-xs font-medium text-muted-foreground">
-              <ShieldAlert className="size-3.5 text-warning" /> Multi-Tier
-              Sequential Chain
+              <ShieldAlert className="size-3.5 text-warning" /> Sequential
+              approval chain
             </span>
           </div>
         </div>
@@ -52,7 +50,7 @@ export function ApprovalsInboxPage() {
             }`}
           >
             <ShieldCheck className="size-3.5" />
-            Quotation Approval Chain
+            Quotation approvals
             <span className="rounded-full bg-surface/20 px-1.5 py-0.5 font-mono text-xs">
               {items.length}
             </span>
@@ -68,7 +66,7 @@ export function ApprovalsInboxPage() {
             }`}
           >
             <Sparkles className="size-3.5" />
-            AI Proposals & HITL Queue
+            AI proposals
           </button>
         </div>
 

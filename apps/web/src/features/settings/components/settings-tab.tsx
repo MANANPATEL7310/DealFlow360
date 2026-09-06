@@ -23,22 +23,22 @@ const CATEGORY_META: Record<
   }
 > = {
   risk: {
-    label: "Discount Risk & Finance Escalation",
+    label: "Discount risk & escalation",
     icon: ShieldCheck,
     tone: "warning",
   },
   health: {
-    label: "Deal Health Telemetry & Anomaly Horizon",
+    label: "Deal health monitoring",
     icon: Sliders,
     tone: "primary",
   },
   ai: {
-    label: "Autonomous AI & Agent Foundation",
+    label: "AI settings",
     icon: Bot,
     tone: "secondary",
   },
   general: {
-    label: "General System Settings",
+    label: "General settings",
     icon: Sparkles,
     tone: "neutral",
   },

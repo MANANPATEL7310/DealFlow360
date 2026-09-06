@@ -32,17 +32,17 @@ export type NavigationSection = {
 
 export const navigationSections: NavigationSection[] = [
   {
-    title: "Command Center",
+    title: "Overview",
     items: [
       {
-        title: "Executive Dashboard",
+        title: "Dashboard",
         href: appRoutes.dashboard,
         icon: LayoutDashboard,
       },
     ],
   },
   {
-    title: "Sales Workspace",
+    title: "Sales",
     items: [
       {
         title: "Quotations",
@@ -50,7 +50,7 @@ export const navigationSections: NavigationSection[] = [
         icon: FileSpreadsheet,
       },
       {
-        title: "Products & Pricing",
+        title: "Products",
         href: appRoutes.products,
         icon: Package,
       },
@@ -62,7 +62,7 @@ export const navigationSections: NavigationSection[] = [
     ],
   },
   {
-    title: "Governance & Ops",
+    title: "Operations",
     items: [
       {
         title: "Discount Governance",
@@ -71,19 +71,19 @@ export const navigationSections: NavigationSection[] = [
         roles: ["admin"],
       },
       {
-        title: "Approvals Inbox",
+        title: "Approvals",
         href: appRoutes.approvals,
         icon: GitPullRequest,
         roles: ["sales_rep", "sales_manager", "finance", "admin"],
       },
       {
-        title: "Fulfillment & Stock",
+        title: "Fulfillment",
         href: appRoutes.fulfillment,
         icon: Truck,
         roles: ["finance", "admin"],
       },
       {
-        title: "Hybrid Billing",
+        title: "Billing",
         href: appRoutes.billing,
         icon: Receipt,
         roles: ["finance", "admin"],
@@ -91,20 +91,20 @@ export const navigationSections: NavigationSection[] = [
     ],
   },
   {
-    title: "Intelligence & Config",
+    title: "Insights",
     items: [
       {
-        title: "Deal Health Radar",
+        title: "Deal Health",
         href: appRoutes.dealHealth,
         icon: Activity,
       },
       {
-        title: "Reports & Analytics",
+        title: "Reports",
         href: appRoutes.reports,
         icon: BarChart3,
       },
       {
-        title: "System Settings",
+        title: "Settings",
         href: appRoutes.settings,
         icon: Settings,
         roles: ["admin"],

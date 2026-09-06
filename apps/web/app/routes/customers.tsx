@@ -2,7 +2,7 @@ import { CustomersPage } from "@/features/customers/pages/customers-page";
 
 export function meta() {
   return [
-    { title: "Customer Accounts & Tiers · DealFlow360" },
+    { title: "Customers · DealFlow360" },
     {
       name: "description",
       content:

@@ -9,11 +9,10 @@ import "@/style.css";
 
 export const meta: MetaFunction = () => {
   return [
-    { title: "DealFlow360 · Intelligent Sales Operations" },
+    { title: "DealFlow360 · Quote-to-cash for B2B sales teams" },
     {
       name: "description",
-      content:
-        "Intelligent, self-governing sales operations from quotation to cash.",
+      content: "Quote-to-cash for B2B sales teams, without the bottlenecks.",
     },
   ];
 };

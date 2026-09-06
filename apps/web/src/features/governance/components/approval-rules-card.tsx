@@ -303,8 +303,8 @@ export function ApprovalRulesCard() {
             Rule Engine
           </h2>
           <p className="text-xs text-muted-foreground">
-            Maps blended quotation risk scores to mandatory approval
-            authorities. Quotations with 0 risk auto-bypass this chain.
+            Maps quotation risk scores to the approvers required. Quotations
+            with 0 risk skip this chain automatically.
           </p>
         </div>
         <Button size="sm" variant="primary" onClick={handleOpenAdd}>

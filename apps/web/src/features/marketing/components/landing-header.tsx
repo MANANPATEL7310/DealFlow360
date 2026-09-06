@@ -10,10 +10,10 @@ export function LandingHeader() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const navLinks = [
-    { label: "Platform Features", href: "#features" },
-    { label: "Risk Simulator", href: "#simulator" },
-    { label: "Quote-to-Cash Workflow", href: "#workflow" },
-    { label: "Role Workspaces", href: "#roles" },
+    { label: "Features", href: "#features" },
+    { label: "Simulator", href: "#simulator" },
+    { label: "How it works", href: "#workflow" },
+    { label: "Roles", href: "#roles" },
   ];
 
   return (
@@ -49,7 +49,7 @@ export function LandingHeader() {
           </Link>
           <Link to={appRoutes.app}>
             <Button size="sm" className="gap-2 font-semibold shadow-md">
-              Launch Workspace
+              Open the app
               <ArrowRight className="size-4" />
             </Button>
           </Link>
@@ -99,7 +99,7 @@ export function LandingHeader() {
               </Link>
               <Link to={appRoutes.app} onClick={() => setMobileMenuOpen(false)}>
                 <Button className="w-full justify-center gap-2">
-                  Launch Workspace
+                  Open the app
                   <ArrowRight className="size-4" />
                 </Button>
               </Link>

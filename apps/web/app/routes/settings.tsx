@@ -3,7 +3,7 @@ import { SettingsPage } from "@/features/settings/pages/settings-page";
 
 export const meta: MetaFunction = () => {
   return [
-    { title: "Settings | Template" },
+    { title: "Settings · DealFlow360" },
     {
       name: "description",
       content: "Manage user preferences and settings.",

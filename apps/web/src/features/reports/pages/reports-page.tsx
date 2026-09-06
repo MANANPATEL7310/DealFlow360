@@ -31,15 +31,15 @@ export default function ReportsPage() {
               <BarChart3 className="size-5" />
             </div>
             <h1 className="text-2xl font-bold tracking-tight text-foreground">
-              Executive Reporting & Analytics
+              Reports
             </h1>
-            <Badge tone="neutral" className="text-xs font-mono capitalize">
-              Role: {role.replace(/_/g, " ")}
+            <Badge tone="neutral" className="text-xs capitalize">
+              {role.replace(/_/g, " ")}
             </Badge>
           </div>
           <p className="text-xs text-muted-foreground">
-            PS A7 Single Dataset reporting: real-time sales aggregations,
-            pipeline funnels, discount leakage, and streaming XLSX/PDF exports.
+            Sales totals, pipeline funnels, discount trends, and exportable
+            summaries.
           </p>
         </div>
 
@@ -80,7 +80,7 @@ export default function ReportsPage() {
         canPickRep={canPickRep}
       />
 
-      {/* Agent 7: AI Sales Insights & Conversational Analytics */}
+      {/* AI Sales Insights & Conversational Analytics */}
       <AiSalesInsightsCard
         currentFilters={filters}
         onApplyFilters={setFilters}
@@ -91,7 +91,7 @@ export default function ReportsPage() {
         <div className="flex flex-col items-center justify-center py-24 space-y-3">
           <Spinner size="lg" />
           <p className="text-xs text-muted-foreground font-medium animate-pulse">
-            Aggregating line-level financial telemetry...
+            Crunching the numbers...
           </p>
         </div>
       ) : data ? (

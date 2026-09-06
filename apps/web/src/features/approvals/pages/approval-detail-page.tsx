@@ -129,14 +129,14 @@ export function ApprovalDetailPage() {
                   {quotation.quotationNumber}
                 </h1>
                 <Badge tone="primary" className="text-xs">
-                  Review Workbench
+                  Review
                 </Badge>
               </div>
 
               <div className="flex flex-wrap items-center gap-4 text-xs text-muted-foreground">
                 <div className="flex items-center gap-1.5 font-medium text-foreground">
                   <Building2 className="size-4 text-muted-foreground" />
-                  {quotation.customer?.name ?? "Enterprise Account"}
+                  {quotation.customer?.name ?? "Customer"}
                 </div>
                 <div className="flex items-center gap-1">
                   <span>Tier:</span>
@@ -181,7 +181,7 @@ export function ApprovalDetailPage() {
 
               <div className="text-left lg:text-right">
                 <span className="text-xs text-muted-foreground">
-                  Blended Risk
+                  Risk score
                 </span>
                 <p
                   className={`text-xl font-black ${
@@ -244,7 +244,7 @@ export function ApprovalDetailPage() {
                 <div className="flex items-center gap-2">
                   <Package className="size-4 text-primary" />
                   <h3 className="text-base font-bold text-foreground">
-                    Quotation Line Items
+                    Line items
                   </h3>
                 </div>
                 <span className="text-xs text-muted-foreground">
@@ -322,7 +322,7 @@ export function ApprovalDetailPage() {
               </div>
             </Card>
 
-            {/* Agent 1 AI Discount Approval Review Card */}
+            {/* AI Discount Approval Review Card */}
             <AiDiscountReviewCard quotation={quotation} risk={risk ?? null} />
 
             {/* Risk Breakdown Card */}

@@ -3,7 +3,7 @@ import ReportsPage from "@/features/reports/pages/reports-page";
 
 export const meta: MetaFunction = () => {
   return [
-    { title: "Executive Reporting & Analytics · DealFlow360" },
+    { title: "Reports · DealFlow360" },
     {
       name: "description",
       content:

@@ -79,7 +79,7 @@ export function AiBillingAssistantCard({
           <Spinner className="size-5 text-purple-600 dark:text-purple-400" />
           <div className="space-y-1">
             <div className="text-sm font-semibold text-foreground">
-              Agent 4: Analyzing Hybrid Billing Schedule & Prorations...
+              Analyzing billing schedule & prorations...
             </div>
             <div className="text-xs text-muted-foreground">
               Auditing one-time upfront charges, subscription recurring cycles,
@@ -107,13 +107,13 @@ export function AiBillingAssistantCard({
             <div>
               <div className="flex flex-wrap items-center gap-2">
                 <h3 className="text-base font-bold text-foreground">
-                  Agent 4: AI Billing & Hybrid Schedule Assistant
+                  AI billing & schedule assistant
                 </h3>
                 <Badge tone="primary" className="text-xs">
                   Claude 4.5 Sonnet
                 </Badge>
                 <Badge tone="success" className="text-xs">
-                  Proration Verified
+                  Proration verified
                 </Badge>
               </div>
               <p className="text-xs text-muted-foreground">
@@ -131,7 +131,7 @@ export function AiBillingAssistantCard({
               className="h-8 gap-1.5 rounded-lg border-purple-500/30 text-xs text-purple-600 hover:bg-purple-500/10 dark:text-purple-400"
             >
               <FilePlus2 className="size-3.5" />
-              Draft Credit Note (HITL)
+              Draft credit note
             </Button>
             <Button
               size="sm"
@@ -202,11 +202,11 @@ export function AiBillingAssistantCard({
                 <CheckCircle2 className="mt-0.5 size-4 shrink-0 text-emerald-600 dark:text-emerald-400" />
                 <div>
                   <span className="font-semibold text-emerald-700 dark:text-emerald-300">
-                    Proration Formula Verified:{" "}
+                    Proration verified:{" "}
                   </span>
                   <span className="text-foreground/90">
-                    Mid-cycle changes are prorated per diem against Document A
-                    ledger invariants with zero uncollected exposure.
+                    Mid-cycle changes are prorated per day against the billing
+                    ledger with zero uncollected exposure.
                     {explanation.nextPaymentMilestone && (
                       <span className="ml-1.5 text-muted-foreground">
                         Next Milestone: {explanation.nextPaymentMilestone}

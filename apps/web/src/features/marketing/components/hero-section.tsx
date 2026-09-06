@@ -87,21 +87,21 @@ export function HeroSection() {
           <div className="space-y-6 text-center lg:col-span-7 lg:text-left">
             <div className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/10 px-3.5 py-1.5 text-xs font-semibold text-primary backdrop-blur-md">
               <span className="flex size-2 animate-pulse rounded-full bg-primary" />
-              <span>Intelligent Self-Governing Sales Operations</span>
+              <span>Quote-to-cash, without the bottlenecks</span>
             </div>
 
             <h1 className="leading-1.12 text-4xl font-extrabold tracking-tight text-foreground sm:text-5xl lg:text-6xl">
-              From Complex Quotes to Cash with{" "}
+              From complex quotes to cash,{" "}
               <span className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
-                Autonomous Governance
+                with guardrails built in
               </span>
             </h1>
 
             <p className="mx-auto max-w-2xl text-base leading-relaxed text-muted-foreground sm:text-lg lg:mx-0">
-              Empower sales reps to configure multi-line deals in seconds while
-              DealFlow360’s blended-discount risk engine, multi-warehouse
-              fulfillment split, and hybrid billing engine safeguard margins
-              without manual bottlenecks.
+              Reps build multi-line deals in seconds. DealFlow360 checks
+              discounts against policy, splits fulfillment across warehouses,
+              and handles one-time and recurring billing — so margins stay
+              protected without the manual back-and-forth.
             </p>
 
             <div className="flex flex-wrap items-center justify-center gap-4 pt-2 lg:justify-start">
@@ -110,14 +110,14 @@ export function HeroSection() {
                   size="lg"
                   className="gap-2.5 px-6 font-semibold shadow-xl shadow-primary/25"
                 >
-                  Launch Sales Workspace
+                  Open the app
                   <ArrowRight className="size-4" />
                 </Button>
               </Link>
               <a href="#simulator">
                 <Button variant="outline" size="lg" className="gap-2 px-5">
                   <Sliders className="size-4 text-primary" />
-                  Try Risk Simulator
+                  Try the discount simulator
                 </Button>
               </a>
             </div>
@@ -128,10 +128,10 @@ export function HeroSection() {
                 <ShieldCheck className="size-5 shrink-0 text-secondary" />
                 <div>
                   <p className="text-xs font-bold text-foreground">
-                    Zero Discount Leakage
+                    No discount leakage
                   </p>
                   <p className="text-xs text-muted-foreground">
-                    Blended risk scoring
+                    Automatic risk scoring
                   </p>
                 </div>
               </div>
@@ -139,10 +139,10 @@ export function HeroSection() {
                 <Layers className="size-5 shrink-0 text-primary" />
                 <div>
                   <p className="text-xs font-bold text-foreground">
-                    Multi-Warehouse Split
+                    Multi-warehouse split
                   </p>
                   <p className="text-xs text-muted-foreground">
-                    Automated stock routing
+                    Automatic stock routing
                   </p>
                 </div>
               </div>
@@ -150,10 +150,10 @@ export function HeroSection() {
                 <TrendingUp className="size-5 shrink-0 text-secondary" />
                 <div>
                   <p className="text-xs font-bold text-foreground">
-                    Hybrid Cash Flow
+                    Flexible billing
                   </p>
                   <p className="text-xs text-muted-foreground">
-                    One-time + recurring billing
+                    One-time + recurring
                   </p>
                 </div>
               </div>
@@ -171,15 +171,15 @@ export function HeroSection() {
                   </div>
                   <div>
                     <h3 className="text-sm font-bold text-foreground">
-                      Interactive Risk Engine
+                      Discount simulator
                     </h3>
                     <p className="text-xs text-muted-foreground">
-                      Live quotation calculation preview
+                      Live quote calculation preview
                     </p>
                   </div>
                 </div>
                 <span className="rounded-md border border-primary/20 bg-primary/10 px-2 py-0.5 text-xs font-semibold text-primary">
-                  PS §10 Rule
+                  Live
                 </span>
               </div>
 

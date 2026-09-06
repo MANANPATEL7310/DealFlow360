@@ -2,7 +2,7 @@ import { QuotationsPage } from "@/features/quotations/pages/quotations-page";
 
 export function meta() {
   return [
-    { title: "Quotations & Pipeline · DealFlow360" },
+    { title: "Quotations · DealFlow360" },
     {
       name: "description",
       content:

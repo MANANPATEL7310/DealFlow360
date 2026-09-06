@@ -61,9 +61,9 @@ export function AiApprovalsInbox() {
               onChange={(e) => setKindFilter(e.target.value)}
               className="bg-transparent text-xs text-foreground focus:outline-none"
             >
-              <option value="ALL">All Categories</option>
-              <option value="DISCOUNT">Discounts (Agent 1)</option>
-              <option value="NEGOTIATION">Negotiation Drafts (Agent 6)</option>
+              <option value="ALL">All categories</option>
+              <option value="DISCOUNT">Discounts</option>
+              <option value="NEGOTIATION">Negotiation drafts</option>
               <option value="FULFILLMENT_OVERRIDE">
                 Fulfillment Overrides
               </option>

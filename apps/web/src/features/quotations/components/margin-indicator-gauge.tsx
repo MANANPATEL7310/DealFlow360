@@ -152,9 +152,7 @@ export function MarginIndicatorGauge({
 
         <div className="space-y-2 rounded-lg border border-border bg-surface-muted/30 p-3">
           <div className="flex items-center justify-between">
-            <span className="text-xs text-muted-foreground">
-              Blended Risk Score:
-            </span>
+            <span className="text-xs text-muted-foreground">Risk score:</span>
             <span
               className={`font-mono text-sm font-bold ${
                 riskScore === 0 ? "text-success-dark" : "text-danger-dark"

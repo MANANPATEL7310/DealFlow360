@@ -26,12 +26,11 @@ export function QuotationsPage() {
               <FileSpreadsheet className="size-5" />
             </div>
             <h1 className="text-2xl font-bold tracking-tight text-foreground">
-              Quotations & Pipeline
+              Quotations
             </h1>
           </div>
           <p className="mt-1 text-sm text-muted-foreground">
-            Construct enterprise proposals, simulate line discount policies, and
-            track multi-tier deal approval governance.
+            Build proposals, apply discounts, and track deals through approval.
           </p>
         </div>
 
@@ -41,7 +40,7 @@ export function QuotationsPage() {
             variant="primary"
             onClick={() => setIsCreateOpen(true)}
           >
-            <Plus className="mr-1.5 size-4" /> Initialize Quotation
+            <Plus className="mr-1.5 size-4" /> New quotation
           </Button>
         </div>
       </div>
@@ -53,10 +52,10 @@ export function QuotationsPage() {
       <div className="surface-card space-y-4 rounded-xl border border-border p-6 shadow-xs">
         <div className="flex items-center justify-between border-b border-border pb-3">
           <h2 className="text-sm font-semibold text-foreground">
-            Quotation Pipeline Portfolio
+            All quotations
           </h2>
           <span className="flex items-center gap-1 text-xs text-muted-foreground">
-            <Sparkles className="size-3 text-primary" /> Live Risk Evaluator
+            <Sparkles className="size-3 text-primary" /> Live risk scoring
           </span>
         </div>
 

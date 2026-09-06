@@ -70,7 +70,7 @@ function CustomerFormContent({
         <div className="flex items-start justify-between border-b border-border/60 pb-4">
           <div className="space-y-1">
             <h2 className="text-xl font-bold text-foreground">
-              {initialCustomer ? "Edit Enterprise Account" : "Add New Customer"}
+              {initialCustomer ? "Edit customer" : "Add customer"}
             </h2>
             <p className="text-xs text-muted-foreground">
               Configure account tier, credit ceilings, and billing terms.

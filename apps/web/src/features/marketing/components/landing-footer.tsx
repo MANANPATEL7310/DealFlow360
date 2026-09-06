@@ -11,13 +11,13 @@ export function LandingFooter() {
           <div className="space-y-4 md:col-span-2">
             <LogoMark />
             <p className="max-w-sm text-sm leading-relaxed text-muted-foreground">
-              DealFlow360 is an intelligent, self-governing sales operations
-              platform that automates the quotation-to-cash lifecycle for B2B
-              enterprises.
+              DealFlow360 connects quoting, approvals, fulfillment, and billing
+              in one place, so B2B sales teams can move from quote to cash
+              without the manual back-and-forth.
             </p>
             <div className="flex items-center gap-2 text-xs font-semibold text-secondary">
               <span className="size-2 animate-pulse rounded-full bg-secondary" />
-              <span>Core Platform Engine Active</span>
+              <span>All systems operational</span>
             </div>
           </div>
 
@@ -32,7 +32,7 @@ export function LandingFooter() {
                   href="#features"
                   className="transition-colors hover:text-primary"
                 >
-                  Platform Features
+                  Features
                 </a>
               </li>
               <li>
@@ -40,7 +40,7 @@ export function LandingFooter() {
                   href="#simulator"
                   className="transition-colors hover:text-primary"
                 >
-                  Risk Engine Simulator
+                  Discount simulator
                 </a>
               </li>
               <li>
@@ -48,7 +48,7 @@ export function LandingFooter() {
                   href="#workflow"
                   className="transition-colors hover:text-primary"
                 >
-                  Quote-to-Cash Workflow
+                  How it works
                 </a>
               </li>
               <li>
@@ -56,7 +56,7 @@ export function LandingFooter() {
                   href="#roles"
                   className="transition-colors hover:text-primary"
                 >
-                  Role Personas
+                  Roles
                 </a>
               </li>
             </ul>
@@ -106,9 +106,7 @@ export function LandingFooter() {
 
         <div className="flex flex-col items-center justify-between gap-4 pt-8 text-xs text-muted-foreground sm:flex-row">
           <p>© {new Date().getFullYear()} DealFlow360. All rights reserved.</p>
-          <p className="font-mono text-xs">
-            Engineered for High-Velocity Sales Operations
-          </p>
+          <p className="text-xs">Built for fast-moving sales teams</p>
         </div>
       </div>
     </footer>

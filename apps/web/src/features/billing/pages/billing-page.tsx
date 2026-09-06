@@ -45,7 +45,7 @@ export function BillingPage() {
   return <BillingOperationsOverview />;
 }
 
-// ─── Quotation-Specific Billing Workspace (B7 Screen) ─────────────────────────
+// ─── Quotation-Specific Billing Workspace ─────────────────────────────────────
 
 function QuotationBillingWorkspace({ quotationId }: { quotationId: string }) {
   const { data: quote, isLoading: isQuoteLoading } = useQuotation(quotationId);
@@ -80,22 +80,22 @@ function QuotationBillingWorkspace({ quotationId }: { quotationId: string }) {
       <RoleGuard
         allowedRoles={["sales_rep", "sales_manager", "finance", "admin"]}
       >
-        <div className="rounded-2xl border border-white/10 bg-slate-900/60 p-12 text-center">
-          <div className="mx-auto flex size-12 items-center justify-center rounded-2xl bg-white/5 text-slate-400">
+        <div className="surface-card rounded-2xl border border-dashed border-border p-12 text-center">
+          <div className="mx-auto flex size-12 items-center justify-center rounded-2xl bg-surface-muted text-muted-foreground">
             <Receipt className="size-6" />
           </div>
-          <h3 className="mt-4 text-base font-semibold text-white">
-            No Billing Schedule Found
+          <h3 className="mt-4 text-base font-semibold text-foreground">
+            No billing schedule yet
           </h3>
-          <p className="mt-1 text-xs text-slate-400">
-            Confirm the quotation or submit it to fulfillment to generate a
-            hybrid billing schedule.
+          <p className="mt-1 text-xs text-muted-foreground">
+            Confirm the quotation or send it to fulfillment to generate a
+            billing schedule.
           </p>
           <div className="mt-6">
             <Link to={appRoutes.quotationBuilder(quotationId)}>
               <Button variant="outline" size="sm" className="gap-2">
                 <ArrowLeft className="size-4" />
-                Return to Quotation
+                Back to quotation
               </Button>
             </Link>
           </div>
@@ -146,7 +146,7 @@ function QuotationBillingWorkspace({ quotationId }: { quotationId: string }) {
           </Link>
           <div className="flex items-center gap-2 text-xs text-muted-foreground">
             <ShieldCheck className="size-4 text-emerald-500" />
-            <span>Audited Billing Engine (M4)</span>
+            <span>Audited billing</span>
           </div>
         </div>
 
@@ -156,7 +156,7 @@ function QuotationBillingWorkspace({ quotationId }: { quotationId: string }) {
             <div>
               <div className="flex flex-wrap items-center gap-3">
                 <h1 className="text-2xl font-bold tracking-tight text-foreground">
-                  Hybrid Billing Workspace
+                  Billing
                 </h1>
                 <Badge
                   tone={getQuoteStatusTone(quote?.status)}
@@ -205,7 +205,7 @@ function QuotationBillingWorkspace({ quotationId }: { quotationId: string }) {
         {/* Metric Cards */}
         <BillingStats schedule={schedule} isLoading={isLoading} />
 
-        {/* Agent 4: AI Billing & Hybrid Schedule Assistant */}
+        {/* AI Billing & Schedule Assistant */}
         <AiBillingAssistantCard
           quotationId={quotationId}
           invoices={schedule.invoices}
@@ -216,7 +216,7 @@ function QuotationBillingWorkspace({ quotationId }: { quotationId: string }) {
           <div className="flex items-center gap-2">
             <Receipt className="size-4 text-sky-500" />
             <h2 className="text-base font-semibold tracking-tight text-foreground">
-              1. Upfront One-Time Invoicing
+              1. One-time charges
             </h2>
           </div>
           {oneTime ? (
@@ -235,7 +235,7 @@ function QuotationBillingWorkspace({ quotationId }: { quotationId: string }) {
             <div className="flex items-center gap-2">
               <Repeat className="size-4 text-purple-500" />
               <h2 className="text-base font-semibold tracking-tight text-foreground">
-                2. Recurring Subscription Schedules
+                2. Recurring subscriptions
               </h2>
             </div>
             <span className="text-xs text-muted-foreground">
@@ -269,7 +269,7 @@ function QuotationBillingWorkspace({ quotationId }: { quotationId: string }) {
           <div className="flex items-center gap-2">
             <CreditCard className="size-4 text-emerald-500" />
             <h2 className="text-base font-semibold tracking-tight text-foreground">
-              3. Prorated Credit Notes Ledger
+              3. Credit notes
             </h2>
           </div>
           <CreditNotesList creditNotes={schedule.creditNotes} />
@@ -279,7 +279,7 @@ function QuotationBillingWorkspace({ quotationId }: { quotationId: string }) {
   );
 }
 
-// ─── Platform-Wide Billing Operations Command Center (/app/billing) ───────────
+// ─── Platform-Wide Billing Overview (/app/billing) ────────────────────────────
 
 function BillingOperationsOverview() {
   const { data: schedules = [], isLoading: isSchedulesLoading } =
@@ -314,11 +314,11 @@ function BillingOperationsOverview() {
               <span>Operations & Finance</span>
             </div>
             <h1 className="text-2xl font-bold tracking-tight text-foreground">
-              Hybrid Billing Operations
+              Billing
             </h1>
             <p className="mt-1 text-xs text-muted-foreground">
-              Enterprise split billing management across one-time hardware
-              charges and multi-tier recurring subscription series.
+              Track one-time charges and recurring subscriptions across all
+              orders.
             </p>
           </div>
           <div className="flex items-center gap-2">
@@ -339,11 +339,10 @@ function BillingOperationsOverview() {
           <div className="flex items-center justify-between border-b border-border pb-4">
             <div>
               <h2 className="text-base font-semibold text-foreground">
-                Active Order Billing Schedules
+                Billing schedules
               </h2>
               <p className="text-xs text-muted-foreground">
-                Direct access to hybrid invoice timelines and payment
-                reconciliation
+                Invoice timelines and payment status by order
               </p>
             </div>
             <span className="text-xs text-muted-foreground">
@@ -406,7 +405,7 @@ function BillingOperationsOverview() {
                             {quote?.quotationNumber ?? sch.quotationId}
                           </div>
                           <div className="text-xs text-muted-foreground">
-                            {quote?.customer?.name ?? "Enterprise Account"}
+                            {quote?.customer?.name ?? "Customer"}
                           </div>
                         </td>
                         <td className="py-3">

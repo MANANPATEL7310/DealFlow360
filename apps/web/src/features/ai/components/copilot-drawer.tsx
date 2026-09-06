@@ -145,7 +145,7 @@ export function CopilotDrawer() {
                 </span>
               </div>
               <p className="truncate text-xs text-muted-foreground">
-                Autonomous agent supervision & HITL governance
+                Review AI suggestions before they run
               </p>
             </div>
           </div>
@@ -176,7 +176,7 @@ export function CopilotDrawer() {
           </div>
         </div>
 
-        {/* Budget & Model Telemetry Bar */}
+        {/* Budget & Model Status Bar */}
         <div className="flex flex-col gap-1.5 border-b border-border/50 bg-muted/30 px-4 py-2 text-xs sm:flex-row sm:items-center sm:justify-between sm:px-6">
           <div className="flex items-center gap-2 text-muted-foreground">
             <Coins className="size-3.5 text-amber-500" />
@@ -190,7 +190,7 @@ export function CopilotDrawer() {
           <div className="flex items-center gap-1.5 text-xs">
             <span className="size-2 rounded-full bg-emerald-500 animate-pulse" />
             <span className="text-emerald-500 font-medium">
-              HITL Guard Active
+              Review required
             </span>
           </div>
         </div>
@@ -207,7 +207,7 @@ export function CopilotDrawer() {
             }`}
           >
             <Inbox className="size-3.5" />
-            <span>HITL Approvals</span>
+            <span>Approvals</span>
             {pendingApprovals.length > 0 && (
               <span className="rounded-full bg-primary/20 px-1.5 py-0.2 text-xs font-bold text-primary">
                 {pendingApprovals.length}
@@ -238,7 +238,7 @@ export function CopilotDrawer() {
             }`}
           >
             <Activity className="size-3.5" />
-            <span>Agent Traces</span>
+            <span>Run history</span>
           </button>
         </div>
 
@@ -247,7 +247,7 @@ export function CopilotDrawer() {
           {/* Degraded mode banner if applicable */}
           <DegradedModeBanner status={aiStatus} />
 
-          {/* TAB 1: HITL APPROVALS INBOX */}
+          {/* TAB 1: APPROVALS INBOX */}
           {activeTab === "inbox" && (
             <div className="space-y-4">
               {/* Filter pills */}
@@ -436,9 +436,8 @@ export function CopilotDrawer() {
         <div className="flex items-center gap-2 border-t border-border/80 bg-muted/30 px-6 py-3 text-xs text-muted-foreground">
           <ShieldCheck className="size-4 shrink-0 text-secondary" />
           <span>
-            <strong>Master Principle (PS §7):</strong> Agents propose; Document
-            A decides. No AI action bypasses pricing ceilings or deterministic
-            controls.
+            <strong>You stay in control:</strong> AI only proposes. Nothing
+            bypasses pricing ceilings or approval controls.
           </span>
         </div>
       </div>

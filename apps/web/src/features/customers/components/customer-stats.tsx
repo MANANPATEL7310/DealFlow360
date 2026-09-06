@@ -20,7 +20,7 @@ export function CustomerStats({ customers, isLoading }: CustomerStatsProps) {
   const bronzeCount = customers.filter((c) => c.tier === "BRONZE").length;
 
   const totalCreditAllocatedDollars =
-    customers.reduce((sum, c) => sum + c.creditLimit, 0) / 100;
+    customers.reduce((sum, c) => sum + (c.creditLimit ?? 0), 0) / 100;
   const creditMillions = (totalCreditAllocatedDollars / 1000000).toFixed(2);
 
   return (
@@ -28,25 +28,25 @@ export function CustomerStats({ customers, isLoading }: CustomerStatsProps) {
       <MetricCard
         icon={Building2}
         loading={isLoading}
-        title="Enterprise Accounts"
+        title="Total Accounts"
         value={total.toString()}
       />
       <MetricCard
         icon={Award}
         loading={isLoading}
-        title="Gold Strategic Tier"
+        title="Gold Tier"
         value={goldCount.toString()}
       />
       <MetricCard
         icon={ShieldCheck}
         loading={isLoading}
-        title="Silver Enterprise"
+        title="Silver Tier"
         value={silverCount.toString()}
       />
       <MetricCard
         icon={ShieldAlert}
         loading={isLoading}
-        title="Bronze Growth"
+        title="Bronze Tier"
         value={bronzeCount.toString()}
       />
       <MetricCard

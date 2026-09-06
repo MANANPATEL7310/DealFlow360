@@ -3,7 +3,7 @@ import { ApprovalsInboxPage } from "@/features/approvals/pages/approvals-inbox-p
 
 export const meta: MetaFunction = () => {
   return [
-    { title: "Deal Approvals & AI HITL Inbox · DealFlow360" },
+    { title: "Approvals · DealFlow360" },
     {
       name: "description",
       content:

@@ -116,7 +116,7 @@ export function AiRecoveryNudgeModal({
                   id="nudge-modal-title"
                   className="text-base font-bold text-foreground"
                 >
-                  Agent 5 · AI Deal Recovery Nudge Assistant
+                  AI deal recovery nudge assistant
                 </h3>
                 <span className="inline-flex items-center gap-1 rounded bg-primary/10 px-2 py-0.5 font-mono text-xs font-semibold text-primary">
                   <Cpu className="size-2.5" />
@@ -142,14 +142,13 @@ export function AiRecoveryNudgeModal({
 
         {/* Modal Body */}
         <div className="flex-1 overflow-y-auto p-6 space-y-5">
-          {/* HITL Notice */}
+          {/* Review Notice */}
           <div className="flex items-start gap-2.5 rounded-xl border border-primary/20 bg-primary/5 p-3 text-xs text-muted-foreground">
             <ShieldCheck className="size-4 shrink-0 text-primary mt-0.5" />
             <span>
-              <strong>Human-In-The-Loop Principle:</strong> AI drafts the
-              recovery copy based on deal velocity and stall duration. The sales
-              rep retains sole authority to review, customize, or cancel before
-              sending.
+              <strong>You stay in control:</strong> AI drafts the recovery copy
+              based on deal velocity and how long it's stalled. The sales rep
+              reviews, edits, or cancels before anything is sent.
             </span>
           </div>
 
@@ -236,7 +235,7 @@ export function AiRecoveryNudgeModal({
                 <div className="absolute inset-0 flex items-center justify-center rounded-xl bg-background/60 backdrop-blur-xs">
                   <div className="flex items-center gap-2 text-xs font-medium text-primary">
                     <Spinner className="size-4" />
-                    <span>Agent 5 drafting copy...</span>
+                    <span>Drafting copy...</span>
                   </div>
                 </div>
               )}

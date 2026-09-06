@@ -91,15 +91,11 @@ export function ProductsPage() {
         <div>
           <div className="flex items-center gap-2">
             <h1 className="text-2xl font-bold tracking-tight text-foreground">
-              Product & Price List Engine
+              Products
             </h1>
-            <span className="rounded-full border border-primary/20 bg-primary/10 px-2.5 py-0.5 text-xs font-semibold text-primary">
-              Module M1
-            </span>
           </div>
           <p className="mt-1 text-xs text-muted-foreground">
-            Multi-tier price schedules, item variant surcharges, and catalog
-            margin compliance floors.
+            Manage the catalog, tier pricing, variants, and margin floors.
           </p>
         </div>
 
@@ -113,7 +109,7 @@ export function ProductsPage() {
             }}
           >
             <PackagePlus className="size-4" />
-            <span>Add Catalog Item</span>
+            <span>Add product</span>
           </Button>
         )}
       </div>

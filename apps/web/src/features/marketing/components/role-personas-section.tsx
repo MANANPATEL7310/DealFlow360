@@ -17,7 +17,7 @@ export function RolePersonasSection() {
       name: "Sales Representative",
       icon: UserCheck,
       tagline: "Build compliant quotes in minutes without approval delays",
-      badge: "Deal Maker",
+      badge: "Sales Rep",
       responsibilities: [
         "Rapid multi-line quotation builder with live pricing catalog",
         "Instant margin visibility before submitting to the client",
@@ -32,9 +32,9 @@ export function RolePersonasSection() {
       name: "Sales Manager",
       icon: Shield,
       tagline: "Total visibility and one-click discount governance",
-      badge: "Tier 1 Approver",
+      badge: "First approver",
       responsibilities: [
-        "Severity-ranked approval inbox with complete blended-risk breakdown",
+        "Severity-ranked approval inbox with a complete risk breakdown",
         "One-click decision modal: Approve, Reject, or Return for Revision",
         "Deal Health radar detecting stalled deals and slippage risks",
         "Configure regional discount tolerances and team pricing guardrails",
@@ -47,7 +47,7 @@ export function RolePersonasSection() {
       name: "Finance & Operations",
       icon: DollarSign,
       tagline: "Unified revenue recognition, credit notes, and fulfillment",
-      badge: "Tier 2 Signoff",
+      badge: "Final sign-off",
       responsibilities: [
         "Second-level approval routing for high-risk and high-value orders",
         "Automated hybrid billing: one-time hardware + recurring subscriptions",
@@ -62,7 +62,7 @@ export function RolePersonasSection() {
       name: "Customer / Buyer",
       icon: Globe,
       tagline: "Transparent, scoped negotiation portal",
-      badge: "Restricted Portal",
+      badge: "Portal access",
       responsibilities: [
         "Secure magic-link authenticated view restricted to specific quotation",
         "Interactive line-by-line inspection and counter-proposal submission",
@@ -103,12 +103,11 @@ export function RolePersonasSection() {
             <span>Tailored Role Experiences</span>
           </div>
           <h2 className="text-3xl font-extrabold tracking-tight text-foreground sm:text-4xl">
-            Designed for Every Stakeholder
+            Designed for every role
           </h2>
           <p className="mt-3 text-base text-muted-foreground sm:text-lg">
-            DealFlow360 provides specialized workspaces with strict role-based
-            access control (RBAC), ensuring each role operates at peak
-            efficiency.
+            Each role gets a workspace built for how they actually work, and
+            everyone only sees what they should.
           </p>
         </div>
 
@@ -181,10 +180,8 @@ export function RolePersonasSection() {
                 {current.quote}
               </p>
               <div className="mt-4 flex items-center justify-between border-t border-border pt-3 text-xs text-muted-foreground">
-                <span>Access Security:</span>
-                <span className="font-mono font-semibold text-primary">
-                  RBAC Enforced
-                </span>
+                <span>Access:</span>
+                <span className="font-semibold text-primary">Role-based</span>
               </div>
             </div>
           </div>

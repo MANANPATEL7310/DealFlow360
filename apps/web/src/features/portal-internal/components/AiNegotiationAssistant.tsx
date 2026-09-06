@@ -62,9 +62,7 @@ export function AiNegotiationAssistant({
         setEditableMessage(resData.result.draftMessage);
       }
       if (resData.status === "PAUSED_FOR_APPROVAL") {
-        toast.success(
-          "Draft response created and enqueued in HITL Approvals inbox.",
-        );
+        toast.success("Draft created and sent to the approvals inbox.");
       }
     },
     onError: (err: unknown) => {
@@ -85,7 +83,7 @@ export function AiNegotiationAssistant({
     }
     if (onPostMessage) {
       await onPostMessage(editableMessage);
-      toast.success("Message dispatched to customer portal thread via M9.");
+      toast.success("Message sent to the customer portal thread.");
     } else {
       toast.success("Draft approved for portal dispatch.");
     }
@@ -107,11 +105,11 @@ export function AiNegotiationAssistant({
           </div>
           <div>
             <h3 className="text-sm font-semibold tracking-tight text-foreground">
-              AI Negotiation Assistant (Agent 6)
+              AI negotiation assistant
             </h3>
             <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
               <Lock className="size-3 text-warning" />
-              <span>Internal Sales Rep Surface Only — No Customer Access</span>
+              <span>Internal to sales reps — customers can't see this</span>
             </div>
           </div>
         </div>
@@ -164,9 +162,9 @@ export function AiNegotiationAssistant({
             Manual Negotiation Mode (AI Inactive)
           </div>
           <p className="text-xs text-muted-foreground">
-            AI drafting is offline. Use the manual response box below to reply
-            to customer counters. Governance remains active: accepting any
-            counter re-runs M4 blended risk.
+            AI drafting is offline. Use the response box below to reply to
+            customer counters. Accepting any counter still re-runs the risk
+            check.
           </p>
           <textarea
             className="w-full rounded-md border border-border bg-surface p-2.5 text-xs text-foreground focus:ring-1 focus:ring-primary focus:outline-none"
@@ -182,7 +180,7 @@ export function AiNegotiationAssistant({
               className="text-xs"
             >
               <Send className="mr-1.5 size-3.5" />
-              Send to Customer via M9
+              Send to customer
             </Button>
           </div>
         </div>
@@ -244,12 +242,12 @@ export function AiNegotiationAssistant({
             />
           </div>
 
-          {/* HITL Notice & Dispatch Buttons */}
+          {/* Approval Notice & Dispatch Buttons */}
           <div className="flex flex-wrap items-center justify-between gap-3 border-t border-border/40 pt-3">
             <div className="text-xs text-muted-foreground">
               {data.approvalRequestId ? (
                 <span>
-                  Queued in HITL Inbox (ID:{" "}
+                  Waiting for approval (ID:{" "}
                   <code>{data.approvalRequestId}</code>)
                 </span>
               ) : (

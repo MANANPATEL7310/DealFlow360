@@ -83,9 +83,7 @@ export function RiskBreakdownCard({
 
         <div className="flex items-center gap-3">
           <div className="text-right">
-            <span className="text-xs text-muted-foreground">
-              Blended Risk Score
-            </span>
+            <span className="text-xs text-muted-foreground">Risk score</span>
             <div className="flex items-baseline justify-end gap-1">
               <span
                 className={`text-2xl font-black ${

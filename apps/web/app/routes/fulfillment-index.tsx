@@ -18,7 +18,7 @@ import { useQuotations } from "@/features/quotations/hooks/use-quotations";
 
 export function meta() {
   return [
-    { title: "Warehouse Fulfillment Operations · DealFlow360" },
+    { title: "Fulfillment · DealFlow360" },
     {
       name: "description",
       content:

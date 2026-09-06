@@ -15,17 +15,17 @@ export function LandingCta() {
           <div className="relative z-10 mx-auto max-w-3xl space-y-6">
             <div className="inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/10 px-3.5 py-1 text-xs font-semibold text-primary">
               <Sparkles className="size-3.5" />
-              <span>Full Quotation-to-Cash Compliance</span>
+              <span>One connected quote-to-cash flow</span>
             </div>
 
             <h2 className="text-3xl font-extrabold tracking-tight text-foreground sm:text-4xl lg:text-5xl">
-              Eliminate Margin Leakage and Accelerate Deal Velocity
+              Protect your margins and close deals faster
             </h2>
 
             <p className="mx-auto max-w-2xl text-base leading-relaxed text-muted-foreground sm:text-lg">
-              Step into the self-governing sales operations platform that
-              harmonizes complex pricing, approval routing, fulfillment
-              splitting, and hybrid invoicing.
+              One platform that connects pricing, approvals, fulfillment, and
+              billing — so your team spends less time chasing sign-offs and more
+              time closing.
             </p>
 
             <div className="flex flex-wrap items-center justify-center gap-4 pt-4">
@@ -34,13 +34,13 @@ export function LandingCta() {
                   size="lg"
                   className="gap-2.5 px-8 font-bold shadow-xl shadow-primary/25"
                 >
-                  Launch DealFlow360 Workspace
+                  Open the app
                   <ArrowRight className="size-4" />
                 </Button>
               </Link>
               <Link to={appRoutes.login}>
                 <Button variant="outline" size="lg" className="px-7">
-                  Sign In to Your Account
+                  Sign in
                 </Button>
               </Link>
             </div>
@@ -48,15 +48,15 @@ export function LandingCta() {
             <div className="flex flex-wrap items-center justify-center gap-6 border-t border-border/60 pt-8 text-xs text-muted-foreground">
               <span className="flex items-center gap-1.5">
                 <ShieldCheck className="size-4 text-secondary" />
-                No Spreadsheet Formulas
+                No more spreadsheets
               </span>
               <span className="flex items-center gap-1.5">
                 <ShieldCheck className="size-4 text-secondary" />
-                Deterministic Risk Governance
+                Automatic discount checks
               </span>
               <span className="flex items-center gap-1.5">
                 <ShieldCheck className="size-4 text-secondary" />
-                Immutable Audit Logging
+                Complete audit trail
               </span>
             </div>
           </div>

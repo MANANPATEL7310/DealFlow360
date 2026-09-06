@@ -55,10 +55,10 @@ export function DealHealthWidget() {
             </div>
             <div>
               <h2 className="text-sm font-bold text-foreground sm:text-base">
-                Deal Health Radar
+                Deal health
               </h2>
               <p className="text-xs text-muted-foreground">
-                Autonomous anomaly detection
+                Flags deals that need attention
               </p>
             </div>
           </div>

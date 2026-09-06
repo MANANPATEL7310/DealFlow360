@@ -68,10 +68,10 @@ export function RecentQuotesTable() {
       <div className="mb-4 flex items-center justify-between border-b border-border pb-4">
         <div>
           <h2 className="text-sm font-bold text-foreground sm:text-base">
-            Recent Quotations &amp; Proposals
+            Recent quotations
           </h2>
           <p className="text-xs text-muted-foreground">
-            Live stream of active deals with blended-risk scoring
+            Your most recently updated deals
           </p>
         </div>
         <Link to={appRoutes.quotations}>

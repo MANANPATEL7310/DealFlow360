@@ -22,15 +22,15 @@ export function KpiStatsGrid() {
       <MetricCard
         title="Active Pipeline"
         value={pipelineDollars}
-        subvalue="Unweighted order book"
+        subvalue="Total open quotation value"
         icon={DollarSign}
         tone="primary"
         loading={isLoading}
       />
 
-      {/* 2. Blended Margin % */}
+      {/* 2. Average margin % */}
       <MetricCard
-        title="Avg. Blended Margin"
+        title="Avg. margin"
         value={marginDisplay}
         subvalue={
           isHealthyMargin
