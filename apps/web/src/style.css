@@ -1,5 +1,6 @@
 @import "tailwindcss";
-@import "@fontsource-variable/outfit";
+@import "@fontsource-variable/inter";
+@import "@fontsource-variable/geist-mono";
 
 @custom-variant dark (&:is(.dark *));
 
@@ -42,6 +43,23 @@
   --danger-dark: #b91c1c;
   --destructive: #ef4444;
 
+  /* Extended semantic accents (reduce blue dominance) */
+  --info-light: #67e8f9;
+  --info: #06b6d4;
+  --info-dark: #0e7490;
+
+  --purple-light: #c4b5fd;
+  --purple: #8b5cf6;
+  --purple-dark: #6d28d9;
+
+  --teal-light: #5eead4;
+  --teal: #14b8a6;
+  --teal-dark: #0f766e;
+
+  --orange-light: #fdba74;
+  --orange: #f97316;
+  --orange-dark: #c2410c;
+
   --neutral-light: #e2e8f0;
   --neutral: #64748b;
   --neutral-dark: #0f172a;
@@ -50,48 +68,71 @@
 }
 
 .dark {
-  /* DealFlow360 Executive Theme: Cobalt & Mint Emerald (Dark Mode) */
-  --background: #080c14;
-  --foreground: #f8fafc;
-  --surface: #0f172a;
-  --surface-muted: #162032;
-  --card: #0f172a;
-  --card-foreground: #f8fafc;
-  --muted: #162032;
-  --muted-foreground: #94a3b8;
-  --border: #1e293b;
-  --input: #1e293b;
-  --ring: #3b82f6;
+  /* DealFlow360 Executive Theme: Neutral Graphite (Dark Mode) */
+  /* Warm-neutral charcoal ramp — no blue tint, no glow. */
+  --background: #0a0a0b;
+  --foreground: #f4f4f5;
+  --surface: #161618;
+  --surface-muted: #1f1f22;
+  --card: #161618;
+  --card-foreground: #f4f4f5;
+  --muted: #1f1f22;
+  --muted-foreground: #a1a1aa;
+  --border: #2a2a2e;
+  --input: #2a2a2e;
+  --ring: #52525b;
 
-  --primary-light: #60a5fa;
-  --primary: #3b82f6;
-  --primary-dark: #1d4ed8;
-  --primary-foreground: #ffffff;
+  /* Primary reads as a controlled accent against graphite, not a wash */
+  --primary-light: #93c5fd;
+  --primary: #60a5fa;
+  --primary-dark: #3b82f6;
+  --primary-foreground: #0a0a0b;
 
-  --secondary-light: #34d399;
-  --secondary: #10b981;
-  --secondary-dark: #059669;
+  --secondary-light: #6ee7b7;
+  --secondary: #34d399;
+  --secondary-dark: #10b981;
 
-  --success-light: #34d399;
-  --success: #10b981;
-  --success-dark: #047857;
+  --success-light: #6ee7b7;
+  --success: #34d399;
+  --success-dark: #10b981;
 
-  --warning-light: #fbbf24;
-  --warning: #f59e0b;
-  --warning-dark: #d97706;
+  --warning-light: #fcd34d;
+  --warning: #fbbf24;
+  --warning-dark: #f59e0b;
 
-  --danger-light: #f87171;
-  --danger: #ef4444;
-  --danger-dark: #dc2626;
-  --destructive: #ef4444;
+  --danger-light: #fca5a5;
+  --danger: #f87171;
+  --danger-dark: #ef4444;
+  --destructive: #f87171;
 
-  --neutral-light: #334155;
-  --neutral: #94a3b8;
-  --neutral-dark: #f8fafc;
+  --info-light: #a5f3fc;
+  --info: #22d3ee;
+  --info-dark: #06b6d4;
+
+  --purple-light: #ddd6fe;
+  --purple: #a78bfa;
+  --purple-dark: #8b5cf6;
+
+  --teal-light: #99f6e4;
+  --teal: #2dd4bf;
+  --teal-dark: #14b8a6;
+
+  --orange-light: #fed7aa;
+  --orange: #fb923c;
+  --orange-dark: #f97316;
+
+  --neutral-light: #3f3f46;
+  --neutral: #a1a1aa;
+  --neutral-dark: #f4f4f5;
 }
 
 @theme inline {
-  --font-sans: "Outfit Variable", "Outfit", sans-serif;
+  --font-sans:
+    "Inter Variable", "Inter", ui-sans-serif, system-ui, -apple-system,
+    sans-serif;
+  --font-mono:
+    "Geist Mono Variable", ui-monospace, "SF Mono", "Cascadia Code",
+    "Roboto Mono", monospace;
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-surface: var(--surface);
@@ -125,6 +166,22 @@
   --color-danger: var(--danger);
   --color-danger-dark: var(--danger-dark);
   --color-destructive: var(--destructive);
+
+  --color-info-light: var(--info-light);
+  --color-info: var(--info);
+  --color-info-dark: var(--info-dark);
+
+  --color-purple-light: var(--purple-light);
+  --color-purple: var(--purple);
+  --color-purple-dark: var(--purple-dark);
+
+  --color-teal-light: var(--teal-light);
+  --color-teal: var(--teal);
+  --color-teal-dark: var(--teal-dark);
+
+  --color-orange-light: var(--orange-light);
+  --color-orange: var(--orange);
+  --color-orange-dark: var(--orange-dark);
 
   --color-neutral-light: var(--neutral-light);
   --color-neutral: var(--neutral);
@@ -198,26 +255,40 @@
 
   html {
     @apply scroll-smooth;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
   }
 
   body {
     @apply min-h-screen bg-background font-sans text-foreground antialiased selection:bg-primary/20 selection:text-primary;
+    /* Inter benefits from calibrated tracking at body size. */
+    letter-spacing: -0.011em;
+  }
+
+  /* Monospace (IDs, financial figures) always aligns in columns. */
+  .font-mono {
+    font-variant-numeric: tabular-nums;
+    letter-spacing: 0;
+  }
+
+  /* Light mode keeps a whisper of ambient tint; dark mode stays flat graphite. */
+  :root body {
     background-image:
       radial-gradient(
-        circle at 12% 15%,
-        color-mix(in srgb, var(--primary) 12%, transparent) 0%,
-        transparent 35%
+        circle at 15% 12%,
+        color-mix(in srgb, var(--primary) 6%, transparent) 0%,
+        transparent 38%
       ),
       radial-gradient(
-        circle at 88% 18%,
-        color-mix(in srgb, var(--secondary) 10%, transparent) 0%,
-        transparent 32%
-      ),
-      radial-gradient(
-        circle at 50% 90%,
-        color-mix(in srgb, var(--primary) 8%, transparent) 0%,
-        transparent 45%
+        circle at 85% 20%,
+        color-mix(in srgb, var(--secondary) 5%, transparent) 0%,
+        transparent 34%
       );
+    background-attachment: fixed;
+  }
+
+  .dark body {
+    background-image: none;
   }
 
   a {
@@ -246,19 +317,19 @@
 
 @layer components {
   .surface-card {
-    @apply rounded-2xl border border-border bg-surface/80 backdrop-blur-xl transition-all duration-300;
-    box-shadow: 0 4px 20px -2px
-      color-mix(in srgb, var(--foreground) 5%, transparent);
+    @apply rounded-xl border border-border bg-surface transition-colors duration-200;
+    box-shadow: 0 1px 2px -1px
+      color-mix(in srgb, var(--foreground) 6%, transparent);
   }
 
   .surface-card-hover {
-    @apply rounded-2xl border border-border bg-surface/80 backdrop-blur-xl transition-all duration-300 hover:border-primary/40 hover:shadow-lg hover:shadow-primary/5;
-    box-shadow: 0 4px 20px -2px
-      color-mix(in srgb, var(--foreground) 5%, transparent);
+    @apply rounded-xl border border-border bg-surface transition-colors duration-200 hover:border-border/60 hover:bg-surface-muted/40;
+    box-shadow: 0 1px 2px -1px
+      color-mix(in srgb, var(--foreground) 6%, transparent);
   }
 
   .glass-panel {
-    @apply rounded-2xl border border-border/80 bg-surface/70 backdrop-blur-md;
+    @apply rounded-xl border border-border bg-surface;
   }
 
   .glow-badge {

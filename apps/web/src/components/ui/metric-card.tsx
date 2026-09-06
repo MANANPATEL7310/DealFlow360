@@ -79,7 +79,7 @@ export function MetricCard({
   return (
     <div
       className={cn(
-        "surface-card p-5 transition-all duration-300 hover:border-primary/40 hover:shadow-md",
+        "surface-card p-5 transition-colors duration-200 hover:border-border/60",
         className,
       )}
     >
@@ -99,7 +99,7 @@ export function MetricCard({
       </div>
 
       <div className="mt-3">
-        <div className="text-2xl font-bold tracking-tight text-foreground">
+        <div className="text-2xl font-bold tracking-tight text-foreground tabular-nums">
           {value}
         </div>
         {subvalue && (
